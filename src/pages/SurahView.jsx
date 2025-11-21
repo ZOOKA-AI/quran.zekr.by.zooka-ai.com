@@ -8,6 +8,7 @@ import { createPageUrl } from '@/utils';
 import AudioPlayer from '../components/quran/AudioPlayer';
 import SearchBar from '../components/quran/SearchBar';
 import VerseCard from '../components/quran/VerseCard';
+import NavigationControls from '../components/quran/NavigationControls';
 import { toast } from 'sonner';
 
 export default function SurahView() {
@@ -15,6 +16,8 @@ export default function SurahView() {
   const surahNumber = parseInt(urlParams.get('surah')) || 1;
   
   const [searchResults, setSearchResults] = useState(null);
+  const [selectedJuz, setSelectedJuz] = useState(null);
+  const [selectedPage, setSelectedPage] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: verses = [], isLoading } = useQuery({
@@ -58,11 +61,34 @@ export default function SurahView() {
     }
   };
 
-  const handleBookmark = (verse) => {
-    createBookmarkMutation.mutate({
-      surah_number: verse.surah_number,
-      verse_number: verse.verse_number,
-    });
+  const handleBookmark = (bookmarkData) => {
+    createBookmarkMutation.mutate(bookmarkData);
+  };
+
+  const handleJuzChange = (juz) => {
+    setSelectedJuz(juz);
+    setSelectedPage(null);
+    setSearchResults(null);
+    const filtered = verses.filter(v => v.juz === juz);
+    if (filtered.length > 0) {
+      setSearchResults(filtered);
+      toast.success(`عرض آيات الجزء ${juz}`);
+    } else {
+      toast.info('لا توجد بيانات للجزء المحدد');
+    }
+  };
+
+  const handlePageChange = (page) => {
+    setSelectedPage(page);
+    setSelectedJuz(null);
+    setSearchResults(null);
+    const filtered = verses.filter(v => v.page === page);
+    if (filtered.length > 0) {
+      setSearchResults(filtered);
+      toast.success(`عرض آيات الصفحة ${page}`);
+    } else {
+      toast.info('لا توجد بيانات للصفحة المحددة');
+    }
   };
 
   const displayedVerses = searchResults || verses;
@@ -109,6 +135,16 @@ export default function SurahView() {
         {/* Audio Player */}
         <div className="mb-8">
           <AudioPlayer surahNumber={surahNumber} />
+        </div>
+
+        {/* Navigation Controls */}
+        <div className="mb-8">
+          <NavigationControls
+            currentJuz={selectedJuz}
+            currentPage={selectedPage}
+            onJuzChange={handleJuzChange}
+            onPageChange={handlePageChange}
+          />
         </div>
 
         {/* Search */}

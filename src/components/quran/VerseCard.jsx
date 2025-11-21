@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookMarked, Share2, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import BookmarkDialog from './BookmarkDialog';
 
 const VerseCard = ({ verse, onBookmark }) => {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('arabic');
+  const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(verse.arabic_text);
@@ -57,12 +59,19 @@ const VerseCard = ({ verse, onBookmark }) => {
               variant="ghost"
               size="icon"
               className="hover:bg-amber-50 hover:text-amber-600"
-              onClick={() => onBookmark(verse)}
+              onClick={() => setShowBookmarkDialog(true)}
             >
               <BookMarked className="w-4 h-4" />
             </Button>
           </div>
         </div>
+
+        <BookmarkDialog
+          isOpen={showBookmarkDialog}
+          onClose={() => setShowBookmarkDialog(false)}
+          verse={verse}
+          onSave={onBookmark}
+        />
 
         {/* Arabic Text */}
         <div className="mb-6 text-center">
