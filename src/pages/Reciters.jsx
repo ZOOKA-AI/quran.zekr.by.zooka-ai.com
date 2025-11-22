@@ -113,6 +113,15 @@ const RECITERS = [
     famous: false,
     birthYear: 1900,
     icon: BookOpen
+  },
+  {
+    id: 13,
+    name: "الشيخ عبد المجيد السريجي",
+    description: "من القراء المتميزين بصوته العذب وأدائه الروحاني، تميز بتلاوته الخاشعة وأسلوبه المؤثر في قراءة القرآن.",
+    era: "classic",
+    famous: true,
+    birthYear: 1929,
+    icon: Star
   }
 ];
 
