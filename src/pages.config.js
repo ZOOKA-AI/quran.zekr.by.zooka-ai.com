@@ -9,6 +9,7 @@ import Calligraphy from './pages/Calligraphy';
 import Notifications from './pages/Notifications';
 import NotificationDocs from './pages/NotificationDocs';
 import NotificationSettings from './pages/NotificationSettings';
+import RecitationPlayer from './pages/RecitationPlayer';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "Notifications": Notifications,
     "NotificationDocs": NotificationDocs,
     "NotificationSettings": NotificationSettings,
+    "RecitationPlayer": RecitationPlayer,
 }
 
 export const pagesConfig = {
