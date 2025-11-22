@@ -4,6 +4,7 @@ import Bookmarks from './pages/Bookmarks';
 import Profile from './pages/Profile';
 import PrayerTimes from './pages/PrayerTimes';
 import Assistant from './pages/Assistant';
+import Reciters from './pages/Reciters';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "Profile": Profile,
     "PrayerTimes": PrayerTimes,
     "Assistant": Assistant,
+    "Reciters": Reciters,
 }
 
 export const pagesConfig = {
