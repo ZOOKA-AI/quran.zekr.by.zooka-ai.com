@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles } from 'lucide-react';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home },
+    { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
     { name: 'المساعد الذكي', path: 'Assistant', icon: MessageSquare },
     { name: 'مواقيت الصلاة', path: 'PrayerTimes', icon: Clock },
