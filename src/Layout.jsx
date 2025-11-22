@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, FileText } from 'lucide-react';
+import DailyReminders from './components/reminders/DailyReminders';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
@@ -10,6 +11,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
     { name: 'المساعد الذكي', path: 'Assistant', icon: MessageSquare },
     { name: 'مواقيت الصلاة', path: 'PrayerTimes', icon: Clock },
+    { name: 'الإشعارات', path: 'Notifications', icon: Bell },
+    { name: 'التوثيق', path: 'NotificationsDocs', icon: FileText },
     { name: 'المحفوظات', path: 'Bookmarks', icon: BookMarked },
     { name: 'الملف الشخصي', path: 'Profile', icon: User },
   ];
@@ -78,6 +81,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main Content */}
       <main>{children}</main>
+
+      {/* Daily Reminders */}
+      <DailyReminders />
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">

@@ -6,6 +6,8 @@ import PrayerTimes from './pages/PrayerTimes';
 import Assistant from './pages/Assistant';
 import Reciters from './pages/Reciters';
 import Calligraphy from './pages/Calligraphy';
+import Notifications from './pages/Notifications';
+import NotificationsDocs from './pages/NotificationsDocs';
 import __Layout from './Layout.jsx';
 
 
@@ -18,6 +20,8 @@ export const PAGES = {
     "Assistant": Assistant,
     "Reciters": Reciters,
     "Calligraphy": Calligraphy,
+    "Notifications": Notifications,
+    "NotificationsDocs": NotificationsDocs,
 }
 
 export const pagesConfig = {
