@@ -79,12 +79,12 @@ export default function TilawaPage() {
     indexRef.current = 0;
     stoppedByUserRef.current = false;
 
-    // إضافة الاستعاذة (001000.mp3 يعني استعاذة في EveryAyah)
-    playlistRef.current.push(`${reciter.baseUrl}001000.mp3`);
+    // إضافة الاستعاذة
+    playlistRef.current.push(ISTIATHA_URL);
     
     // إضافة البسملة إذا لم تكن سورة التوبة
     if (s !== 9) {
-      playlistRef.current.push(`${reciter.baseUrl}001001.mp3`);
+      playlistRef.current.push(BASMALA_URL);
     }
 
     // بناء قائمة التشغيل للآيات
