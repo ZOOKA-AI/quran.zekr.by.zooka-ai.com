@@ -7,6 +7,7 @@ import DailyReminders from '@/components/notifications/DailyReminders';
 export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home },
+    { name: 'التلاوة', path: 'Tilawa', icon: Volume2 },
     { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
     { name: 'المساعد الذكي', path: 'Assistant', icon: MessageSquare },
