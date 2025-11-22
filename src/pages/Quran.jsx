@@ -255,6 +255,7 @@ export default function QuranPage() {
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 }
