@@ -221,9 +221,12 @@ export default function TilawaPage() {
             </div>
 
             {/* Info Note */}
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-gray-700 leading-relaxed">
-                💡 <strong>ملاحظة:</strong> سيتم تشغيل الآيات المحددة تلقائياً واحدة تلو الأخرى بصوت القارئ المختار.
+            <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-lg">
+              <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                ✨ <strong>التشغيل الآلي:</strong> يبدأ بالاستعاذة، ثم البسملة (ما عدا سورة التوبة)، ثم تشغيل الآيات المحددة تلقائياً واحدة تلو الأخرى.
+              </p>
+              <p className="text-xs text-gray-600">
+                🎧 يتم استخدام ملفات EveryAyah عالية الجودة لجميع القراء
               </p>
             </div>
           </div>
