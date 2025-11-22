@@ -106,8 +106,11 @@ export default function Layout({ children, currentPageName }) {
                 
                 <div className="border-t border-emerald-600/50 pt-3 mt-3">
                   <p className="text-amber-300 text-xs font-bold mb-1">🔐 المشرف العام الوحيد</p>
-                  <a href="mailto:Zookaalmrzwq@gmail.com" className="text-emerald-100 text-xs hover:text-white transition-colors underline">
+                  <a href="mailto:Zookaalmrzwq@gmail.com" className="text-emerald-100 text-xs hover:text-white transition-colors underline block mb-1">
                     Zookaalmrzwq@gmail.com
+                  </a>
+                  <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-amber-300 text-xs hover:text-amber-200 transition-colors underline font-bold block mb-2">
+                    🌐 zaka.ai
                   </a>
                   <p className="text-emerald-200 text-xs mt-1">مسؤول حماية المنصة والملكية الفكرية</p>
                   <p className="text-white text-xs font-bold mt-2">⚠️ جميع الحقوق محفوظة • ممنوع النسخ أو التعديل بدون إذن</p>
