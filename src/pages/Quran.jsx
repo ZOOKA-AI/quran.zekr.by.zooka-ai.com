@@ -4,7 +4,8 @@ import { createPageUrl } from '@/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Search, MessageSquare } from 'lucide-react';
+import { Search, MessageSquare, Share2, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import SurahCard from '../components/quran/SurahCard';
 
 const SURAHS = [
@@ -30,6 +31,27 @@ const SURAHS = [
 
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleShare = () => {
+    const appUrl = window.location.origin;
+    const shareText = '🕌 تطبيق القرآن الكريم - مجاني بالكامل لوجه الله تعالى\n\nصدقة جارية - شارك الأجر معنا 🤲\n\n' + appUrl;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: 'تطبيق القرآن الكريم',
+        text: shareText,
+      });
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast.success('تم نسخ الرابط! شاركه مع من تحب لتنال الأجر 🌟');
+    }
+  };
+
+  const handleCopyLink = () => {
+    const appUrl = window.location.origin;
+    navigator.clipboard.writeText(appUrl);
+    toast.success('تم نسخ رابط التطبيق! 📋');
+  };
 
   const filteredSurahs = SURAHS.filter(surah => 
     surah.name.includes(searchQuery) || 
@@ -90,6 +112,23 @@ export default function QuranPage() {
                     <div className="font-bold">انشر الخير</div>
                     <div className="text-sm text-green-100">صدقة جارية لك</div>
                   </div>
+                </div>
+                <div className="mt-6 flex gap-3 justify-center flex-wrap">
+                  <Button
+                    onClick={handleShare}
+                    className="bg-white text-emerald-700 hover:bg-emerald-50 font-bold px-6 py-3 text-lg flex items-center gap-2"
+                  >
+                    <Share2 className="w-5 h-5" />
+                    شارك التطبيق واربح الأجر
+                  </Button>
+                  <Button
+                    onClick={handleCopyLink}
+                    variant="outline"
+                    className="bg-white/20 border-white text-white hover:bg-white/30 font-bold px-6 py-3 text-lg flex items-center gap-2"
+                  >
+                    <Copy className="w-5 h-5" />
+                    نسخ الرابط
+                  </Button>
                 </div>
               </div>
             </div>
