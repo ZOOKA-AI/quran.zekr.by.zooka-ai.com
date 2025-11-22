@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookMarked, Share2, Copy, Check, Info, Link2, GitCompare } from 'lucide-react';
+import { BookMarked, Share2, Copy, Check, Info, Link2, GitCompare, Play, Pause, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
 import BookmarkDialog from './BookmarkDialog';
 import SababNuzoolDialog from './SababNuzoolDialog';
 import RelatedVersesDialog from './RelatedVersesDialog';
 import CompareTafsirDialog from './CompareTafsirDialog';
+
+const RECITERS = [
+  { id: 'husary', name: 'الحصري', baseUrl: 'https://EveryAyah.com/data/Husary_128kbps/' },
+  { id: 'minshawi', name: 'المنشاوي', baseUrl: 'https://EveryAyah.com/data/Minshawy_Murattal_128kbps/' },
+  { id: 'abdulbasit', name: 'عبد الباسط', baseUrl: 'https://EveryAyah.com/data/Abdul_Basit_Mujawwad_128kbps/' },
+  { id: 'sudais', name: 'السديس', baseUrl: 'https://EveryAyah.com/data/Abdurrahmaan_As-Sudais_192kbps/' },
+  { id: 'alafasy', name: 'العفاسي', baseUrl: 'https://EveryAyah.com/data/Alafasy_128kbps/' }
+];
 
 const VerseCard = ({ verse, onBookmark }) => {
   const [copied, setCopied] = useState(false);
@@ -17,6 +25,8 @@ const VerseCard = ({ verse, onBookmark }) => {
   const [showSababNuzool, setShowSababNuzool] = useState(false);
   const [showRelatedVerses, setShowRelatedVerses] = useState(false);
   const [showCompareTafsir, setShowCompareTafsir] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(verse.arabic_text);
@@ -36,14 +46,72 @@ const VerseCard = ({ verse, onBookmark }) => {
     }
   };
 
+  const buildAudioUrl = () => {
+    const surah = String(verse.surah_number).padStart(3, '0');
+    const ayah = String(verse.verse_number).padStart(3, '0');
+    return RECITERS[0].baseUrl + surah + ayah + '.mp3';
+  };
+
+  const toggleAudio = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(buildAudioUrl());
+      
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+      };
+      
+      audioRef.current.onerror = () => {
+        toast.error('حدث خطأ في تشغيل الصوت');
+        setIsPlaying(false);
+      };
+    }
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
   return (
     <Card className="bg-white border-2 border-gray-100 hover:border-emerald-200 transition-all shadow-md hover:shadow-xl">
       <div className="p-6">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
-          <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
-            آية {verse.verse_number}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
+              آية {verse.verse_number}
+            </Badge>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleAudio}
+              className={`${isPlaying ? 'bg-emerald-100 border-emerald-400' : ''} hover:bg-emerald-50`}
+            >
+              {isPlaying ? (
+                <>
+                  <Pause className="w-4 h-4 ml-1" />
+                  إيقاف
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-4 h-4 ml-1" />
+                  استماع
+                </>
+              )}
+            </Button>
+          </div>
           <div className="flex gap-2">
             <Button
               variant="ghost"
