@@ -72,9 +72,9 @@ export default function QuranPage() {
           }}
         />
         {/* Overlay with spiritual colors */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/40 via-teal-400/30 to-emerald-500/40 animate-pulse-slow" 
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/50 via-teal-300/40 to-emerald-400/50 animate-pulse-slow" 
              style={{ animationDuration: '10s' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-sky-300/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/40 to-sky-200/40" />
         
         {/* Animated particles effect */}
         <div className="absolute inset-0 opacity-30">
@@ -106,7 +106,7 @@ export default function QuranPage() {
       
       <div className="relative z-10">
       {/* Header with Islamic Calligraphy Style */}
-      <div className="bg-gradient-to-r from-teal-600/80 via-cyan-600/80 to-emerald-600/80 backdrop-blur-xl text-white shadow-2xl border-b-4 border-amber-400/50">
+      <div className="bg-gradient-to-r from-teal-500 via-cyan-500 to-emerald-500 text-white shadow-2xl border-b-4 border-amber-400">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="text-center">
             <div className="mb-8 animate-pulse">
@@ -132,7 +132,7 @@ export default function QuranPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Sadaqah Jariyah Banner */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-600/95 via-emerald-600/95 to-teal-600/95 text-white shadow-2xl border-none backdrop-blur-xl border-4 border-white/20">
+          <Card className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white shadow-2xl border-none border-4 border-white/30">
             <div className="p-8 text-center">
               <div className="text-6xl mb-4">🤲</div>
               <h2 className="text-3xl font-bold mb-3">صدقة جارية لوجه الله تعالى</h2>
@@ -188,7 +188,7 @@ export default function QuranPage() {
         {/* Smart Assistant Banner */}
         <div className="mb-8">
           <Link to={createPageUrl('Assistant')}>
-            <div className="bg-gradient-to-r from-purple-500/90 via-purple-600/90 to-indigo-600/90 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-4 border-purple-300/40 backdrop-blur-xl">
+            <div className="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-4 border-purple-300/50">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="bg-white/30 backdrop-blur-md rounded-2xl p-4 border-2 border-white/40 shadow-lg">
