@@ -95,7 +95,7 @@ export default function AssistantPage() {
   // ميزة قراءة النص بالصوت
   const speakText = (text) => {
     if (!('speechSynthesis' in window)) {
-      toast.error('المتصفح لا يدعم قراءة النصوص');
+      console.warn('Speech synthesis not supported');
       return;
     }
 
@@ -104,7 +104,9 @@ export default function AssistantPage() {
       speechSynthesis.cancel();
       
       // تنظيف النص من الرموز الخاصة
-      const cleanText = text.replace(/[#*_~`]/g, '');
+      const cleanText = text.replace(/[#*_~`]/g, '').trim();
+      
+      if (!cleanText) return;
       
       const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = 'ar-SA';
@@ -121,9 +123,8 @@ export default function AssistantPage() {
       };
       
       utterance.onerror = (event) => {
-        console.error('Speech synthesis error:', event);
+        console.error('Speech error:', event);
         setIsSpeaking(false);
-        toast.error('حدث خطأ في قراءة النص');
       };
       
       // تأخير بسيط لضمان استعداد المتصفح
@@ -131,9 +132,8 @@ export default function AssistantPage() {
         speechSynthesis.speak(utterance);
       }, 100);
     } catch (error) {
-      console.error('Speech error:', error);
+      console.error('Speech synthesis error:', error);
       setIsSpeaking(false);
-      toast.error('فشل تشغيل القراءة الصوتية');
     }
   };
 
@@ -153,7 +153,7 @@ export default function AssistantPage() {
   // ميزة التعرف على الصوت
   const startVoiceRecognition = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      toast.error('المتصفح لا يدعم التعرف على الصوت. استخدم Chrome أو Edge');
+      toast.error('⚠️ المتصفح لا يدعم التعرف على الصوت. استخدم Chrome أو Edge');
       return;
     }
 
@@ -167,7 +167,7 @@ export default function AssistantPage() {
 
       recognition.onstart = () => {
         setIsListening(true);
-        toast.success('🎤 ابدأ بالتحدث الآن...');
+        toast.success('🎤 ابدأ بالتحدث الآن...', { duration: 5000 });
       };
 
       recognition.onresult = (event) => {
@@ -179,11 +179,13 @@ export default function AssistantPage() {
       recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'no-speech') {
-          toast.error('لم يتم اكتشاف صوت. حاول مرة أخرى');
-        } else if (event.error === 'not-allowed') {
-          toast.error('يرجى السماح بالوصول للميكروفون من إعدادات المتصفح');
+          toast.error('⚠️ لم يتم اكتشاف صوت. حاول مرة أخرى');
+        } else if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+          toast.error('🔒 يرجى السماح بالوصول للميكروفون من إعدادات المتصفح');
+        } else if (event.error === 'network') {
+          toast.error('📡 خطأ في الاتصال. تحقق من الإنترنت');
         } else {
-          toast.error('حدث خطأ في التعرف على الصوت');
+          toast.error('❌ حدث خطأ في التعرف على الصوت');
         }
         setIsListening(false);
       };
@@ -194,7 +196,7 @@ export default function AssistantPage() {
 
       recognition.start();
     } catch (error) {
-      console.error('Recognition error:', error);
+      console.error('Recognition initialization error:', error);
       toast.error('فشل تشغيل التعرف على الصوت');
       setIsListening(false);
     }
@@ -297,9 +299,9 @@ export default function AssistantPage() {
                 className={`flex-shrink-0 ${isListening ? 'bg-red-100 border-red-400 text-red-700 animate-pulse' : 'hover:bg-emerald-50 hover:border-emerald-300'}`}
                 onClick={startVoiceRecognition}
                 disabled={isListening || isSending}
-                title={isListening ? 'جاري الاستماع...' : 'اضغط للتحدث'}
+                title={isListening ? '🎤 جاري الاستماع...' : '🎤 اضغط للتحدث'}
               >
-                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                {isListening ? <MicOff className="w-5 h-5 animate-pulse" /> : <Mic className="w-5 h-5" />}
               </Button>
 
               {isSpeaking && (
