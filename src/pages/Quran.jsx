@@ -224,21 +224,21 @@ export default function QuranPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-100 text-center">
-            <p className="text-4xl font-bold text-emerald-600 mb-2">114</p>
-            <p className="text-gray-600">سورة</p>
+          <div className="bg-gradient-to-br from-white/90 to-emerald-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-emerald-200/50 text-center hover:scale-105 transition-transform">
+            <p className="text-5xl font-bold text-emerald-600 mb-2 drop-shadow-md">114</p>
+            <p className="text-gray-700 font-semibold">سورة</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-amber-100 text-center">
-            <p className="text-4xl font-bold text-amber-600 mb-2">30</p>
-            <p className="text-gray-600">جزء</p>
+          <div className="bg-gradient-to-br from-white/90 to-amber-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-amber-200/50 text-center hover:scale-105 transition-transform">
+            <p className="text-5xl font-bold text-amber-600 mb-2 drop-shadow-md">30</p>
+            <p className="text-gray-700 font-semibold">جزء</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-100 text-center">
-            <p className="text-4xl font-bold text-blue-600 mb-2">6236</p>
-            <p className="text-gray-600">آية</p>
+          <div className="bg-gradient-to-br from-white/90 to-blue-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-blue-200/50 text-center hover:scale-105 transition-transform">
+            <p className="text-5xl font-bold text-blue-600 mb-2 drop-shadow-md">6236</p>
+            <p className="text-gray-700 font-semibold">آية</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-100 text-center">
-            <p className="text-4xl font-bold text-purple-600 mb-2">5</p>
-            <p className="text-gray-600">قراء</p>
+          <div className="bg-gradient-to-br from-white/90 to-purple-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-purple-200/50 text-center hover:scale-105 transition-transform">
+            <p className="text-5xl font-bold text-purple-600 mb-2 drop-shadow-md">5</p>
+            <p className="text-gray-700 font-semibold">قراء</p>
           </div>
         </div>
 
