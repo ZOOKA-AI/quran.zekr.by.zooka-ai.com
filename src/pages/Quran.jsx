@@ -60,32 +60,71 @@ export default function QuranPage() {
   );
 
   return (
-    <div className="min-h-screen relative" dir="rtl">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80)',
-          opacity: 0.15
-        }}
-      />
-      <div className="fixed inset-0 bg-gradient-to-br from-emerald-50/95 via-white/90 to-cyan-50/95" />
+    <div className="min-h-screen relative overflow-hidden" dir="rtl">
+      {/* Spiritual Animated Background */}
+      <div className="fixed inset-0 z-0">
+        {/* Nature Background with Beach & Palm Trees */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-pulse-slow"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80)',
+            animationDuration: '8s'
+          }}
+        />
+        {/* Overlay with spiritual colors */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/40 via-teal-400/30 to-emerald-500/40 animate-pulse-slow" 
+             style={{ animationDuration: '10s' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-sky-300/30" />
+        
+        {/* Animated particles effect */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-amber-300/40 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-40 right-20 w-40 h-40 bg-emerald-400/30 rounded-full blur-3xl animate-float-delayed" />
+          <div className="absolute bottom-20 left-1/4 w-48 h-48 bg-cyan-400/25 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/3 right-1/3 w-36 h-36 bg-teal-300/30 rounded-full blur-3xl animate-float-delayed" style={{ animationDelay: '2s' }} />
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.6; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-20px) scale(1.1); }
+        }
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          33% { transform: translateY(-15px) translateX(10px); }
+          66% { transform: translateY(-5px) translateX(-10px); }
+        }
+        .animate-pulse-slow { animation: pulse-slow infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite; }
+      `}</style>
       
       <div className="relative z-10">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600/95 via-teal-600/95 to-cyan-600/95 backdrop-blur-sm text-white shadow-2xl">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+      {/* Header with Islamic Calligraphy Style */}
+      <div className="bg-gradient-to-r from-teal-600/80 via-cyan-600/80 to-emerald-600/80 backdrop-blur-xl text-white shadow-2xl border-b-4 border-amber-400/50">
+        <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="text-center">
-            <div className="mb-6">
-              <div className="inline-block p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <svg className="w-16 h-16 text-amber-300" fill="currentColor" viewBox="0 0 24 24">
+            <div className="mb-8 animate-pulse">
+              <div className="inline-block p-6 bg-gradient-to-br from-amber-300/30 to-yellow-400/20 rounded-3xl backdrop-blur-xl border-2 border-amber-300/40 shadow-2xl">
+                <svg className="w-20 h-20 text-amber-200 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
                 </svg>
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">القرآن الكريم</h1>
-            <p className="text-xl text-emerald-100 mb-2">﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾</p>
-            <p className="text-emerald-200">المصحف الإلكتروني الشامل</p>
+            <h1 className="text-6xl font-bold mb-6 text-white drop-shadow-2xl font-arabic" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3), 0 0 40px rgba(251,191,36,0.4)' }}>
+              القرآن الكريم
+            </h1>
+            <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 max-w-3xl mx-auto border border-white/30 shadow-2xl mb-4">
+              <p className="text-2xl text-amber-100 mb-3 font-arabic leading-loose" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
+                ﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾
+              </p>
+              <p className="text-cyan-100 text-lg font-semibold">المصحف الإلكتروني الشامل • بروح الإيمان والسكينة 🕌</p>
+            </div>
           </div>
         </div>
       </div>
@@ -215,7 +254,6 @@ export default function QuranPage() {
             <p className="text-gray-500 text-lg">لم يتم العثور على نتائج</p>
           </div>
         )}
-      </div>
       </div>
     </div>
   );
