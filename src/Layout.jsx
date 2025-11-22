@@ -106,7 +106,9 @@ export default function Layout({ children, currentPageName }) {
                 
                 <div className="border-t border-emerald-600/50 pt-3 mt-3">
                   <p className="text-amber-300 text-xs font-bold mb-1">🔐 المشرف العام الوحيد</p>
-                  <p className="text-emerald-100 text-xs">Zookaalmrzwq@gmail.com</p>
+                  <a href="mailto:Zookaalmrzwq@gmail.com" className="text-emerald-100 text-xs hover:text-white transition-colors underline">
+                    Zookaalmrzwq@gmail.com
+                  </a>
                   <p className="text-emerald-200 text-xs mt-1">مسؤول حماية المنصة والملكية الفكرية</p>
                   <p className="text-white text-xs font-bold mt-2">⚠️ جميع الحقوق محفوظة • ممنوع النسخ أو التعديل بدون إذن</p>
                 </div>
