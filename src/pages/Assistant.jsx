@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2 } from 'lucide-react';
+import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2, Volume2, VolumeX } from 'lucide-react';
 import { toast } from 'sonner';
 import MessageBubble from '../components/assistant/MessageBubble';
 
@@ -14,6 +14,8 @@ export default function AssistantPage() {
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(true);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -42,12 +44,22 @@ export default function AssistantPage() {
     if (!conversationId) return;
 
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
-      setMessages(data.messages);
+      const newMessages = data.messages;
+      
+      // قراءة الرد الجديد بالصوت تلقائياً
+      if (autoSpeak && newMessages.length > messages.length) {
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage.role === 'assistant' && lastMessage.content) {
+          speakText(lastMessage.content);
+        }
+      }
+      
+      setMessages(newMessages);
       setIsSending(false);
     });
 
     return () => unsubscribe();
-  }, [conversationId]);
+  }, [conversationId, messages.length, autoSpeak]);
 
   // التمرير التلقائي للأسفل
   useEffect(() => {
@@ -77,6 +89,32 @@ export default function AssistantPage() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  // ميزة قراءة النص بالصوت
+  const speakText = (text) => {
+    if ('speechSynthesis' in window) {
+      // إيقاف أي صوت قيد التشغيل
+      speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ar-SA';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      
+      speechSynthesis.speak(utterance);
+    }
+  };
+
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+      setIsSpeaking(false);
     }
   };
 
@@ -186,6 +224,26 @@ export default function AssistantPage() {
 
           {/* Input Area */}
           <div className="border-t-2 border-emerald-100 p-4 bg-gray-50">
+            {/* Auto-speak toggle */}
+            <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <Volume2 className="w-4 h-4 text-gray-600" />
+                <span className="text-sm text-gray-700">قراءة الردود تلقائياً</span>
+              </div>
+              <button
+                onClick={() => setAutoSpeak(!autoSpeak)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  autoSpeak ? 'bg-emerald-600' : 'bg-gray-300'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    autoSpeak ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+
             <div className="flex gap-3">
               <Button
                 variant="outline"
@@ -193,9 +251,22 @@ export default function AssistantPage() {
                 className={`flex-shrink-0 ${isListening ? 'bg-red-50 border-red-300 text-red-600' : 'hover:bg-emerald-50 hover:border-emerald-300'}`}
                 onClick={startVoiceRecognition}
                 disabled={isListening || isSending}
+                title="تسجيل صوتي"
               >
                 {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
               </Button>
+
+              {isSpeaking && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex-shrink-0 bg-amber-50 border-amber-300 text-amber-600 hover:bg-amber-100"
+                  onClick={stopSpeaking}
+                  title="إيقاف القراءة"
+                >
+                  <VolumeX className="w-5 h-5" />
+                </Button>
+              )}
               
               <Input
                 value={inputMessage}
@@ -215,7 +286,9 @@ export default function AssistantPage() {
               </Button>
             </div>
             <p className="text-xs text-gray-500 mt-2 text-center">
-              اضغط على أيقونة المايكروفون للتحدث أو اكتب سؤالك
+              {isListening && '🎤 جاري الاستماع...'}
+              {isSpeaking && '🔊 جاري القراءة...'}
+              {!isListening && !isSpeaking && 'اضغط على المايكروفون للتحدث أو اكتب سؤالك'}
             </p>
           </div>
         </Card>

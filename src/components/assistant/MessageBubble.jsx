@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Button } from "@/components/ui/button";
-import { Copy, Zap, CheckCircle2, AlertCircle, Loader2, ChevronRight, Clock } from 'lucide-react';
+import { Copy, Zap, CheckCircle2, AlertCircle, Loader2, ChevronRight, Clock, Volume2 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -97,6 +97,15 @@ const FunctionDisplay = ({ toolCall }) => {
 export default function MessageBubble({ message }) {
     const isUser = message.role === 'user';
     
+    const handleSpeak = () => {
+        if ('speechSynthesis' in window && message.content) {
+            const utterance = new SpeechSynthesisUtterance(message.content);
+            utterance.lang = 'ar-SA';
+            utterance.rate = 0.9;
+            speechSynthesis.speak(utterance);
+        }
+    };
+    
     return (
         <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
             {!isUser && (
@@ -106,10 +115,22 @@ export default function MessageBubble({ message }) {
             )}
             <div className={cn("max-w-[85%]", isUser && "flex flex-col items-end")}>
                 {message.content && (
-                    <div className={cn(
-                        "rounded-2xl px-4 py-2.5",
-                        isUser ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white" : "bg-white border border-slate-200"
-                    )}>
+                    <div className="relative group">
+                        <div className={cn(
+                            "rounded-2xl px-4 py-2.5",
+                            isUser ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white" : "bg-white border border-slate-200"
+                        )}>
+                        {!isUser && (
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                className="absolute top-2 left-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-50"
+                                onClick={handleSpeak}
+                                title="استماع"
+                            >
+                                <Volume2 className="h-3 w-3 text-emerald-600" />
+                            </Button>
+                        )}
                         {isUser ? (
                             <p className="text-sm leading-relaxed">{message.content}</p>
                         ) : (
@@ -163,6 +184,7 @@ export default function MessageBubble({ message }) {
                                 {message.content}
                             </ReactMarkdown>
                         )}
+                        </div>
                     </div>
                 )}
                 
