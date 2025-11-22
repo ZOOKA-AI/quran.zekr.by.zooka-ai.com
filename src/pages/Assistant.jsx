@@ -94,26 +94,58 @@ export default function AssistantPage() {
 
   // ميزة قراءة النص بالصوت
   const speakText = (text) => {
-    if ('speechSynthesis' in window) {
+    if (!('speechSynthesis' in window)) {
+      toast.error('المتصفح لا يدعم قراءة النصوص');
+      return;
+    }
+
+    try {
       // إيقاف أي صوت قيد التشغيل
       speechSynthesis.cancel();
       
-      const utterance = new SpeechSynthesisUtterance(text);
+      // تنظيف النص من الرموز الخاصة
+      const cleanText = text.replace(/[#*_~`]/g, '');
+      
+      const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = 'ar-SA';
       utterance.rate = 0.9;
       utterance.pitch = 1;
+      utterance.volume = 1;
       
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+      };
       
-      speechSynthesis.speak(utterance);
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+      
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setIsSpeaking(false);
+        toast.error('حدث خطأ في قراءة النص');
+      };
+      
+      // تأخير بسيط لضمان استعداد المتصفح
+      setTimeout(() => {
+        speechSynthesis.speak(utterance);
+      }, 100);
+    } catch (error) {
+      console.error('Speech error:', error);
+      setIsSpeaking(false);
+      toast.error('فشل تشغيل القراءة الصوتية');
     }
   };
 
   const stopSpeaking = () => {
-    if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
+    try {
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        setIsSpeaking(false);
+        toast.success('تم إيقاف القراءة');
+      }
+    } catch (error) {
+      console.error('Stop speaking error:', error);
       setIsSpeaking(false);
     }
   };
@@ -121,37 +153,51 @@ export default function AssistantPage() {
   // ميزة التعرف على الصوت
   const startVoiceRecognition = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      toast.error('المتصفح لا يدعم التعرف على الصوت');
+      toast.error('المتصفح لا يدعم التعرف على الصوت. استخدم Chrome أو Edge');
       return;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'ar-SA';
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    try {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ar-SA';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => {
-      setIsListening(true);
-      toast.info('🎤 جاري الاستماع...');
-    };
+      recognition.onstart = () => {
+        setIsListening(true);
+        toast.success('🎤 ابدأ بالتحدث الآن...');
+      };
 
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setInputMessage(transcript);
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(transcript);
+        toast.success('✅ تم التعرف على الصوت بنجاح');
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error === 'no-speech') {
+          toast.error('لم يتم اكتشاف صوت. حاول مرة أخرى');
+        } else if (event.error === 'not-allowed') {
+          toast.error('يرجى السماح بالوصول للميكروفون من إعدادات المتصفح');
+        } else {
+          toast.error('حدث خطأ في التعرف على الصوت');
+        }
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (error) {
+      console.error('Recognition error:', error);
+      toast.error('فشل تشغيل التعرف على الصوت');
       setIsListening(false);
-    };
-
-    recognition.onerror = () => {
-      toast.error('حدث خطأ في التعرف على الصوت');
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognition.start();
+    }
   };
 
   const suggestedQuestions = [
@@ -248,10 +294,10 @@ export default function AssistantPage() {
               <Button
                 variant="outline"
                 size="icon"
-                className={`flex-shrink-0 ${isListening ? 'bg-red-50 border-red-300 text-red-600' : 'hover:bg-emerald-50 hover:border-emerald-300'}`}
+                className={`flex-shrink-0 ${isListening ? 'bg-red-100 border-red-400 text-red-700 animate-pulse' : 'hover:bg-emerald-50 hover:border-emerald-300'}`}
                 onClick={startVoiceRecognition}
                 disabled={isListening || isSending}
-                title="تسجيل صوتي"
+                title={isListening ? 'جاري الاستماع...' : 'اضغط للتحدث'}
               >
                 {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
               </Button>
