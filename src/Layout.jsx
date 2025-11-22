@@ -96,7 +96,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 
                 <p className="text-emerald-100 text-sm mb-1">من ZOOKA-AI 🤖</p>
-                <p className="text-emerald-200 text-xs mb-1">المطورون: موسى وهارون - بيت الريف</p>
+                <p className="text-emerald-200 text-xs mb-1">المطورون: موسى وهارون بالإمارات 🇦🇪</p>
                 <p className="text-emerald-200 text-xs mb-2">حفظ الملكية وتأمين كتاب الله وسنة رسوله</p>
                 <p className="text-emerald-100 text-xs">من الفقراء لله المصريين 🇪🇬</p>
                 
