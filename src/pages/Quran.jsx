@@ -147,19 +147,19 @@ export default function QuranPage() {
                   <strong>شارك في الأجر:</strong> انشر التطبيق مع أهلك وأصدقائك وكل من ينتفع به تشارك في الأجر
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="text-3xl mb-2">📖</div>
-                    <div className="font-bold">قراءة القرآن</div>
+                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
+                    <div className="text-4xl mb-3">📖</div>
+                    <div className="font-bold text-lg">قراءة القرآن</div>
                     <div className="text-sm text-green-100">كل حرف بحسنة</div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="text-3xl mb-2">🎤</div>
-                    <div className="font-bold">استماع للمقرئين</div>
+                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
+                    <div className="text-4xl mb-3">🎤</div>
+                    <div className="font-bold text-lg">استماع للمقرئين</div>
                     <div className="text-sm text-green-100">تدبر وخشوع</div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="text-3xl mb-2">🤝</div>
-                    <div className="font-bold">انشر الخير</div>
+                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
+                    <div className="text-4xl mb-3">🤝</div>
+                    <div className="font-bold text-lg">انشر الخير</div>
                     <div className="text-sm text-green-100">صدقة جارية لك</div>
                   </div>
                 </div>
