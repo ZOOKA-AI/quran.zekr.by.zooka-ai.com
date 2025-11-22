@@ -139,7 +139,7 @@ export default function QuranPage() {
               <p className="text-xl mb-4 text-green-50">
                 هذا التطبيق مجاني بالكامل ولا نطلب أي تبرعات
               </p>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-3xl mx-auto">
+              <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 max-w-3xl mx-auto border border-white/30 shadow-inner">
                 <p className="text-lg leading-relaxed mb-4">
                   ﴿ إِنَّ الَّذِينَ يَتْلُونَ كِتَابَ اللَّهِ وَأَقَامُوا الصَّلَاةَ وَأَنفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً يَرْجُونَ تِجَارَةً لَّن تَبُورَ ﴾
                 </p>
