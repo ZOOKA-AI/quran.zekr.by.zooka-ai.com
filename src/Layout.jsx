@@ -55,7 +55,7 @@ export default function Layout({ children, currentPageName }) {
       `}</style>
 
       {/* Navigation */}
-      <nav className="bg-white border-b-2 border-emerald-100 shadow-sm sticky top-0 z-50">
+      <nav className="bg-white/90 backdrop-blur-xl border-b-2 border-emerald-200/50 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             <Link to={createPageUrl('Quran')} className="flex items-center gap-3">
