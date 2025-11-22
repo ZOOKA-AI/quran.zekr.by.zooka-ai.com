@@ -57,6 +57,44 @@ export default function QuranPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Sadaqah Jariyah Banner */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white shadow-2xl border-none">
+            <div className="p-8 text-center">
+              <div className="text-6xl mb-4">🤲</div>
+              <h2 className="text-3xl font-bold mb-3">صدقة جارية لوجه الله تعالى</h2>
+              <p className="text-xl mb-4 text-green-50">
+                هذا التطبيق مجاني بالكامل ولا نطلب أي تبرعات
+              </p>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-3xl mx-auto">
+                <p className="text-lg leading-relaxed mb-4">
+                  ﴿ إِنَّ الَّذِينَ يَتْلُونَ كِتَابَ اللَّهِ وَأَقَامُوا الصَّلَاةَ وَأَنفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً يَرْجُونَ تِجَارَةً لَّن تَبُورَ ﴾
+                </p>
+                <p className="text-green-50 mb-4">
+                  <strong>شارك في الأجر:</strong> انشر التطبيق مع أهلك وأصدقائك وكل من ينتفع به تشارك في الأجر
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <div className="text-3xl mb-2">📖</div>
+                    <div className="font-bold">قراءة القرآن</div>
+                    <div className="text-sm text-green-100">كل حرف بحسنة</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <div className="text-3xl mb-2">🎤</div>
+                    <div className="font-bold">استماع للمقرئين</div>
+                    <div className="text-sm text-green-100">تدبر وخشوع</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <div className="text-3xl mb-2">🤝</div>
+                    <div className="font-bold">انشر الخير</div>
+                    <div className="text-sm text-green-100">صدقة جارية لك</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
         {/* Smart Assistant Banner */}
         <div className="mb-8">
           <Link to={createPageUrl('Assistant')}>
