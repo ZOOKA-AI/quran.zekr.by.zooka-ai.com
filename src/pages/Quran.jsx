@@ -132,7 +132,7 @@ export default function QuranPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Sadaqah Jariyah Banner */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white shadow-2xl border-none">
+          <Card className="bg-gradient-to-r from-green-600/95 via-emerald-600/95 to-teal-600/95 text-white shadow-2xl border-none backdrop-blur-xl border-4 border-white/20">
             <div className="p-8 text-center">
               <div className="text-6xl mb-4">🤲</div>
               <h2 className="text-3xl font-bold mb-3">صدقة جارية لوجه الله تعالى</h2>
