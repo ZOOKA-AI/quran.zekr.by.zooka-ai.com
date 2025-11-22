@@ -3,14 +3,20 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookMarked, Share2, Copy, Check } from 'lucide-react';
+import { BookMarked, Share2, Copy, Check, Info, Link2, GitCompare } from 'lucide-react';
 import { toast } from 'sonner';
 import BookmarkDialog from './BookmarkDialog';
+import SababNuzoolDialog from './SababNuzoolDialog';
+import RelatedVersesDialog from './RelatedVersesDialog';
+import CompareTafsirDialog from './CompareTafsirDialog';
 
 const VerseCard = ({ verse, onBookmark }) => {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('arabic');
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
+  const [showSababNuzool, setShowSababNuzool] = useState(false);
+  const [showRelatedVerses, setShowRelatedVerses] = useState(false);
+  const [showCompareTafsir, setShowCompareTafsir] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(verse.arabic_text);
@@ -66,11 +72,66 @@ const VerseCard = ({ verse, onBookmark }) => {
           </div>
         </div>
 
+        {/* Interactive Features Buttons */}
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {verse.sabab_nuzool && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSababNuzool(true)}
+              className="flex items-center gap-2 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+            >
+              <Info className="w-4 h-4" />
+              سبب النزول
+            </Button>
+          )}
+          {verse.related_verses && verse.related_verses.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowRelatedVerses(true)}
+              className="flex items-center gap-2 border-purple-200 hover:bg-purple-50 hover:text-purple-700"
+            >
+              <Link2 className="w-4 h-4" />
+              آيات متشابهة ({verse.related_verses.length})
+            </Button>
+          )}
+          {(verse.tafsir_saadi || verse.tafsir_kathir || verse.tafsir_tabari) && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowCompareTafsir(true)}
+              className="flex items-center gap-2 border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+            >
+              <GitCompare className="w-4 h-4" />
+              مقارنة التفاسير
+            </Button>
+          )}
+        </div>
+
         <BookmarkDialog
           isOpen={showBookmarkDialog}
           onClose={() => setShowBookmarkDialog(false)}
           verse={verse}
           onSave={onBookmark}
+        />
+
+        <SababNuzoolDialog
+          isOpen={showSababNuzool}
+          onClose={() => setShowSababNuzool(false)}
+          verse={verse}
+        />
+
+        <RelatedVersesDialog
+          isOpen={showRelatedVerses}
+          onClose={() => setShowRelatedVerses(false)}
+          verse={verse}
+        />
+
+        <CompareTafsirDialog
+          isOpen={showCompareTafsir}
+          onClose={() => setShowCompareTafsir(false)}
+          verse={verse}
         />
 
         {/* Arabic Text */}
