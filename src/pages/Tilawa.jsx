@@ -7,22 +7,18 @@ import { Play, Square, Volume2, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 
 const RECITERS = {
-  khalid_al_jaleel: { name: "خالد الجليل", baseUrl: "https://EveryAyah.com/data/Khalid_Al_Jaleel_64kbps/" },
-  islam_sobhi: { name: "إسلام صبحي", baseUrl: "https://EveryAyah.com/data/IslamSobhi_128kbps/" },
-  tablawi: { name: "محمد محمود الطبلاوي", baseUrl: "https://EveryAyah.com/data/AlTablawi_128kbps/" },
-  elsayed_saeed: { name: "السيد سعيد", baseUrl: "https://EveryAyah.com/data/ElsayedSaeed_64kbps/" },
-  mohamed_elleithy: { name: "محمد الليثي", baseUrl: "https://EveryAyah.com/data/Mohamed_Al_Lithy_128kbps/" },
-  husary: { name: "محمود خليل الحصري", baseUrl: "https://EveryAyah.com/data/Husary_128kbps/" },
-  minshawi: { name: "محمد صديق المنشاوي", baseUrl: "https://EveryAyah.com/data/Minshawy_Murattal_128kbps/" },
-  abdulbasit: { name: "عبد الباسط عبد الصمد", baseUrl: "https://EveryAyah.com/data/Abdul_Basit_Mujawwad_128kbps/" },
-  sudais: { name: "عبد الرحمن السديس", baseUrl: "https://EveryAyah.com/data/Abdurrahmaan_As-Sudais_192kbps/" },
-  shuraim: { name: "سعود الشريم", baseUrl: "https://EveryAyah.com/data/Saood_Shreem_128kbps/" },
-  maher_muaiqly: { name: "ماهر المعيقلي", baseUrl: "https://EveryAyah.com/data/MaherAlMuaiqly_64kbps/" },
-  saad_al_ghamdi: { name: "سعد الغامدي", baseUrl: "https://EveryAyah.com/data/SaadAlGhamdi_128kbps/" },
-  mishary_alafasy: { name: "مشاري راشد العفاسي", baseUrl: "https://EveryAyah.com/data/Alafasy_128kbps/" },
-  abdullah_matroud: { name: "عبد الله المطرود", baseUrl: "https://EveryAyah.com/data/Abdullah_Almatroud_128kbps/" },
-  ali_jaber: { name: "علي جابر", baseUrl: "https://EveryAyah.com/data/Ali_Jaber_64kbps/" }
+  khalid_al_jaleel: { name: "خالد الجليل", baseUrl: "https://server8.mp3quran.net/khalid_al_jalil/hafs/" },
+  islam_sobhi: { name: "إسلام صبحي", baseUrl: "https://server11.mp3quran.net/islam_sobhi/hafs/" },
+  tablawi: { name: "محمد محمود الطبلاوي", baseUrl: "https://server8.mp3quran.net/tablawi/hafs/" },
+  husary: { name: "محمود خليل الحصري", baseUrl: "https://server13.mp3quran.net/husary/hafs/" },
+  minshawi: { name: "محمد صديق المنشاوي", baseUrl: "https://server10.mp3quran.net/minshawi/hafs/" },
+  abdulbasit: { name: "عبد الباسط عبد الصمد", baseUrl: "https://server7.mp3quran.net/basit/hafs/" },
+  sudais: { name: "عبد الرحمن السديس", baseUrl: "https://server11.mp3quran.net/sds/hafs/" },
+  mishary_alafasy: { name: "مشاري راشد العفاسي", baseUrl: "https://server8.mp3quran.net/afs/hafs/" }
 };
+
+const ISTIATHA_URL = "https://server8.mp3quran.net/afs/hafs/001000.mp3";
+const BASMALA_URL = "https://server8.mp3quran.net/afs/hafs/001001.mp3";
 
 export default function TilawaPage() {
   const [selectedReciter, setSelectedReciter] = useState("husary");
