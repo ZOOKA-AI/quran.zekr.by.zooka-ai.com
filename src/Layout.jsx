@@ -96,7 +96,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 
                 <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg p-3 mb-3 border border-purple-400/30">
-                  <p className="text-amber-300 text-lg font-bold mb-1">🤖 ZOOKA-AI</p>
+                  <p className="text-amber-300 text-lg font-bold mb-1">🤖 ZOOKA-AI المرزوق</p>
                   <p className="text-white text-sm mb-1">مساعد التنفيذ الذكي</p>
                   <p className="text-emerald-100 text-xs italic">أول مشروع دعائي • تقنية الذكاء الاصطناعي في خدمة القرآن</p>
                 </div>
