@@ -85,6 +85,10 @@ export default function Layout({ children, currentPageName }) {
           <div className="text-center">
             <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
             <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
+            <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
+              <p className="text-lg font-bold text-white mb-2">🤲 صدقة جارية لوجه الله تعالى</p>
+              <p className="text-emerald-100 text-sm">تطبيق مجاني بالكامل - من المسلمين إلى المسلمين</p>
+            </div>
             <div className="flex justify-center gap-8 text-sm text-emerald-300">
               <span>© 2024 القرآن الكريم</span>
               <span>•</span>
