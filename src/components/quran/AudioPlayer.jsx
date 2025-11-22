@@ -3,22 +3,30 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Play, Pause, SkipForward, SkipBack, Volume2, Download } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Play, Pause, SkipForward, SkipBack, Volume2, Download, Repeat, Repeat1, Gauge } from 'lucide-react';
 
 const RECITERS = [
   { id: 'afasy', name: 'مشاري راشد العفاسي', url: 'https://server8.mp3quran.net/afs/' },
   { id: 'husary', name: 'محمود خليل الحصري', url: 'https://server8.mp3quran.net/husary/' },
   { id: 'minshawi', name: 'محمد صديق المنشاوي', url: 'https://server10.mp3quran.net/minsh/' },
   { id: 'abdulbasit', name: 'عبد الباسط عبد الصمد', url: 'https://server7.mp3quran.net/basit/' },
-  { id: 'sudais', name: 'عبد الرحمن السديس', url: 'https://server11.mp3quran.net/sds/' }
+  { id: 'sudais', name: 'عبد الرحمن السديس', url: 'https://server11.mp3quran.net/sds/' },
+  { id: 'ghamadi', name: 'سعد الغامدي', url: 'https://server7.mp3quran.net/s_gmd/' },
+  { id: 'shuraim', name: 'سعود الشريم', url: 'https://server6.mp3quran.net/shur/' },
+  { id: 'alajmi', name: 'أحمد العجمي', url: 'https://server10.mp3quran.net/ajm/' },
+  { id: 'jibreen', name: 'عبد الله الجبرين', url: 'https://server16.mp3quran.net/jbreen/' },
+  { id: 'budair', name: 'عبد الله بصفر', url: 'https://server11.mp3quran.net/bsfr/' }
 ];
 
-const AudioPlayer = ({ surahNumber }) => {
+const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(80);
   const [selectedReciter, setSelectedReciter] = useState(RECITERS[0].id);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [repeatMode, setRepeatMode] = useState('none'); // none, one, all
   const audioRef = useRef(null);
 
   const reciter = RECITERS.find(r => r.id === selectedReciter);
@@ -30,21 +38,60 @@ const AudioPlayer = ({ surahNumber }) => {
     }
   }, [volume]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = playbackRate;
+    }
+  }, [playbackRate]);
+
   const togglePlayPause = () => {
     if (isPlaying) {
       audioRef.current?.pause();
     } else {
       audioRef.current?.play();
     }
-    setIsPlaying(!isPlaying);
+    const newState = !isPlaying;
+    setIsPlaying(newState);
+    if (onPlayingChange) onPlayingChange(newState);
   };
 
   const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current?.currentTime || 0);
+    const time = audioRef.current?.currentTime || 0;
+    setCurrentTime(time);
+    if (onTimeUpdate) onTimeUpdate(time);
   };
 
   const handleLoadedMetadata = () => {
     setDuration(audioRef.current?.duration || 0);
+  };
+
+  const handleEnded = () => {
+    if (repeatMode === 'one') {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    } else if (repeatMode === 'all') {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    } else {
+      setIsPlaying(false);
+    }
+  };
+
+  const toggleRepeatMode = () => {
+    const modes = ['none', 'one', 'all'];
+    const currentIndex = modes.indexOf(repeatMode);
+    const nextMode = modes[(currentIndex + 1) % modes.length];
+    setRepeatMode(nextMode);
+  };
+
+  const getRepeatIcon = () => {
+    if (repeatMode === 'one') return <Repeat1 className="w-5 h-5" />;
+    return <Repeat className="w-5 h-5" />;
+  };
+
+  const getRepeatColor = () => {
+    if (repeatMode === 'none') return 'text-gray-400';
+    return 'text-emerald-600';
   };
 
   const handleSeek = (value) => {
@@ -87,7 +134,7 @@ const AudioPlayer = ({ surahNumber }) => {
           src={audioUrl}
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
-          onEnded={() => setIsPlaying(false)}
+          onEnded={handleEnded}
         />
 
         {/* Progress Bar */}
@@ -140,6 +187,39 @@ const AudioPlayer = ({ surahNumber }) => {
           >
             <SkipForward className="w-5 h-5" />
           </Button>
+        </div>
+
+        {/* Additional Controls */}
+        <div className="flex items-center justify-center gap-3 mb-4 pb-4 border-b">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleRepeatMode}
+            className={getRepeatColor()}
+          >
+            {getRepeatIcon()}
+            <span className="mr-2">
+              {repeatMode === 'none' && 'بدون تكرار'}
+              {repeatMode === 'one' && 'تكرار السورة'}
+              {repeatMode === 'all' && 'تكرار مستمر'}
+            </span>
+          </Button>
+
+          <div className="flex items-center gap-2">
+            <Gauge className="w-4 h-4 text-gray-600" />
+            <Select value={playbackRate.toString()} onValueChange={(v) => setPlaybackRate(parseFloat(v))}>
+              <SelectTrigger className="w-32 h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0.5">× 0.5 (أبطأ جداً)</SelectItem>
+                <SelectItem value="0.75">× 0.75 (أبطأ)</SelectItem>
+                <SelectItem value="1">× 1 (عادي)</SelectItem>
+                <SelectItem value="1.25">× 1.25 (أسرع)</SelectItem>
+                <SelectItem value="1.5">× 1.5 (أسرع جداً)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Volume Control */}

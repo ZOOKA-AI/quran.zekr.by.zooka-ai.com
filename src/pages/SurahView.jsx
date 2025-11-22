@@ -6,6 +6,7 @@ import { ArrowRight, BookMarked, Search as SearchIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import AudioPlayer from '../components/quran/AudioPlayer';
+import VerseSync from '../components/quran/VerseSync';
 import SearchBar from '../components/quran/SearchBar';
 import VerseCard from '../components/quran/VerseCard';
 import NavigationControls from '../components/quran/NavigationControls';
@@ -18,6 +19,8 @@ export default function SurahView() {
   const [searchResults, setSearchResults] = useState(null);
   const [selectedJuz, setSelectedJuz] = useState(null);
   const [selectedPage, setSelectedPage] = useState(null);
+  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: verses = [], isLoading } = useQuery({
@@ -134,7 +137,20 @@ export default function SurahView() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Audio Player */}
         <div className="mb-8">
-          <AudioPlayer surahNumber={surahNumber} />
+          <AudioPlayer 
+            surahNumber={surahNumber}
+            onTimeUpdate={setAudioCurrentTime}
+            onPlayingChange={setIsAudioPlaying}
+          />
+        </div>
+
+        {/* Verse Sync Display */}
+        <div className="mb-8">
+          <VerseSync 
+            surahNumber={surahNumber}
+            currentTime={audioCurrentTime}
+            isPlaying={isAudioPlaying}
+          />
         </div>
 
         {/* Navigation Controls */}
