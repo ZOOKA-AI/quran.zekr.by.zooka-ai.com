@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Bell, Clock, BookOpen, Heart, Sparkles, Moon, Sun, Share2, Copy } from 'lucide-react';
+import { Bell, BellRing, Clock, BookOpen, Heart, Sparkles, Moon, Sun, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const NOTIFICATIONS = [
@@ -11,7 +11,7 @@ const NOTIFICATIONS = [
     icon: Sun,
     title: '☀️ أذكار الصباح',
     body: 'ابدأ يومك بذكر الله، افتح التطبيق واقرأ أذكار الصباح الآن، فبها تحفظ وتكفى 🌸',
-    time: '6:00 صباحاً',
+    time: '6:00 AM',
     type: 'adhkar',
     category: 'أذكار'
   },
@@ -20,7 +20,7 @@ const NOTIFICATIONS = [
     icon: Moon,
     title: '🌙 أذكار المساء',
     body: 'قبل أن تنام… دقائق مع أذكار المساء تمحو همّ اليوم وتجمع لك الأجر 🤍',
-    time: '6:00 مساءً',
+    time: '6:00 PM',
     type: 'adhkar',
     category: 'أذكار'
   },
@@ -29,7 +29,7 @@ const NOTIFICATIONS = [
     icon: BookOpen,
     title: '📖 آية اليوم',
     body: 'آية واحدة تستطيع أن تغيّر يومك، افتح التطبيق واقرأ آية اليوم بتدبر.',
-    time: '9:00 صباحاً',
+    time: '9:00 AM',
     type: 'quran',
     category: 'قرآن'
   },
@@ -38,7 +38,7 @@ const NOTIFICATIONS = [
     icon: BookOpen,
     title: '🎯 تذكير بخطتك في ختم القرآن',
     body: 'لا تنسَ وردك من القرآن اليوم، استمر ولو صفحة واحدة… المهم أن لا ينقطع حبلك مع كتاب الله.',
-    time: '8:00 مساءً',
+    time: '8:00 PM',
     type: 'quran',
     category: 'قرآن'
   },
@@ -47,7 +47,7 @@ const NOTIFICATIONS = [
     icon: Sparkles,
     title: '🌿 جمعة مباركة',
     body: 'أكثر من الصلاة على النبي ﷺ وقراءة سورة الكهف، وادعُ لمن تحب… جمعة طيبة عليك 🤍',
-    time: 'الجمعة 7:00 صباحاً',
+    time: 'الجمعة 7:00 AM',
     type: 'friday',
     category: 'الجمعة'
   },
@@ -56,7 +56,7 @@ const NOTIFICATIONS = [
     icon: BookOpen,
     title: '🕌 تذكير بسورة الكهف',
     body: 'لا تنسَ قراءة سورة الكهف اليوم، فهي نورٌ ما بين الجمعتين.',
-    time: 'الجمعة 9:00 صباحاً',
+    time: 'الجمعة 9:00 AM',
     type: 'friday',
     category: 'الجمعة'
   },
@@ -65,7 +65,7 @@ const NOTIFICATIONS = [
     icon: Heart,
     title: '🤍 قل يا رب',
     body: 'لو ضاق صدرك… ارفع يديك وقل: يا رب. افتح التطبيق واختر دعاء يطمئن قلبك.',
-    time: '12:00 ظهراً',
+    time: '12:00 PM',
     type: 'dua',
     category: 'دعاء'
   },
@@ -74,7 +74,7 @@ const NOTIFICATIONS = [
     icon: Heart,
     title: '🌧️ دعاء الكرب والهم',
     body: 'ما أصابك لم يكن ليخطئك… تعال نردد معًا أدعية تفريج الكرب من داخل التطبيق.',
-    time: '3:00 عصراً',
+    time: '3:00 PM',
     type: 'dua',
     category: 'دعاء'
   },
@@ -83,7 +83,7 @@ const NOTIFICATIONS = [
     icon: Sparkles,
     title: '🌟 سنة مهجورة',
     body: 'تعرّف اليوم على سنة نبوية قد لا يعرفها الكثير، واعمل بها لتُحبَّ إلى الله أكثر.',
-    time: '10:00 صباحاً',
+    time: '10:00 AM',
     type: 'sunnah',
     category: 'سنة'
   },
@@ -92,7 +92,7 @@ const NOTIFICATIONS = [
     icon: Heart,
     title: '❤️ دقيقة استغفار',
     body: 'استغفر الله العظيم وأتوب إليه… كررها 100 مرة، وانظر لراحة قلبك بعدها.',
-    time: '5:00 مساءً',
+    time: '5:00 PM',
     type: 'istighfar',
     category: 'استغفار'
   },
@@ -101,36 +101,36 @@ const NOTIFICATIONS = [
     icon: Share2,
     title: 'شارك الأجر مع غيرك',
     body: 'أرسل التطبيق لصديق أو قريب، فالدال على الخير كفاعله. اضغط وشارك الرابط الآن 🌱',
-    time: '4:00 عصراً',
-    type: 'share',
-    category: 'تفاعل'
+    time: 'يومياً',
+    type: 'sharing',
+    category: 'مشاركة'
   },
   {
     id: 12,
     icon: Bell,
     title: 'ما رأيك في التطبيق؟',
     body: 'ساعدنا نحسّن تطبيقك الإسلامي برسالة بسيطة برأيك واقتراحاتك، رأيك يهمنا جدًا.',
-    time: '7:00 مساءً',
+    time: 'أسبوعياً',
     type: 'feedback',
-    category: 'تفاعل'
+    category: 'تقييم'
   },
   {
     id: 13,
     icon: Clock,
     title: '⏰ تذكير لطيف',
     body: 'بين مشاغل الحياة لا تنسَ قلبك… افتح التطبيق وخُذ دقيقة ذكرٍ وقراءةٍ وراحة.',
-    time: '2:00 ظهراً',
-    type: 'general',
-    category: 'عام'
+    time: '2:00 PM',
+    type: 'reminder',
+    category: 'تذكير'
   },
   {
     id: 14,
     icon: Sparkles,
     title: '🌺 لحظات مع الله',
     body: 'اجعل لك لحظات ثابتة كل يوم مع القرآن والذكر والدعاء، ونحن هنا لنذكّرك بها.',
-    time: '11:00 صباحاً',
-    type: 'general',
-    category: 'عام'
+    time: 'يومياً',
+    type: 'reminder',
+    category: 'تذكير'
   }
 ];
 
@@ -142,17 +142,22 @@ export default function NotificationsPage() {
     : NOTIFICATIONS.filter(n => n.type === filter);
 
   const categories = [
-    { id: 'all', label: 'الكل', count: NOTIFICATIONS.length },
-    { id: 'adhkar', label: 'أذكار', count: NOTIFICATIONS.filter(n => n.type === 'adhkar').length },
-    { id: 'quran', label: 'قرآن', count: NOTIFICATIONS.filter(n => n.type === 'quran').length },
-    { id: 'friday', label: 'الجمعة', count: NOTIFICATIONS.filter(n => n.type === 'friday').length },
-    { id: 'dua', label: 'دعاء', count: NOTIFICATIONS.filter(n => n.type === 'dua').length }
+    { id: 'all', label: 'الكل' },
+    { id: 'adhkar', label: 'أذكار' },
+    { id: 'quran', label: 'قرآن' },
+    { id: 'friday', label: 'الجمعة' },
+    { id: 'dua', label: 'دعاء' },
+    { id: 'sunnah', label: 'سنة' }
   ];
 
-  const copyNotification = (notification) => {
-    const text = `${notification.title}\n${notification.body}`;
-    navigator.clipboard.writeText(text);
-    toast.success('تم نسخ الإشعار! 📋');
+  const handleShare = (notification) => {
+    const text = `${notification.title}\n\n${notification.body}`;
+    if (navigator.share) {
+      navigator.share({ text });
+    } else {
+      navigator.clipboard.writeText(text);
+      toast.success('تم النسخ! 📋');
+    }
   };
 
   return (
@@ -163,7 +168,7 @@ export default function NotificationsPage() {
           <div className="text-center">
             <div className="mb-6">
               <div className="inline-block p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <Bell className="w-16 h-16 text-amber-300" />
+                <BellRing className="w-16 h-16 text-amber-300" />
               </div>
             </div>
             <h1 className="text-5xl font-bold mb-4">الإشعارات والتذكيرات</h1>
@@ -173,23 +178,19 @@ export default function NotificationsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        {/* Filters */}
+        <div className="flex gap-3 mb-8 flex-wrap justify-center">
           {categories.map(cat => (
-            <Card 
+            <Button
               key={cat.id}
-              className={`p-4 text-center cursor-pointer transition-all hover:shadow-lg ${
-                filter === cat.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white hover:bg-emerald-50'
-              }`}
               onClick={() => setFilter(cat.id)}
+              variant={filter === cat.id ? 'default' : 'outline'}
+              className={filter === cat.id 
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                : 'hover:bg-emerald-50'}
             >
-              <div className={`text-3xl font-bold mb-1 ${filter === cat.id ? 'text-white' : 'text-emerald-600'}`}>
-                {cat.count}
-              </div>
-              <div className={`text-sm ${filter === cat.id ? 'text-emerald-100' : 'text-gray-600'}`}>
-                {cat.label}
-              </div>
-            </Card>
+              {cat.label}
+            </Button>
           ))}
         </div>
 
@@ -221,11 +222,11 @@ export default function NotificationsPage() {
                         </div>
                         <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => copyNotification(notification)}
-                          className="hover:bg-emerald-50"
+                          variant="ghost"
+                          onClick={() => handleShare(notification)}
+                          className="text-emerald-600 hover:text-emerald-700"
                         >
-                          <Copy className="w-4 h-4" />
+                          <Share2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </div>

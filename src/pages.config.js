@@ -7,7 +7,8 @@ import Assistant from './pages/Assistant';
 import Reciters from './pages/Reciters';
 import Calligraphy from './pages/Calligraphy';
 import Notifications from './pages/Notifications';
-import NotificationsDocs from './pages/NotificationsDocs';
+import NotificationDocs from './pages/NotificationDocs';
+import NotificationSettings from './pages/NotificationSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -21,7 +22,8 @@ export const PAGES = {
     "Reciters": Reciters,
     "Calligraphy": Calligraphy,
     "Notifications": Notifications,
-    "NotificationsDocs": NotificationsDocs,
+    "NotificationDocs": NotificationDocs,
+    "NotificationSettings": NotificationSettings,
 }
 
 export const pagesConfig = {
