@@ -60,70 +60,43 @@ export default function QuranPage() {
   );
 
   return (
-    <div className="min-h-screen relative overflow-hidden" dir="rtl">
-      {/* Spiritual Animated Background */}
-      <div className="fixed inset-0 z-0">
-        {/* Nature Background with Beach & Palm Trees */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-pulse-slow"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80)',
-            animationDuration: '8s'
-          }}
-        />
-        {/* Overlay with spiritual colors */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/50 via-teal-300/40 to-emerald-400/50 animate-pulse-slow" 
-             style={{ animationDuration: '10s' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/40 to-sky-200/40" />
-        
-        {/* Animated particles effect */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-amber-300/40 rounded-full blur-3xl animate-float" />
-          <div className="absolute top-40 right-20 w-40 h-40 bg-emerald-400/30 rounded-full blur-3xl animate-float-delayed" />
-          <div className="absolute bottom-20 left-1/4 w-48 h-48 bg-cyan-400/25 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/3 right-1/3 w-36 h-36 bg-teal-300/30 rounded-full blur-3xl animate-float-delayed" style={{ animationDelay: '2s' }} />
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir="rtl">
       <style jsx>{`
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.6; }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 0 40px rgba(16, 185, 129, 0.3); }
+          50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), 0 0 60px rgba(16, 185, 129, 0.5); }
         }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.1); }
-        }
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          33% { transform: translateY(-15px) translateX(10px); }
-          66% { transform: translateY(-5px) translateX(-10px); }
-        }
-        .animate-pulse-slow { animation: pulse-slow infinite; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite; }
+        .glow-green { animation: glow 2s ease-in-out infinite; }
       `}</style>
       
-      <div className="relative z-10">
-      {/* Header with Islamic Calligraphy Style */}
-      <div className="bg-gradient-to-r from-teal-500 via-cyan-500 to-emerald-500 text-white shadow-2xl border-b-4 border-amber-400">
-        <div className="max-w-7xl mx-auto px-6 py-20">
+      {/* Header with Kaaba Image */}
+      <div className="relative bg-gradient-to-br from-emerald-500 via-green-500 to-emerald-600 text-white shadow-2xl overflow-hidden">
+        {/* Kaaba Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{
+            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6920cdfd512838f4a35374d8/ad390f8ea_21da07e84f2006654e384d2924c664b1.jpg)'
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-600/80 via-green-600/70 to-emerald-700/80" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
           <div className="text-center">
-            <div className="mb-8 animate-pulse">
-              <div className="inline-block p-6 bg-gradient-to-br from-amber-300/30 to-yellow-400/20 rounded-3xl backdrop-blur-xl border-2 border-amber-300/40 shadow-2xl">
-                <svg className="w-20 h-20 text-amber-200 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+            <div className="mb-6">
+              <div className="inline-block p-5 bg-white/20 rounded-3xl border-4 border-amber-400 shadow-2xl glow-green">
+                <svg className="w-16 h-16 text-amber-300" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
                 </svg>
               </div>
             </div>
-            <h1 className="text-6xl font-bold mb-6 text-white drop-shadow-2xl font-arabic" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3), 0 0 40px rgba(251,191,36,0.4)' }}>
+            <h1 className="text-7xl font-bold mb-4 text-white font-arabic drop-shadow-2xl" style={{ textShadow: '0 4px 15px rgba(0,0,0,0.6), 0 0 50px rgba(251,191,36,0.6)' }}>
               القرآن الكريم
             </h1>
-            <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 max-w-3xl mx-auto border border-white/30 shadow-2xl mb-4">
-              <p className="text-2xl text-amber-100 mb-3 font-arabic leading-loose" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
+            <div className="bg-white rounded-2xl p-6 max-w-3xl mx-auto shadow-2xl border-4 border-amber-400">
+              <p className="text-3xl text-emerald-700 mb-3 font-arabic font-bold leading-loose">
                 ﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾
               </p>
-              <p className="text-cyan-100 text-lg font-semibold">المصحف الإلكتروني الشامل • بروح الإيمان والسكينة 🕌</p>
+              <p className="text-emerald-600 text-xl font-bold">المصحف الإلكتروني الشامل 🕌</p>
             </div>
           </div>
         </div>
@@ -132,51 +105,50 @@ export default function QuranPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Sadaqah Jariyah Banner */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white shadow-2xl border-none border-4 border-white/30">
+          <Card className="bg-gradient-to-br from-emerald-500 via-green-500 to-emerald-600 text-white shadow-2xl border-4 border-amber-400 glow-green">
             <div className="p-8 text-center">
               <div className="text-6xl mb-4">🤲</div>
-              <h2 className="text-3xl font-bold mb-3">صدقة جارية لوجه الله تعالى</h2>
-              <p className="text-xl mb-4 text-green-50">
+              <h2 className="text-4xl font-bold mb-3 drop-shadow-lg">صدقة جارية لوجه الله تعالى</h2>
+              <p className="text-2xl mb-6 font-bold text-white">
                 هذا التطبيق مجاني بالكامل ولا نطلب أي تبرعات
               </p>
-              <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 max-w-3xl mx-auto border border-white/30 shadow-inner">
-                <p className="text-lg leading-relaxed mb-4">
+              <div className="bg-white rounded-2xl p-8 max-w-3xl mx-auto shadow-2xl">
+                <p className="text-xl font-bold text-emerald-700 leading-relaxed mb-6 font-arabic">
                   ﴿ إِنَّ الَّذِينَ يَتْلُونَ كِتَابَ اللَّهِ وَأَقَامُوا الصَّلَاةَ وَأَنفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً يَرْجُونَ تِجَارَةً لَّن تَبُورَ ﴾
                 </p>
-                <p className="text-green-50 mb-4">
-                  <strong>شارك في الأجر:</strong> انشر التطبيق مع أهلك وأصدقائك وكل من ينتفع به تشارك في الأجر
+                <p className="text-emerald-700 mb-6 text-lg font-bold">
+                  شارك في الأجر: انشر التطبيق مع أهلك وأصدقائك
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
-                    <div className="text-4xl mb-3">📖</div>
-                    <div className="font-bold text-lg">قراءة القرآن</div>
-                    <div className="text-sm text-green-100">كل حرف بحسنة</div>
+                  <div className="bg-gradient-to-br from-emerald-100 to-green-50 rounded-xl p-6 shadow-lg border-2 border-emerald-300">
+                    <div className="text-5xl mb-3">📖</div>
+                    <div className="font-bold text-xl text-emerald-700">قراءة القرآن</div>
+                    <div className="text-emerald-600 font-semibold">كل حرف بحسنة</div>
                   </div>
-                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
-                    <div className="text-4xl mb-3">🎤</div>
-                    <div className="font-bold text-lg">استماع للمقرئين</div>
-                    <div className="text-sm text-green-100">تدبر وخشوع</div>
+                  <div className="bg-gradient-to-br from-emerald-100 to-green-50 rounded-xl p-6 shadow-lg border-2 border-emerald-300">
+                    <div className="text-5xl mb-3">🎤</div>
+                    <div className="font-bold text-xl text-emerald-700">استماع للمقرئين</div>
+                    <div className="text-emerald-600 font-semibold">تدبر وخشوع</div>
                   </div>
-                  <div className="bg-gradient-to-br from-white/20 to-white/10 rounded-xl p-5 backdrop-blur-sm border border-white/30 shadow-lg hover:scale-105 transition-transform">
-                    <div className="text-4xl mb-3">🤝</div>
-                    <div className="font-bold text-lg">انشر الخير</div>
-                    <div className="text-sm text-green-100">صدقة جارية لك</div>
+                  <div className="bg-gradient-to-br from-emerald-100 to-green-50 rounded-xl p-6 shadow-lg border-2 border-emerald-300">
+                    <div className="text-5xl mb-3">🤝</div>
+                    <div className="font-bold text-xl text-emerald-700">انشر الخير</div>
+                    <div className="text-emerald-600 font-semibold">صدقة جارية لك</div>
                   </div>
                 </div>
-                <div className="mt-6 flex gap-3 justify-center flex-wrap">
+                <div className="mt-8 flex gap-4 justify-center flex-wrap">
                   <Button
                     onClick={handleShare}
-                    className="bg-white text-emerald-700 hover:bg-emerald-50 font-bold px-6 py-3 text-lg flex items-center gap-2"
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white font-bold px-8 py-4 text-xl shadow-xl border-2 border-amber-400"
                   >
-                    <Share2 className="w-5 h-5" />
+                    <Share2 className="w-6 h-6 ml-2" />
                     شارك التطبيق واربح الأجر
                   </Button>
                   <Button
                     onClick={handleCopyLink}
-                    variant="outline"
-                    className="bg-white/20 border-white text-white hover:bg-white/30 font-bold px-6 py-3 text-lg flex items-center gap-2"
+                    className="bg-amber-400 hover:bg-amber-500 text-emerald-900 font-bold px-8 py-4 text-xl shadow-xl border-2 border-emerald-500"
                   >
-                    <Copy className="w-5 h-5" />
+                    <Copy className="w-6 h-6 ml-2" />
                     نسخ الرابط
                   </Button>
                 </div>
@@ -188,58 +160,60 @@ export default function QuranPage() {
         {/* Smart Assistant Banner */}
         <div className="mb-8">
           <Link to={createPageUrl('Assistant')}>
-            <div className="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-4 border-purple-300/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="bg-white/30 backdrop-blur-md rounded-2xl p-4 border-2 border-white/40 shadow-lg">
-                    <MessageSquare className="w-10 h-10 text-white drop-shadow-lg" />
+            <Card className="bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-4 border-purple-400">
+              <div className="p-8">
+                <div className="flex items-center justify-between gap-6">
+                  <div className="flex items-center gap-6">
+                    <div className="bg-white rounded-2xl p-5 shadow-xl">
+                      <MessageSquare className="w-12 h-12 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">🎤 المساعد الصوتي الذكي</h3>
+                      <p className="text-xl text-purple-100 font-semibold">اسأل أي سؤال عن القرآن بالصوت أو الكتابة</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-1">🎤 المساعد الصوتي الذكي</h3>
-                    <p className="text-purple-100">اسأل أي سؤال عن القرآن بالصوت أو الكتابة</p>
+                  <div className="hidden md:block">
+                    <Button className="bg-white text-purple-600 hover:bg-purple-50 font-bold px-8 py-4 text-xl shadow-xl">
+                      جرب الآن
+                    </Button>
                   </div>
-                </div>
-                <div className="hidden md:block">
-                  <Button className="bg-white text-purple-600 hover:bg-purple-50 font-bold px-6 py-3 text-lg">
-                    جرب الآن
-                  </Button>
                 </div>
               </div>
-            </div>
+            </Card>
           </Link>
         </div>
 
         {/* Search Bar */}
         <div className="mb-12">
           <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-emerald-500" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="ابحث عن سورة بالاسم أو الرقم..."
-              className="pr-12 h-14 text-lg border-2 border-emerald-200 focus:border-emerald-500 rounded-xl shadow-lg"
+              className="pr-16 h-16 text-xl font-bold border-4 border-emerald-400 focus:border-emerald-600 rounded-2xl shadow-2xl bg-white"
             />
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-white/90 to-emerald-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-emerald-200/50 text-center hover:scale-105 transition-transform">
-            <p className="text-5xl font-bold text-emerald-600 mb-2 drop-shadow-md">114</p>
-            <p className="text-gray-700 font-semibold">سورة</p>
-          </div>
-          <div className="bg-gradient-to-br from-white/90 to-amber-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-amber-200/50 text-center hover:scale-105 transition-transform">
-            <p className="text-5xl font-bold text-amber-600 mb-2 drop-shadow-md">30</p>
-            <p className="text-gray-700 font-semibold">جزء</p>
-          </div>
-          <div className="bg-gradient-to-br from-white/90 to-blue-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-blue-200/50 text-center hover:scale-105 transition-transform">
-            <p className="text-5xl font-bold text-blue-600 mb-2 drop-shadow-md">6236</p>
-            <p className="text-gray-700 font-semibold">آية</p>
-          </div>
-          <div className="bg-gradient-to-br from-white/90 to-purple-50/80 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border-2 border-purple-200/50 text-center hover:scale-105 transition-transform">
-            <p className="text-5xl font-bold text-purple-600 mb-2 drop-shadow-md">5</p>
-            <p className="text-gray-700 font-semibold">قراء</p>
-          </div>
+          <Card className="bg-white rounded-2xl p-8 shadow-2xl border-4 border-emerald-300 text-center hover:scale-105 transition-transform">
+            <p className="text-6xl font-bold text-emerald-600 mb-3">114</p>
+            <p className="text-gray-800 font-bold text-xl">سورة</p>
+          </Card>
+          <Card className="bg-white rounded-2xl p-8 shadow-2xl border-4 border-amber-300 text-center hover:scale-105 transition-transform">
+            <p className="text-6xl font-bold text-amber-600 mb-3">30</p>
+            <p className="text-gray-800 font-bold text-xl">جزء</p>
+          </Card>
+          <Card className="bg-white rounded-2xl p-8 shadow-2xl border-4 border-blue-300 text-center hover:scale-105 transition-transform">
+            <p className="text-6xl font-bold text-blue-600 mb-3">6236</p>
+            <p className="text-gray-800 font-bold text-xl">آية</p>
+          </Card>
+          <Card className="bg-white rounded-2xl p-8 shadow-2xl border-4 border-purple-300 text-center hover:scale-105 transition-transform">
+            <p className="text-6xl font-bold text-purple-600 mb-3">8</p>
+            <p className="text-gray-800 font-bold text-xl">قراء</p>
+          </Card>
         </div>
 
         {/* Surahs Grid */}
@@ -251,10 +225,9 @@ export default function QuranPage() {
 
         {filteredSurahs.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">لم يتم العثور على نتائج</p>
+            <p className="text-gray-700 text-2xl font-bold">لم يتم العثور على نتائج</p>
           </div>
         )}
-      </div>
       </div>
     </div>
   );
