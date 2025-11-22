@@ -188,7 +188,7 @@ export default function QuranPage() {
         {/* Smart Assistant Banner */}
         <div className="mb-8">
           <Link to={createPageUrl('Assistant')}>
-            <div className="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-2 border-purple-400">
+            <div className="bg-gradient-to-r from-purple-500/90 via-purple-600/90 to-indigo-600/90 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] cursor-pointer border-4 border-purple-300/40 backdrop-blur-xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3">
