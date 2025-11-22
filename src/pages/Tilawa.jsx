@@ -83,7 +83,15 @@ export default function TilawaPage() {
     indexRef.current = 0;
     stoppedByUserRef.current = false;
 
-    // بناء قائمة التشغيل
+    // إضافة الاستعاذة (001000.mp3 يعني استعاذة في EveryAyah)
+    playlistRef.current.push(`${reciter.baseUrl}001000.mp3`);
+    
+    // إضافة البسملة إذا لم تكن سورة التوبة
+    if (s !== 9) {
+      playlistRef.current.push(`${reciter.baseUrl}001001.mp3`);
+    }
+
+    // بناء قائمة التشغيل للآيات
     for (let a = from; a <= to; a++) {
       const surahStr = s.toString().padStart(3, "0");
       const ayahStr = a.toString().padStart(3, "0");
@@ -92,7 +100,7 @@ export default function TilawaPage() {
     }
 
     setIsPlaying(true);
-    toast.success(`بدء التلاوة: السورة ${s} من الآية ${from} إلى ${to}`);
+    toast.success(`بدء التلاوة بالاستعاذة والبسملة: السورة ${s} من الآية ${from} إلى ${to}`);
     playNext();
   };
 
