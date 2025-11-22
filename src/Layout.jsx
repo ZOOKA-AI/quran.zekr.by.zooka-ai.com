@@ -85,6 +85,16 @@ export default function Layout({ children, currentPageName }) {
           <div className="text-center">
             <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
             <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
+
+            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-4 mb-4 max-w-2xl mx-auto border border-purple-400/30">
+              <p className="text-amber-300 text-xl font-bold mb-2">📢 باص إسلامي صدقة جارية</p>
+              <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-white text-lg hover:text-amber-300 transition-colors underline font-bold block mb-2">
+                🌐 zaka.ai
+              </a>
+              <p className="text-emerald-100 text-sm mb-2">من مصر 🇪🇬 • نطاق .egypt</p>
+              <p className="text-white font-bold">👍 اشتركوا في القناة</p>
+            </div>
+
             <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
               <p className="text-lg font-bold text-white mb-2">🤲 صدقة جارية لوجه الله تعالى</p>
               <p className="text-emerald-100 text-sm mb-3">تطبيق مجاني بالكامل - من المسلمين إلى المسلمين</p>
