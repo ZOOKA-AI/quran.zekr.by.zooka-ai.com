@@ -2,6 +2,7 @@ import Quran from './pages/Quran';
 import SurahView from './pages/SurahView';
 import Bookmarks from './pages/Bookmarks';
 import Profile from './pages/Profile';
+import PrayerTimes from './pages/PrayerTimes';
 import __Layout from './Layout.jsx';
 
 
@@ -10,6 +11,7 @@ export const PAGES = {
     "SurahView": SurahView,
     "Bookmarks": Bookmarks,
     "Profile": Profile,
+    "PrayerTimes": PrayerTimes,
 }
 
 export const pagesConfig = {
