@@ -87,7 +87,13 @@ export default function Layout({ children, currentPageName }) {
             <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
             <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
               <p className="text-lg font-bold text-white mb-2">🤲 صدقة جارية لوجه الله تعالى</p>
-              <p className="text-emerald-100 text-sm">تطبيق مجاني بالكامل - من المسلمين إلى المسلمين</p>
+              <p className="text-emerald-100 text-sm mb-3">تطبيق مجاني بالكامل - من المسلمين إلى المسلمين</p>
+              <div className="border-t border-emerald-600/50 pt-3 mt-3">
+                <p className="text-emerald-100 text-sm mb-1">من ZOOKA-AI 🤖</p>
+                <p className="text-emerald-200 text-xs mb-1">المطورون: موسى وهارون - بيت الريف</p>
+                <p className="text-emerald-200 text-xs">حفظ الملكية وتأمين كتاب الله وسنة رسوله</p>
+                <p className="text-emerald-100 text-xs mt-2">من الفقراء لله المصريين 🇪🇬</p>
+              </div>
             </div>
             <div className="flex justify-center gap-8 text-sm text-emerald-300">
               <span>© 2024 القرآن الكريم</span>
