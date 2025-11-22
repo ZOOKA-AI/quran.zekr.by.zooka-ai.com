@@ -60,9 +60,20 @@ export default function QuranPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
+    <div className="min-h-screen relative" dir="rtl">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80)',
+          opacity: 0.15
+        }}
+      />
+      <div className="fixed inset-0 bg-gradient-to-br from-emerald-50/95 via-white/90 to-cyan-50/95" />
+      
+      <div className="relative z-10">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
+      <div className="bg-gradient-to-r from-emerald-600/95 via-teal-600/95 to-cyan-600/95 backdrop-blur-sm text-white shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center">
             <div className="mb-6">
