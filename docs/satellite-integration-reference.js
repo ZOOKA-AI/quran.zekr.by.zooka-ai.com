@@ -52,8 +52,10 @@ const s3 = new AWS.S3();
 async function downlinkSatelliteData(contactId, bucketName, key) {
   try {
     const params = { contactId };
-    const response = await groundstation.getDataflowEndpointGroup(params).promise();
-    console.log('Satellite Downlink Started:', response);
+    // Note: This is simplified. Real implementation would use describeContact
+    // to check contact status, then retrieve data from S3 after contact completion
+    const response = await groundstation.describeContact(params).promise();
+    console.log('Satellite Contact Status:', response);
 
     // Store downlinked data in S3
     const s3Params = {
@@ -163,7 +165,7 @@ const GlobalQuranApp = () => {
   return (
     <div className="satellite-status">
       <h1>ذكر القرآن - عالمي عبر الأقمار الصناعية</h1>
-      <p>التطبيق مربوط بالأقمار للوصول العالمي والتخزين الآمن</p>
+      <p>التطبيق مرتبط بالأقمار للوصول العالمي والتخزين الآمن</p>
       
       <div className="connection-status">
         <p>Connection Status: {connectionStatus}</p>
@@ -172,7 +174,7 @@ const GlobalQuranApp = () => {
         )}
       </div>
       
-      {signalStrength < 50 && (
+      {signalStrength !== null && signalStrength < 50 && (
         <div className="offline-mode-notice">
           <p>Low signal detected. Offline mode enabled.</p>
         </div>
