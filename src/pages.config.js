@@ -10,10 +10,13 @@ import Notifications from './pages/Notifications';
 import NotificationDocs from './pages/NotificationDocs';
 import NotificationSettings from './pages/NotificationSettings';
 import Tilawa from './pages/Tilawa';
+import Home from './pages/Home';
+import RecitationPlayer from './pages/RecitationPlayer';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Home": Home,
     "Quran": Quran,
     "SurahView": SurahView,
     "Bookmarks": Bookmarks,
@@ -26,10 +29,11 @@ export const PAGES = {
     "NotificationDocs": NotificationDocs,
     "NotificationSettings": NotificationSettings,
     "Tilawa": Tilawa,
+    "RecitationPlayer": RecitationPlayer,
 }
 
 export const pagesConfig = {
-    mainPage: "Quran",
+    mainPage: "Home",
     Pages: PAGES,
     Layout: __Layout,
 };
