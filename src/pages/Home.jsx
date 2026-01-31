@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Volume2, Clock, BookMarked, MessageSquare, Bell, Sparkles, Mic, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function Home() {
   const features = [
@@ -144,7 +145,7 @@ export default function Home() {
           <h3 className="text-2xl font-bold text-blue-900 mb-4">آية اليوم</h3>
           <div className="bg-white/70 rounded-lg p-6 mb-4">
             <p className="text-3xl font-arabic text-gray-800 leading-loose mb-4">
-              إِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرٗا
+              فَإِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرًا
             </p>
             <p className="text-lg text-gray-600 mb-2">
               "فإن مع العسر يسرا"
@@ -154,7 +155,7 @@ export default function Home() {
             </p>
           </div>
           <p className="text-gray-700 italic">
-            "Indeed, with hardship comes ease"
+            "For indeed, with hardship comes ease"
           </p>
         </div>
       </Card>
@@ -179,7 +180,7 @@ export default function Home() {
                   navigator.share({ title: 'تطبيق القرآن الكريم', text: shareText });
                 } else {
                   navigator.clipboard.writeText(shareText);
-                  alert('تم نسخ الرابط!');
+                  toast.success('تم نسخ الرابط! شاركه مع من تحب لتنال الأجر 🌟');
                 }
               }}
             >
