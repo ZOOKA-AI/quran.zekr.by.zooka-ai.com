@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookMarked, Share2, Copy, Check, Info, Link2, GitCompare, Play, Pause, Volume2 } from 'lucide-react';
+import { BookMarked, Share2, Copy, Check, Info, Link2, GitCompare, Pause, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
 import BookmarkDialog from './BookmarkDialog';
 import SababNuzoolDialog from './SababNuzoolDialog';

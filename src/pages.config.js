@@ -1,3 +1,4 @@
+import Home from './pages/Home';
 import Quran from './pages/Quran';
 import SurahView from './pages/SurahView';
 import Bookmarks from './pages/Bookmarks';
@@ -14,6 +15,7 @@ import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Home": Home,
     "Quran": Quran,
     "SurahView": SurahView,
     "Bookmarks": Bookmarks,
@@ -29,7 +31,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Quran",
+    mainPage: "Home",
     Pages: PAGES,
     Layout: __Layout,
 };
