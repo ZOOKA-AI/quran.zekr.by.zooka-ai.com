@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
@@ -16,7 +16,28 @@ export default function BookmarksPage() {
     queryKey: ['bookmarks'],
     queryFn: () => base44.entities.Bookmark.list('-created_date'),
     initialData: [],
+    staleTime: 30000, // 30 seconds cache
   });
+
+  // Real-time subscription للتحديثات الفورية
+  useEffect(() => {
+    const unsubscribe = base44.entities.Bookmark.subscribe((event) => {
+      queryClient.setQueryData(['bookmarks'], (old) => {
+        if (!old) return old;
+        
+        if (event.type === 'create') {
+          return [event.data, ...old];
+        } else if (event.type === 'update') {
+          return old.map((b) => (b.id === event.id ? event.data : b));
+        } else if (event.type === 'delete') {
+          return old.filter((b) => b.id !== event.id);
+        }
+        return old;
+      });
+    });
+
+    return unsubscribe;
+  }, [queryClient]);
 
   const deleteBookmarkMutation = useMutation({
     mutationFn: (id) => base44.entities.Bookmark.delete(id),

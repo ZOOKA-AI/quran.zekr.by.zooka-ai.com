@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Search, MessageSquare, Share2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import SurahCard from '../components/quran/SurahCard';
+import { useAuth } from '@/components/AuthProvider';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
@@ -31,6 +32,7 @@ const SURAHS = [
 
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const { user, isAuthenticated } = useAuth();
 
   const handleShare = () => {
     const appUrl = window.location.origin;
@@ -53,11 +55,17 @@ export default function QuranPage() {
     toast.success('تم نسخ رابط التطبيق! 📋');
   };
 
-  const filteredSurahs = SURAHS.filter(surah => 
-    surah.name.includes(searchQuery) || 
-    surah.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    surah.number.toString().includes(searchQuery)
-  );
+  // Memoized filtering للأداء العالي
+  const filteredSurahs = useMemo(() => {
+    if (!searchQuery) return SURAHS;
+    
+    const query = searchQuery.toLowerCase();
+    return SURAHS.filter(surah => 
+      surah.name.includes(searchQuery) || 
+      surah.transliteration.toLowerCase().includes(query) ||
+      surah.number.toString().includes(searchQuery)
+    );
+  }, [searchQuery]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir="rtl">
