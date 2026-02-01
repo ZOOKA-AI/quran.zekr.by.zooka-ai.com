@@ -52,8 +52,10 @@ import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
 import Community from './pages/Community';
+import Ibtihaalat from './pages/Ibtihaalat';
 import Library from './pages/Library';
 import Messages from './pages/Messages';
+import Muathin from './pages/Muathin';
 import NotificationSettings from './pages/NotificationSettings';
 import Orphans from './pages/Orphans';
 import PrayerTimes from './pages/PrayerTimes';
@@ -66,8 +68,7 @@ import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
-import Ibtihaalat from './pages/Ibtihaalat';
-import Muathin from './pages/Muathin';
+import AdminPanel from './pages/AdminPanel';
 import __Layout from './Layout.jsx';
 
 
@@ -77,8 +78,10 @@ export const PAGES = {
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
     "Community": Community,
+    "Ibtihaalat": Ibtihaalat,
     "Library": Library,
     "Messages": Messages,
+    "Muathin": Muathin,
     "NotificationSettings": NotificationSettings,
     "Orphans": Orphans,
     "PrayerTimes": PrayerTimes,
@@ -91,8 +94,7 @@ export const PAGES = {
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
-    "Ibtihaalat": Ibtihaalat,
-    "Muathin": Muathin,
+    "AdminPanel": AdminPanel,
 }
 
 export const pagesConfig = {
