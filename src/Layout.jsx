@@ -105,6 +105,7 @@ export default function Layout({ children, currentPageName }) {
         onNext={() => {}}
         onPrevious={() => {}}
         onVolumeChange={() => {}}
+        onProgressChange={() => {}}
       />
 
       {/* Footer */}
