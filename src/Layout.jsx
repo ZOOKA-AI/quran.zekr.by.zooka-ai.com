@@ -104,6 +104,7 @@ export default function Layout({ children, currentPageName }) {
         onPlayPause={() => {}}
         onNext={() => {}}
         onPrevious={() => {}}
+        onVolumeChange={() => {}}
       />
 
       {/* Footer */}
