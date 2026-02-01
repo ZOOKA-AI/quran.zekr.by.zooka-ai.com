@@ -10,6 +10,7 @@ import SababNuzoolDialog from './SababNuzoolDialog';
 import RelatedVersesDialog from './RelatedVersesDialog';
 import CompareTafsirDialog from './CompareTafsirDialog';
 import VerseAudioPlayer from './VerseAudioPlayer';
+import TafsirViewer from './TafsirViewer';
 
 const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [copied, setCopied] = useState(false);
