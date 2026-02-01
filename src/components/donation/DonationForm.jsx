@@ -75,6 +75,7 @@ export default function DonationForm() {
   const [donorName, setDonorName] = useState('');
   const [donorEmail, setDonorEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showDonorInfo, setShowDonorInfo] = useState(false);
 
   const handlePresetAmount = (value) => {
     setAmount(value);
@@ -87,6 +88,7 @@ export default function DonationForm() {
   };
 
   const finalAmount = customAmount || amount;
+  const selectedType = DONATION_TYPES.find(t => t.id === donationType);
 
   const handleDonate = async () => {
     if (!finalAmount || parseFloat(finalAmount) < 1) {
@@ -94,7 +96,6 @@ export default function DonationForm() {
       return;
     }
 
-    // التحقق من أننا لسنا في iframe
     if (window.self !== window.top) {
       toast.error('للتبرع، يرجى فتح التطبيق في نافذة جديدة');
       window.open(window.location.href, '_blank');
