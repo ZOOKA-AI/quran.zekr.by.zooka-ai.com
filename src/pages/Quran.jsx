@@ -23,7 +23,7 @@ const FEATURED_SURAHS = [
 ];
 import { toast } from 'sonner';
 import SurahCard from '../components/quran/SurahCard';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/lib/AuthContext';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },

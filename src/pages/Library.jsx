@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookMarked, Heart, Clock, ListMusic, Plus, Play } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function Library() {
   const { user, isAuthenticated } = useAuth();

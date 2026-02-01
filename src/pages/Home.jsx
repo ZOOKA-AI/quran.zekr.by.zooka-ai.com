@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Play, Bookmark, Clock, TrendingUp, Sparkles, Music, BookOpen, Headphones } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/lib/AuthContext';
 
 const FEATURED_SURAHS = [
   { number: 1, name: 'الفاتحة', color: 'from-emerald-500 to-green-600' },

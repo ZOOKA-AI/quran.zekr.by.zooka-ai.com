@@ -14,7 +14,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
+import { toast } from 'sonner';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -23,9 +24,17 @@ type MobileMenuProps = {
 };
 
 export default function MobileMenu({ isOpen, onClose, currentPageName }: MobileMenuProps) {
+  const { logout } = useAuth();
+
   const handleLogout = async () => {
-    await base44.auth.logout();
-    onClose();
+    try {
+      await logout();
+      onClose();
+      toast.success('تم تسجيل الخروج بنجاح');
+    } catch (error) {
+      console.error('خطأ في تسجيل الخروج:', error);
+      toast.error('حدث خطأ أثناء تسجيل الخروج');
+    }
   };
 
   return (

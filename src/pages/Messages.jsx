@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, Mail, Heart, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function MessagesPage() {
   const [newMessage, setNewMessage] = useState({ recipient_email: '', message_type: 'reminder', subject: '', content: '' });

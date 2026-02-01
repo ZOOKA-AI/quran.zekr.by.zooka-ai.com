@@ -11,7 +11,6 @@
  */
 
 import { useState } from 'react';
-import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import DailyReminders from '@/components/notifications/DailyReminders';
@@ -29,8 +28,7 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen relative overflow-hidden" dir="rtl">
+    <div className="min-h-screen relative overflow-hidden" dir="rtl">
         {/* Spiritual Background */}
         <div className="fixed inset-0 z-0">
           <div
@@ -76,6 +74,5 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
           <Footer />
         </div>
       </div>
-    </AuthProvider>
   );
 }

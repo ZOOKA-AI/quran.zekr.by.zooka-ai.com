@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Trophy, Star, Award, TrendingUp, Zap, Crown, Target } from 'lucide-react';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth } from '@/lib/AuthContext';
 import { toast } from 'sonner';
 
 const BADGES = [
