@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 import SurahCard from '../components/quran/SurahCard';
 import { useAuth } from '@/components/AuthProvider';
 import DailyContent from '../components/daily/DailyContent';
+import AppLogo from '../components/brand/AppLogo';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
@@ -273,6 +274,11 @@ export default function QuranPage() {
           </div>
           
           <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
+                <AppLogo size="xl" showTagline={true} />
+              </div>
+            </div>
             <p className="text-3xl font-arabic text-amber-200/90 mb-2">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
             <p className="text-indigo-200 text-lg">اقرأ واستمع إلى كتاب الله</p>
           </div>
