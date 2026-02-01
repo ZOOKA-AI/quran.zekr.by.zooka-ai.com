@@ -44,12 +44,14 @@ export default function QuranRadio() {
   }, []);
 
   const playStation = (station) => {
+    // إيقاف أي صوت آخر أولاً
+    AudioManager.stopAll();
+    
     if (currentStation?.id === station.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
-      AudioManager.stop();
     } else {
-      // تسجيل الصوت في المدير المركزي (سيوقف أي صوت آخر تلقائياً)
+      // تسجيل الصوت في المدير المركزي
       AudioManager.register(audioRef.current, 'radio');
       
       setCurrentStation(station);

@@ -7,6 +7,8 @@ import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import ClassicAudioPlayer, { PlayerProvider } from '@/components/player/ClassicAudioPlayer';
+import FloatingAudioControl from '@/components/controls/FloatingAudioControl';
+import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
 import { Button } from '@/components/ui/button';
 import {
@@ -230,6 +232,9 @@ export default function Layout({ children, currentPageName }) {
       {/* Classic Audio Player */}
       <ClassicAudioPlayer />
 
+      {/* Floating Audio Control */}
+      <FloatingAudioControl />
+
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
         <div className="max-w-7xl mx-auto px-6 py-12">
@@ -306,6 +311,12 @@ export default function Layout({ children, currentPageName }) {
                 </div>
               </div>
             </div>
+            {/* روابط التواصل الاجتماعي */}
+            <div className="mb-6">
+              <p className="text-amber-300 font-bold mb-4">تابعنا على</p>
+              <SocialLinks variant="footer" />
+            </div>
+
             <div className="flex justify-center gap-8 text-sm text-emerald-300">
               <span>© 2024 القرآن الكريم</span>
               <span>•</span>

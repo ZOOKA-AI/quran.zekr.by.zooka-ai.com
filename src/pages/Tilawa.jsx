@@ -7,6 +7,7 @@ import { Play, Square, Volume2, BookOpen, Headphones } from 'lucide-react';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 import AudioManager from '@/components/audio/AudioManager';
+import { toast } from 'sonner';
 
 // روابط صوت القراء - كل سورة كاملة
 const RECITERS = {
