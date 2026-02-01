@@ -94,17 +94,34 @@ export default function QuranPage() {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" dir="rtl">
+    <div className="min-h-screen relative" dir="rtl">
+      {/* خلفية روحانية إسلامية */}
+      <div className="fixed inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: 'url(https://images.unsplash.com/photo-1564769625905-50e93615e769?w=1920&q=80)',
+            filter: 'brightness(0.3)'
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98" />
+        {/* نجوم متلألئة */}
+        <div className="absolute inset-0 opacity-30" style={{
+          backgroundImage: 'radial-gradient(2px 2px at 20px 30px, white, transparent), radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent), radial-gradient(1px 1px at 90px 40px, white, transparent), radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent)',
+          backgroundSize: '200px 200px'
+        }} />
+      </div>
       
-      {/* Header - Spotify Style */}
-      <div className="relative bg-gradient-to-b from-slate-800 to-slate-900 text-white shadow-xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-purple-600/10" />
+      <div className="relative z-10">
+      {/* الرأس */}
+      <div className="relative text-white shadow-xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/10 via-transparent to-indigo-600/10" />
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
           <div className="flex items-center justify-between mb-6">
             <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                <Button variant="ghost" size="icon" className="text-amber-200 hover:bg-white/10">
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
@@ -249,28 +266,29 @@ export default function QuranPage() {
               </SheetContent>
             </Sheet>
             
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold text-amber-100">
               {greeting} {isAuthenticated && user?.full_name && `، ${user.full_name}`}
             </h1>
             <div className="w-10"></div>
           </div>
           
           <div className="text-center">
-            <p className="text-slate-300 text-lg">استمع إلى القرآن الكريم</p>
+            <p className="text-3xl font-arabic text-amber-200/90 mb-2">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+            <p className="text-indigo-200 text-lg">اقرأ واستمع إلى كتاب الله</p>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Daily Content Section */}
+        {/* قسم محتوى اليوم */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">✨ محتوى اليوم</h2>
+          <h2 className="text-2xl font-bold text-amber-100 mb-6">✨ محتوى اليوم</h2>
           <DailyContent />
         </div>
 
-        {/* Quick Access Cards - Spotify Style */}
+        {/* السور المميزة */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">السور المميزة</h2>
+          <h2 className="text-2xl font-bold text-amber-100 mb-6">السور المميزة</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {FEATURED_SURAHS.slice(0, 6).map(surah => (
               <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
@@ -297,9 +315,9 @@ export default function QuranPage() {
 
 
 
-        {/* Browse by Category */}
+        {/* تصفح حسب القسم */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">تصفح حسب الفئة</h2>
+          <h2 className="text-2xl font-bold text-amber-100 mb-6">الأقسام</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link to={createPageUrl('Tilawa')}>
               <Card className="bg-gradient-to-br from-purple-600 to-indigo-600 hover:scale-105 transition-all cursor-pointer p-6 h-40">
@@ -324,24 +342,24 @@ export default function QuranPage() {
           </div>
         </div>
 
-        {/* All Surahs */}
+        {/* جميع السور */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6">جميع السور</h2>
+          <h2 className="text-2xl font-bold text-amber-100 mb-6">سور القرآن الكريم</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredSurahs.map(surah => (
               <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
-                <Card className="bg-slate-800/50 hover:bg-slate-700/50 transition-all cursor-pointer p-4 border-slate-700 group">
+                <Card className="bg-slate-900/60 backdrop-blur-sm hover:bg-slate-800/70 transition-all cursor-pointer p-4 border-amber-900/30 group">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-lg flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-amber-700 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
                       {surah.number}
                     </div>
                     <div className="flex-1">
-                      <p className="text-white font-bold">{surah.name}</p>
-                      <p className="text-slate-400 text-sm">{surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}</p>
+                      <p className="text-amber-100 font-bold">{surah.name}</p>
+                      <p className="text-indigo-300/70 text-sm">{surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}</p>
                     </div>
                     <Button
                       size="icon"
-                      className="bg-emerald-500 hover:bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="bg-amber-600 hover:bg-amber-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Play className="w-4 h-4" />
                     </Button>
@@ -353,10 +371,11 @@ export default function QuranPage() {
 
           {filteredSurahs.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
+              <p className="text-indigo-300 text-xl">لم يتم العثور على نتائج</p>
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
