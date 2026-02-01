@@ -7,6 +7,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
+import AppLogo from '@/components/brand/AppLogo';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -96,10 +97,7 @@ export default function Layout({ children, currentPageName }) {
         <SheetContent side="right" className="w-96 overflow-y-auto">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-3 text-2xl">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-xl flex items-center justify-center">
-                <BookOpen className="w-7 h-7 text-white" />
-              </div>
-              القرآن الكريم
+              <AppLogo size="md" showTagline={false} />
             </SheetTitle>
           </SheetHeader>
 
