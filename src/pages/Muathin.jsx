@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, MapPin, Clock, Play, Pause, Volume2, VolumeX, Sun, Sunrise, Sunset, Moon, Cloud, Settings, ChevronDown, Check, RefreshCw } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Bell, MapPin, Clock, Play, Pause, Volume2, VolumeX, Sun, Sunrise, Sunset, Moon, Cloud, Settings, ChevronDown, Check, RefreshCw, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,20 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-
-// قائمة المؤذنين
-const MUATHINS = [
-  { id: 1, name: 'عبد المجيد السريحي', country: 'السعودية', mosque: 'المسجد النبوي', audio: 'https://www.islamcan.com/audio/adhan/azan1.mp3', featured: true },
-  { id: 2, name: 'علي أحمد ملا', country: 'السعودية', mosque: 'المسجد الحرام', audio: 'https://www.islamcan.com/audio/adhan/azan2.mp3', featured: true },
-  { id: 3, name: 'فاروق حضراوي', country: 'السعودية', mosque: 'المسجد الحرام', audio: 'https://www.islamcan.com/audio/adhan/azan3.mp3', featured: true },
-  { id: 4, name: 'ماهر المعيقلي', country: 'السعودية', mosque: 'المسجد الحرام', audio: 'https://www.islamcan.com/audio/adhan/azan4.mp3', featured: true },
-  { id: 5, name: 'عبد الرحمن السديس', country: 'السعودية', mosque: 'المسجد الحرام', audio: 'https://www.islamcan.com/audio/adhan/azan5.mp3', featured: false },
-  { id: 6, name: 'مشاري العفاسي', country: 'الكويت', mosque: 'مسجد الدولة الكبير', audio: 'https://www.islamcan.com/audio/adhan/azan6.mp3', featured: true },
-  { id: 7, name: 'ناصر القطامي', country: 'السعودية', mosque: 'جامع الراجحي', audio: 'https://www.islamcan.com/audio/adhan/azan7.mp3', featured: false },
-  { id: 8, name: 'عبد الباسط عبد الصمد', country: 'مصر', mosque: 'الأزهر الشريف', audio: 'https://www.islamcan.com/audio/adhan/azan8.mp3', featured: true },
-  { id: 9, name: 'محمد رفعت', country: 'مصر', mosque: 'القاهرة', audio: 'https://www.islamcan.com/audio/adhan/azan1.mp3', featured: false },
-  { id: 10, name: 'نصر الدين طوبار', country: 'مصر', mosque: 'الإذاعة المصرية', audio: 'https://www.islamcan.com/audio/adhan/azan2.mp3', featured: false },
-];
 
 // قائمة الدول والمدن
 const COUNTRIES = [
@@ -60,7 +47,7 @@ const PRAYERS = [
 export default function Muathin() {
   const [selectedCountry, setSelectedCountry] = useState('AE');
   const [selectedCity, setSelectedCity] = useState('دبي');
-  const [selectedMuathin, setSelectedMuathin] = useState(MUATHINS[0]);
+  const [selectedMuathin, setSelectedMuathin] = useState(null);
   const [prayerTimes, setPrayerTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -71,6 +58,19 @@ export default function Muathin() {
   const [countdown, setCountdown] = useState('');
   
   const audioRef = useRef(null);
+
+  // جلب المؤذنين من قاعدة البيانات
+  const { data: muathins = [], isLoading: loadingMuathins } = useQuery({
+    queryKey: ['muathins'],
+    queryFn: () => base44.entities.Muathin.list('-total_plays'),
+  });
+
+  // تعيين المؤذن الأول عند تحميل البيانات
+  useEffect(() => {
+    if (muathins.length > 0 && !selectedMuathin) {
+      setSelectedMuathin(muathins[0]);
+    }
+  }, [muathins]);
 
   // تحديث الوقت كل ثانية
   useEffect(() => {
@@ -161,8 +161,8 @@ export default function Muathin() {
   };
 
   const playAdhan = () => {
-    if (audioRef.current) {
-      audioRef.current.src = selectedMuathin.audio;
+    if (audioRef.current && selectedMuathin) {
+      audioRef.current.src = selectedMuathin.audio_url;
       audioRef.current.volume = volume / 100;
       audioRef.current.play();
       setIsPlaying(true);
@@ -354,21 +354,26 @@ export default function Muathin() {
           <CardContent className="p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-4">اختر المؤذن</h2>
             
+            {loadingMuathins ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+              </div>
+            ) : (
             <div className="grid gap-3">
-              {MUATHINS.map((muathin) => (
+              {muathins.map((muathin) => (
                 <button
                   key={muathin.id}
                   onClick={() => setSelectedMuathin(muathin)}
                   className={`w-full p-4 rounded-xl text-right transition-all flex items-center gap-4 ${
-                    selectedMuathin.id === muathin.id 
+                    selectedMuathin?.id === muathin.id 
                       ? 'bg-emerald-100 ring-2 ring-emerald-500' 
                       : 'bg-gray-50 hover:bg-gray-100'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    selectedMuathin.id === muathin.id ? 'bg-emerald-500 text-white' : 'bg-gray-200'
+                    selectedMuathin?.id === muathin.id ? 'bg-emerald-500 text-white' : 'bg-gray-200'
                   }`}>
-                    {selectedMuathin.id === muathin.id ? (
+                    {selectedMuathin?.id === muathin.id ? (
                       <Check className="w-6 h-6" />
                     ) : (
                       <Volume2 className="w-6 h-6 text-gray-500" />
@@ -378,7 +383,7 @@ export default function Muathin() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="font-bold text-gray-900">{muathin.name}</p>
-                      {muathin.featured && (
+                      {muathin.is_featured && (
                         <Badge className="bg-amber-100 text-amber-700">مميز</Badge>
                       )}
                     </div>
@@ -399,6 +404,7 @@ export default function Muathin() {
                 </button>
               ))}
             </div>
+            )}
           </CardContent>
         </Card>
       </div>
