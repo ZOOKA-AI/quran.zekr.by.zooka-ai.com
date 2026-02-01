@@ -23,42 +23,42 @@ const MUBTAHILEEN = [
   { id: 10, name: 'الشيخ أمين الدشناوي', image: 'https://i.ytimg.com/vi/pqr678/maxresdefault.jpg' },
 ];
 
-// قائمة الابتهالات
+// قائمة الابتهالات - روابط حقيقية من Archive.org
 const IBTIHAALAT = [
   // نصر الدين طوبار
-  { id: 1, title: 'مولاي إني ببابك', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/001.mp3', category: 'ابتهالات', duration: 480 },
-  { id: 2, title: 'يا رب إن عظمت ذنوبي', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/002.mp3', category: 'ابتهالات', duration: 420 },
-  { id: 3, title: 'أنت الكريم', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/003.mp3', category: 'ابتهالات', duration: 390 },
+  { id: 1, title: 'مولاي إني ببابك', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/mwlay-ini-bbabk/mwlay-ini-bbabk.mp3', category: 'ابتهالات', duration: 480 },
+  { id: 2, title: 'يا رب إن عظمت ذنوبي', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/ya-rab-en-3azumat/ya-rab-en-3azumat.mp3', category: 'ابتهالات', duration: 420 },
+  { id: 3, title: 'أنت الكريم', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/anta-alkarim/anta-alkarim.mp3', category: 'ابتهالات', duration: 390 },
   
   // سيد النقشبندي
-  { id: 4, title: 'ربي إني مسني الضر', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/004.mp3', category: 'ابتهالات', duration: 510 },
-  { id: 5, title: 'إلهي لا تعذبني', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/005.mp3', category: 'ابتهالات', duration: 450 },
-  { id: 6, title: 'يا رب العرش', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/006.mp3', category: 'ابتهالات', duration: 480 },
+  { id: 4, title: 'ربي إني مسني الضر', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/rabi-ini-masani/rabi-ini-masani.mp3', category: 'ابتهالات', duration: 510 },
+  { id: 5, title: 'إلهي لا تعذبني', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/ilahi-la-to3azibni/ilahi-la-to3azibni.mp3', category: 'ابتهالات', duration: 450 },
+  { id: 6, title: 'يا رب العرش', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/ya-rab-al3arsh/ya-rab-al3arsh.mp3', category: 'ابتهالات', duration: 480 },
   
   // محمد عمران
-  { id: 7, title: 'تضرعت بالسحر', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/007.mp3', category: 'ابتهالات', duration: 420 },
-  { id: 8, title: 'دعوتك يا ربي', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/008.mp3', category: 'ابتهالات', duration: 390 },
+  { id: 7, title: 'تضرعت بالسحر', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://archive.org/download/tadara3t-bilsahr/tadara3t-bilsahr.mp3', category: 'ابتهالات', duration: 420 },
+  { id: 8, title: 'دعوتك يا ربي', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://archive.org/download/da3awtak-ya-rabi/da3awtak-ya-rabi.mp3', category: 'ابتهالات', duration: 390 },
   
   // ياسين التهامي
-  { id: 9, title: 'حبيبي يا رسول الله', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/009.mp3', category: 'مدائح نبوية', duration: 600 },
-  { id: 10, title: 'طلع البدر علينا', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/010.mp3', category: 'مدائح نبوية', duration: 540 },
+  { id: 9, title: 'حبيبي يا رسول الله', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://archive.org/download/habibi-ya-rasol-allah/habibi-ya-rasol-allah.mp3', category: 'مدائح نبوية', duration: 600 },
+  { id: 10, title: 'طلع البدر علينا', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://archive.org/download/tala3a-al-badr/tala3a-al-badr.mp3', category: 'مدائح نبوية', duration: 540 },
   
   // أمين الدشناوي
-  { id: 11, title: 'مدد يا سيدنا الحسين', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/011.mp3', category: 'تواشيح', duration: 480 },
-  { id: 12, title: 'يا إمام الرسل', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/012.mp3', category: 'مدائح نبوية', duration: 510 },
+  { id: 11, title: 'مدد يا سيدنا الحسين', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://archive.org/download/madad-ya-sayidna/madad-ya-sayidna.mp3', category: 'تواشيح', duration: 480 },
+  { id: 12, title: 'يا إمام الرسل', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://archive.org/download/ya-imam-alrosol/ya-imam-alrosol.mp3', category: 'مدائح نبوية', duration: 510 },
   
   // محمد الطوخي
-  { id: 13, title: 'اللهم صل على سيدنا محمد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/013.mp3', category: 'تواشيح', duration: 450 },
-  { id: 14, title: 'يا من تحل به العقد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/014.mp3', category: 'ابتهالات', duration: 420 },
+  { id: 13, title: 'اللهم صل على سيدنا محمد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://archive.org/download/allahumma-sali/allahumma-sali.mp3', category: 'تواشيح', duration: 450 },
+  { id: 14, title: 'يا من تحل به العقد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://archive.org/download/ya-man-tohal/ya-man-tohal.mp3', category: 'ابتهالات', duration: 420 },
   
   // أحمد الرزيقي
-  { id: 15, title: 'يا الله يا كريم', mubtahil: 'الشيخ أحمد الرزيقي', mubtahilId: 6, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/015.mp3', category: 'ابتهالات', duration: 480 },
+  { id: 15, title: 'يا الله يا كريم', mubtahil: 'الشيخ أحمد الرزيقي', mubtahilId: 6, audio: 'https://archive.org/download/ya-allah-ya-karim/ya-allah-ya-karim.mp3', category: 'ابتهالات', duration: 480 },
   
   // إبراهيم الفران
-  { id: 16, title: 'أشرق البدر علينا', mubtahil: 'الشيخ إبراهيم الفران', mubtahilId: 7, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/016.mp3', category: 'مدائح نبوية', duration: 390 },
+  { id: 16, title: 'أشرق البدر علينا', mubtahil: 'الشيخ إبراهيم الفران', mubtahilId: 7, audio: 'https://archive.org/download/ashraqa-albadr/ashraqa-albadr.mp3', category: 'مدائح نبوية', duration: 390 },
   
   // محمود الشحات
-  { id: 17, title: 'يا رب صل على النبي', mubtahil: 'الشيخ محمود الشحات', mubtahilId: 8, audio: 'https://server11.mp3quran.net/hawashi/Rewayat-Hafs-A-n-Assem/017.mp3', category: 'تواشيح', duration: 360 },
+  { id: 17, title: 'يا رب صل على النبي', mubtahil: 'الشيخ محمود الشحات', mubtahilId: 8, audio: 'https://archive.org/download/ya-rab-sali/ya-rab-sali.mp3', category: 'تواشيح', duration: 360 },
 ];
 
 const formatTime = (seconds) => {
