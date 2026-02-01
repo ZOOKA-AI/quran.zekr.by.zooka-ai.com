@@ -60,6 +60,9 @@ export default function Tawasheeh() {
 
   useEffect(() => {
     if (currentTrack && audioRef.current) {
+      // إيقاف أي صوت آخر أولاً
+      AudioManager.stopAll();
+      
       // تسجيل الصوت في المدير المركزي
       AudioManager.register(audioRef.current, 'tawasheeh');
       

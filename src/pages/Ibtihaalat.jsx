@@ -109,10 +109,12 @@ export default function Ibtihaalat() {
   }, [volume, isMuted]);
 
   const playTrack = (track) => {
+    // إيقاف أي صوت آخر أولاً
+    AudioManager.stopAll();
+    
     if (currentTrack?.id === track.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
-      AudioManager.stop();
     } else {
       // تسجيل الصوت في المدير المركزي
       AudioManager.register(audioRef.current, 'ibtihaalat');
