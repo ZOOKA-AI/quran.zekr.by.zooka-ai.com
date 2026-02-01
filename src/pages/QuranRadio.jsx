@@ -1,22 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Radio, Play, Pause, Volume2, VolumeX, Heart, Search, Globe, Wifi, Signal } from 'lucide-react';
+import { Radio, Play, Pause, Volume2, VolumeX, Heart, Search, Globe, Wifi, Signal, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import AudioManager from '@/components/audio/AudioManager';
 
-const RADIO_STATIONS = [
-  { id: 'quran-radio', name: 'إذاعة القرآن الكريم', country: '🇸🇦', url: 'https://stream.radiojar.com/0tpy1h0kxtzuv', category: 'قرآن' },
-  { id: 'quran-egypt', name: 'إذاعة القرآن - مصر', country: '🇪🇬', url: 'https://stream.radiojar.com/4wqre23fytzuv', category: 'قرآن' },
-  { id: 'makkah-live', name: 'إذاعة مكة المكرمة', country: '🇸🇦', url: 'https://stream.radiojar.com/bz3m8tdwwtzuv', category: 'قرآن' },
-  { id: 'madinah-live', name: 'إذاعة المدينة المنورة', country: '🇸🇦', url: 'https://stream.radiojar.com/rdwrsdzfctzuv', category: 'قرآن' },
-  { id: 'azhar-radio', name: 'إذاعة الأزهر الشريف', country: '🇪🇬', url: 'https://stream.radiojar.com/cqensdj0k3xuv', category: 'إسلامية' },
-  { id: 'quran-kuwait', name: 'إذاعة القرآن - الكويت', country: '🇰🇼', url: 'https://stream.radiojar.com/7vhwdsgcbtzuv', category: 'قرآن' },
-  { id: 'tarateel', name: 'إذاعة التراتيل', country: '🌍', url: 'https://stream.radiojar.com/38x9rbcgktzuv', category: 'تراتيل' },
-  { id: 'tilawat', name: 'إذاعة التلاوات الخاشعة', country: '🌍', url: 'https://stream.radiojar.com/5wngrcj0y3xuv', category: 'قرآن' },
-];
+// الأعلام حسب البلد
+const COUNTRY_FLAGS = {
+  'مصر': '🇪🇬',
+  'السعودية': '🇸🇦',
+  'الكويت': '🇰🇼',
+  'الإمارات': '🇦🇪',
+  'قطر': '🇶🇦',
+  'البحرين': '🇧🇭',
+  'الأردن': '🇯🇴',
+  'فلسطين': '🇵🇸',
+};
 
 export default function QuranRadio() {
   const [currentStation, setCurrentStation] = useState(null);
@@ -27,6 +30,22 @@ export default function QuranRadio() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const audioRef = useRef(null);
+
+  // جلب المحطات من قاعدة البيانات
+  const { data: dbStations = [], isLoading } = useQuery({
+    queryKey: ['radio-stations'],
+    queryFn: () => base44.entities.RadioStation.filter({ is_active: true }),
+  });
+
+  // تحويل البيانات للصيغة المطلوبة
+  const RADIO_STATIONS = dbStations.map(s => ({
+    id: s.id,
+    name: s.name,
+    country: COUNTRY_FLAGS[s.country] || '🌍',
+    url: s.stream_url,
+    category: s.category,
+    listeners: s.listeners_count
+  }));
 
   useEffect(() => {
     const saved = localStorage.getItem('radio-favorites');
@@ -72,7 +91,9 @@ export default function QuranRadio() {
     localStorage.setItem('radio-favorites', JSON.stringify(updated));
   };
 
-  const categories = ['all', 'قرآن', 'إسلامية', 'تراتيل'];
+  // استخراج الفئات الفريدة من البيانات
+  const uniqueCategories = [...new Set(RADIO_STATIONS.map(s => s.category))];
+  const categories = ['all', ...uniqueCategories];
   
   const filteredStations = RADIO_STATIONS.filter(station => {
     const matchesSearch = station.name.includes(searchQuery);
@@ -165,7 +186,15 @@ export default function QuranRadio() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+          </div>
+        )}
+
         {/* Stations Grid */}
+        {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredStations.map(station => (
             <Card 
@@ -211,6 +240,14 @@ export default function QuranRadio() {
             </Card>
           ))}
         </div>
+        )}
+
+        {!isLoading && filteredStations.length === 0 && (
+          <Card className="p-8 text-center">
+            <Radio className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500">لا توجد محطات متاحة</p>
+          </Card>
+        )}
       </div>
     </div>
   );
