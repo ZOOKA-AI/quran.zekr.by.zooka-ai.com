@@ -276,25 +276,23 @@ export default function Layout({ children, currentPageName }) {
                   <p className="text-emerald-100 text-sm italic font-arabic">بلد الخير والعطاء • أرض التسامح والمحبة</p>
                 </div>
                 
-                <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg p-3 mb-3 border border-purple-400/30">
-                  <p className="text-amber-300 text-lg font-bold mb-1">🤖 ZOOKA-AI المرزوق</p>
-                  <p className="text-white text-sm mb-1">مساعد التنفيذ الذكي</p>
-                  <p className="text-emerald-100 text-xs italic">أول مشروع دعائي • تقنية الذكاء الاصطناعي في خدمة القرآن</p>
+                <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg p-4 mb-3 border border-purple-400/30">
+                  <p className="text-amber-300 text-lg font-bold mb-2">🏢 من إنتاج شركة</p>
+                  <p className="text-white text-base font-bold mb-1">Royal Haroon Cleaning and Disinfection Services FZ-LLC</p>
+                  <p className="text-emerald-100 text-sm italic">تقنية الذكاء الاصطناعي في خدمة القرآن والإنسانية</p>
                 </div>
-                <p className="text-emerald-200 text-xs mb-1">المطورون: موسى وهارون بالإمارات 🇦🇪</p>
-                <p className="text-emerald-200 text-xs mb-2">حفظ الملكية وتأمين كتاب الله وسنة رسوله</p>
-                <p className="text-emerald-100 text-xs">من الفقراء لله المصريين 🇪🇬</p>
                 
                 <div className="border-t border-emerald-600/50 pt-3 mt-3">
-                  <p className="text-amber-300 text-xs font-bold mb-1">🔐 المشرف العام الوحيد</p>
-                  <a href="mailto:Zookaalmrzwq@gmail.com" className="text-emerald-100 text-xs hover:text-white transition-colors underline block mb-1">
-                    Zookaalmrzwq@gmail.com
-                  </a>
-                  <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-amber-300 text-xs hover:text-amber-200 transition-colors underline font-bold block mb-2">
-                    🌐 zaka.ai
-                  </a>
-                  <p className="text-emerald-200 text-xs mt-1">مسؤول حماية المنصة والملكية الفكرية</p>
-                  <p className="text-white text-xs font-bold mt-2">⚠️ جميع الحقوق محفوظة • ممنوع النسخ أو التعديل بدون إذن</p>
+                  <p className="text-amber-300 font-bold mb-2">📧 للتواصل:</p>
+                  <div className="space-y-1">
+                    <a href="mailto:info@zooka-ai.com" className="text-emerald-100 hover:text-white transition-colors underline block">
+                      info@zooka-ai.com
+                    </a>
+                    <a href="mailto:info@royalcleanuae.com" className="text-emerald-100 hover:text-white transition-colors underline block">
+                      info@royalcleanuae.com
+                    </a>
+                  </div>
+                  <p className="text-white text-sm font-bold mt-3">⚠️ جميع الحقوق محفوظة • حفظ الملكية الفكرية</p>
                 </div>
               </div>
             </div>
