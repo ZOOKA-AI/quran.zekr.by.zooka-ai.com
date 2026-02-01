@@ -1,24 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Play, Pause, Heart, Clock, Music2, Mic2, Star, Volume2, SkipBack, SkipForward } from 'lucide-react';
+import { Play, Pause, Heart, Clock, Music2, Mic2, Star, Volume2, SkipBack, SkipForward, Loader2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import AudioManager from '@/components/audio/AudioManager';
-
-// روابط صوتية حقيقية للتواشيح والابتهالات
-const TAWASHEEH = [
-  { id: 1, title: 'مولاي إني ببابك', artist: 'النقشبندي', duration: '8:45', category: 'ابتهالات', url: 'https://archive.org/download/mwlay-ini-bbabk/mwlay-ini-bbabk.mp3', featured: true },
-  { id: 2, title: 'يا رب العباد', artist: 'سيد النقشبندي', duration: '12:30', category: 'ابتهالات', url: 'https://archive.org/download/ya-rab-al3ebad/ya-rab-al3ebad.mp3', featured: true },
-  { id: 3, title: 'حبيبي يا رسول الله', artist: 'محمد عمران', duration: '6:20', category: 'تواشيح', url: 'https://archive.org/download/habibi-ya-rasol-allah/habibi-ya-rasol-allah.mp3', featured: false },
-  { id: 4, title: 'طلع البدر علينا', artist: 'المنشد المصري', duration: '4:15', category: 'أناشيد', url: 'https://archive.org/download/tala3a-al-badr/tala3a-al-badr.mp3', featured: true },
-  { id: 5, title: 'يا إمام الرسل', artist: 'نصر الدين طوبار', duration: '15:00', category: 'ابتهالات', url: 'https://archive.org/download/ya-imam-alrosol/ya-imam-alrosol.mp3', featured: true },
-  { id: 6, title: 'رباه يا من أناجي', artist: 'النقشبندي', duration: '10:30', category: 'ابتهالات', url: 'https://archive.org/download/rabah-ya-man-onaji/rabah-ya-man-onaji.mp3', featured: false },
-  { id: 7, title: 'أشرق المعنى', artist: 'نصر الدين طوبار', duration: '9:00', category: 'تواشيح', url: 'https://archive.org/download/ashraqa-alma3na/ashraqa-alma3na.mp3', featured: false },
-  { id: 8, title: 'لبيك اللهم لبيك', artist: 'محمد الهلباوي', duration: '5:30', category: 'أناشيد', url: 'https://archive.org/download/labayk-allahuma/labayk-allahuma.mp3', featured: true },
-];
 
 const CATEGORIES = [
   { id: 'all', name: 'الكل', icon: Music2 },
