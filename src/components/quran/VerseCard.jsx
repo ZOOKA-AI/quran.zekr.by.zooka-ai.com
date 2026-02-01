@@ -20,6 +20,7 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [showRelatedVerses, setShowRelatedVerses] = useState(false);
   const [showCompareTafsir, setShowCompareTafsir] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [showTafsirViewer, setShowTafsirViewer] = useState(false);
 
   const { fontSize = 24, fontFamily = 'amiri', lineHeight = 2 } = readingSettings;
   
