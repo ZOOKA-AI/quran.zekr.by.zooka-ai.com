@@ -7,58 +7,25 @@ import { Play, Square, Volume2, BookOpen, Headphones } from 'lucide-react';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 
+// روابط صوت القراء - كل سورة كاملة
 const RECITERS = {
-  khalid_al_jaleel: { name: "خالد الجليل", baseUrl: "https://server8.mp3quran.net/khalid_al_jalil/hafs/" },
-  islam_sobhi: { name: "إسلام صبحي", baseUrl: "https://server11.mp3quran.net/islam_sobhi/hafs/" },
-  tablawi: { name: "محمد محمود الطبلاوي", baseUrl: "https://server8.mp3quran.net/tablawi/hafs/" },
-  husary: { name: "محمود خليل الحصري", baseUrl: "https://server13.mp3quran.net/husary/hafs/" },
-  minshawi: { name: "محمد صديق المنشاوي", baseUrl: "https://server10.mp3quran.net/minshawi/hafs/" },
-  abdulbasit: { name: "عبد الباسط عبد الصمد", baseUrl: "https://server7.mp3quran.net/basit/hafs/" },
-  sudais: { name: "عبد الرحمن السديس", baseUrl: "https://server11.mp3quran.net/sds/hafs/" },
-  mishary_alafasy: { name: "مشاري راشد العفاسي", baseUrl: "https://server8.mp3quran.net/afs/hafs/" }
+  husary: { name: "محمود خليل الحصري", baseUrl: "https://server13.mp3quran.net/husr/" },
+  minshawi: { name: "محمد صديق المنشاوي", baseUrl: "https://server10.mp3quran.net/minsh/" },
+  abdulbasit: { name: "عبد الباسط عبد الصمد", baseUrl: "https://server7.mp3quran.net/basit/" },
+  sudais: { name: "عبد الرحمن السديس", baseUrl: "https://server11.mp3quran.net/sds/" },
+  mishary_alafasy: { name: "مشاري راشد العفاسي", baseUrl: "https://server8.mp3quran.net/afs/" },
+  maher: { name: "ماهر المعيقلي", baseUrl: "https://server12.mp3quran.net/maher/" },
+  ajmi: { name: "أحمد العجمي", baseUrl: "https://server10.mp3quran.net/ajm/" },
+  shuraim: { name: "سعود الشريم", baseUrl: "https://server7.mp3quran.net/shur/" }
 };
-
-const ISTIATHA_URL = "https://server8.mp3quran.net/afs/hafs/001000.mp3";
-const BASMALA_URL = "https://server8.mp3quran.net/afs/hafs/001001.mp3";
 
 export default function TilawaPage() {
   const [selectedReciter, setSelectedReciter] = useState("husary");
   const [surahNumber, setSurahNumber] = useState(1);
-  const [fromAyah, setFromAyah] = useState(1);
-  const [toAyah, setToAyah] = useState(7);
   const [isPlaying, setIsPlaying] = useState(false);
   
   const playerRef = useRef(null);
-  const playlistRef = useRef([]);
-  const indexRef = useRef(0);
   const stoppedByUserRef = useRef(false);
-
-  const playNext = () => {
-    if (stoppedByUserRef.current) return;
-    if (indexRef.current >= playlistRef.current.length) {
-      setIsPlaying(false);
-      toast.success('انتهت التلاوة');
-      return;
-    }
-
-    const url = playlistRef.current[indexRef.current];
-    
-    if (!playerRef.current) {
-      playerRef.current = new Audio();
-    }
-    
-    playerRef.current.src = url;
-    playerRef.current.play()
-      .catch(err => {
-        console.error('خطأ في التشغيل:', err);
-        toast.error('حدث خطأ في تشغيل الآية');
-      });
-    
-    playerRef.current.onended = () => {
-      indexRef.current++;
-      playNext();
-    };
-  };
 
   const handlePlay = () => {
     const reciter = RECITERS[selectedReciter];
@@ -68,37 +35,37 @@ export default function TilawaPage() {
     }
 
     const s = Number(surahNumber);
-    const from = Number(fromAyah);
-    const to = Number(toAyah);
 
-    if (!s || !from || !to || from > to || s < 1 || s > 114) {
-      toast.error("تحقق من أرقام السورة والآيات");
+    if (!s || s < 1 || s > 114) {
+      toast.error("تحقق من رقم السورة");
       return;
     }
 
-    playlistRef.current = [];
-    indexRef.current = 0;
     stoppedByUserRef.current = false;
 
-    // إضافة الاستعاذة
-    playlistRef.current.push(ISTIATHA_URL);
+    // تشغيل السورة كاملة
+    const surahStr = s.toString().padStart(3, "0");
+    const url = `${reciter.baseUrl}${surahStr}.mp3`;
+
+    if (!playerRef.current) {
+      playerRef.current = new Audio();
+    }
     
-    // إضافة البسملة إذا لم تكن سورة التوبة
-    if (s !== 9) {
-      playlistRef.current.push(BASMALA_URL);
-    }
-
-    // بناء قائمة التشغيل للآيات
-    for (let a = from; a <= to; a++) {
-      const surahStr = s.toString().padStart(3, "0");
-      const ayahStr = a.toString().padStart(3, "0");
-      const url = `${reciter.baseUrl}${surahStr}${ayahStr}.mp3`;
-      playlistRef.current.push(url);
-    }
-
-    setIsPlaying(true);
-    toast.success(`بدء التلاوة بالاستعاذة والبسملة: السورة ${s} من الآية ${from} إلى ${to}`);
-    playNext();
+    playerRef.current.src = url;
+    playerRef.current.play()
+      .then(() => {
+        setIsPlaying(true);
+        toast.success(`جاري تشغيل سورة رقم ${s} بصوت ${reciter.name}`);
+      })
+      .catch(err => {
+        console.error('خطأ في التشغيل:', err);
+        toast.error('حدث خطأ في تشغيل السورة - جرب قارئ آخر');
+      });
+    
+    playerRef.current.onended = () => {
+      setIsPlaying(false);
+      toast.success('انتهت التلاوة');
+    };
   };
 
   const handleStop = () => {
@@ -156,45 +123,19 @@ export default function TilawaPage() {
               </Select>
             </div>
 
-            {/* اختيار السورة والآيات */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div>
-                <label className="block text-sm font-bold text-amber-200 mb-2">
-                  رقم السورة:
-                </label>
-                <Input
-                  type="number"
-                  min="1"
-                  max="114"
-                  value={surahNumber}
-                  onChange={(e) => setSurahNumber(e.target.value)}
-                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-amber-200 mb-2">
-                  من الآية:
-                </label>
-                <Input
-                  type="number"
-                  min="1"
-                  value={fromAyah}
-                  onChange={(e) => setFromAyah(e.target.value)}
-                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-amber-200 mb-2">
-                  إلى الآية:
-                </label>
-                <Input
-                  type="number"
-                  min="1"
-                  value={toAyah}
-                  onChange={(e) => setToAyah(e.target.value)}
-                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
-                />
-              </div>
+            {/* اختيار السورة */}
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-amber-200 mb-2">
+                رقم السورة (1-114):
+              </label>
+              <Input
+                type="number"
+                min="1"
+                max="114"
+                value={surahNumber}
+                onChange={(e) => setSurahNumber(e.target.value)}
+                className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
+              />
             </div>
 
             {/* أزرار التحكم */}
@@ -221,7 +162,7 @@ export default function TilawaPage() {
             {/* ملاحظة */}
             <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
               <p className="text-sm text-amber-100 leading-relaxed mb-2">
-                ✨ <strong>التشغيل الآلي:</strong> يبدأ بالاستعاذة، ثم البسملة (ما عدا سورة التوبة)، ثم تشغيل الآيات تلقائياً
+                ✨ <strong>تشغيل السورة كاملة</strong> بصوت القارئ المختار
               </p>
               <p className="text-xs text-indigo-300">
                 🎧 جودة صوت عالية من mp3quran.net
@@ -235,20 +176,18 @@ export default function TilawaPage() {
           <h3 className="text-xl font-bold text-amber-100 mb-4">سور مختارة:</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
-              { name: 'الفاتحة', surah: 1, from: 1, to: 7 },
-              { name: 'الكهف', surah: 18, from: 1, to: 110 },
-              { name: 'يس', surah: 36, from: 1, to: 83 },
-              { name: 'الرحمن', surah: 55, from: 1, to: 78 },
-              { name: 'الملك', surah: 67, from: 1, to: 30 },
-              { name: 'الإخلاص', surah: 112, from: 1, to: 4 }
+              { name: 'الفاتحة', surah: 1 },
+              { name: 'الكهف', surah: 18 },
+              { name: 'يس', surah: 36 },
+              { name: 'الرحمن', surah: 55 },
+              { name: 'الملك', surah: 67 },
+              { name: 'الإخلاص', surah: 112 }
             ].map(surah => (
               <Button
                 key={surah.surah}
                 variant="outline"
                 onClick={() => {
                   setSurahNumber(surah.surah);
-                  setFromAyah(surah.from);
-                  setToAyah(surah.to);
                   toast.success(`تم اختيار سورة ${surah.name}`);
                 }}
                 className="h-12 border border-amber-600/40 bg-slate-800/40 text-amber-200 hover:bg-amber-600/20"

@@ -12,9 +12,10 @@ const SURAH_NAMES = {
 };
 
 const RECITERS = {
-  husary: { name: 'الحصري', baseUrl: 'https://server8.mp3quran.net/afs/' },
+  husary: { name: 'الحصري', baseUrl: 'https://server13.mp3quran.net/husr/' },
   minshawi: { name: 'المنشاوي', baseUrl: 'https://server10.mp3quran.net/minsh/' },
   abdulbasit: { name: 'عبد الباسط', baseUrl: 'https://server7.mp3quran.net/basit/' },
+  afs: { name: 'العفاسي', baseUrl: 'https://server8.mp3quran.net/afs/' },
 };
 
 export default function GlobalAudioPlayer() {
