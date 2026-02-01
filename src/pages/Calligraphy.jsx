@@ -5,8 +5,9 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sparkles, Download, Share2, RefreshCw, Search } from 'lucide-react';
+import { Sparkles, Download, Share2, RefreshCw, Search, Palette } from 'lucide-react';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 const FEATURED_VERSES = [
   { surah: 1, verse: 1, name: 'البسملة' },
@@ -76,60 +77,61 @@ export default function CalligraphyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-16">
+    <IslamicBackground variant="amber">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="text-center">
             <div className="mb-6">
-              <div className="inline-block p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <Sparkles className="w-16 h-16 text-amber-300" />
+              <div className="inline-block p-5 bg-gradient-to-br from-teal-500/20 to-teal-600/10 rounded-3xl backdrop-blur-sm border border-teal-400/20">
+                <Palette className="w-14 h-14 text-teal-300" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">خطوط القرآن الكريم</h1>
-            <p className="text-xl text-emerald-100">اكتشف جمال الخط العربي مع كلام الله</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-100">خطوط القرآن الكريم</h1>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ وَإِنَّهُ لَكِتَابٌ عَزِيزٌ ﴾</p>
+            <p className="text-slate-300 mt-2">اكتشف جمال الخط العربي مع كلام الله</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Controls Panel */}
+          {/* لوحة التحكم */}
           <div className="space-y-6">
-            <Card className="p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Search className="w-5 h-5 text-emerald-600" />
+            <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border border-teal-500/20">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-200">
+                <Search className="w-5 h-5 text-teal-400" />
                 اختر الآية
               </h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">السورة</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">السورة</label>
                   <Input
                     type="number"
                     min="1"
                     max="114"
                     value={selectedSurah}
                     onChange={(e) => setSelectedSurah(parseInt(e.target.value) || 1)}
-                    className="w-full"
+                    className="w-full bg-slate-800/50 border-teal-500/30 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">رقم الآية</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">رقم الآية</label>
                   <Input
                     type="number"
                     min="1"
                     value={selectedVerse}
                     onChange={(e) => setSelectedVerse(parseInt(e.target.value) || 1)}
-                    className="w-full"
+                    className="w-full bg-slate-800/50 border-teal-500/30 text-white"
                   />
                 </div>
 
                 <Button
                   onClick={randomVerse}
                   variant="outline"
-                  className="w-full"
+                  className="w-full border-teal-500/30 text-teal-300 hover:bg-teal-500/20"
                 >
                   <RefreshCw className="w-4 h-4 ml-2" />
                   آية عشوائية
@@ -137,14 +139,14 @@ export default function CalligraphyPage() {
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h3 className="text-xl font-bold mb-4">آيات مميزة</h3>
+            <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border border-teal-500/20">
+              <h3 className="text-xl font-bold mb-4 text-amber-200">آيات مميزة</h3>
               <div className="space-y-2">
                 {FEATURED_VERSES.map((verse) => (
                   <Button
                     key={`${verse.surah}-${verse.verse}`}
                     variant="outline"
-                    className="w-full justify-start"
+                    className="w-full justify-start border-teal-500/30 text-teal-200 hover:bg-teal-500/20"
                     onClick={() => {
                       setSelectedSurah(verse.surah);
                       setSelectedVerse(verse.verse);
@@ -156,14 +158,14 @@ export default function CalligraphyPage() {
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h3 className="text-xl font-bold mb-4">التخصيص</h3>
+            <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border border-teal-500/20">
+              <h3 className="text-xl font-bold mb-4 text-amber-200">التخصيص</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">نوع الخط</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">نوع الخط</label>
                   <Select value={selectedStyle} onValueChange={setSelectedStyle}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-800/50 border-teal-500/30 text-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -177,7 +179,7 @@ export default function CalligraphyPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">حجم الخط: {fontSize}px</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">حجم الخط: {fontSize}px</label>
                   <input
                     type="range"
                     min="32"
@@ -189,7 +191,7 @@ export default function CalligraphyPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">لون الخلفية</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">لون الخلفية</label>
                   <div className="flex gap-2">
                     <input
                       type="color"
@@ -200,13 +202,13 @@ export default function CalligraphyPage() {
                     <Input
                       value={bgColor}
                       onChange={(e) => setBgColor(e.target.value)}
-                      className="flex-1"
+                      className="flex-1 bg-slate-800/50 border-teal-500/30 text-white"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">لون النص</label>
+                  <label className="block text-sm font-medium mb-2 text-slate-300">لون النص</label>
                   <div className="flex gap-2">
                     <input
                       type="color"
@@ -217,7 +219,7 @@ export default function CalligraphyPage() {
                     <Input
                       value={textColor}
                       onChange={(e) => setTextColor(e.target.value)}
-                      className="flex-1"
+                      className="flex-1 bg-slate-800/50 border-teal-500/30 text-white"
                     />
                   </div>
                 </div>
@@ -225,9 +227,9 @@ export default function CalligraphyPage() {
             </Card>
           </div>
 
-          {/* Display Area */}
+          {/* منطقة العرض */}
           <div className="lg:col-span-2">
-            <Card className="p-8 min-h-[600px] flex flex-col">
+            <Card className="p-8 min-h-[600px] flex flex-col bg-slate-900/60 backdrop-blur-xl border border-teal-500/20">
               <div className="flex-1 flex items-center justify-center">
                 <div
                   className="w-full h-full rounded-2xl flex items-center justify-center p-12 shadow-2xl"
@@ -255,15 +257,15 @@ export default function CalligraphyPage() {
 
               {currentVerse && (
                 <div className="mt-6 space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600 mb-1">الترجمة:</p>
-                    <p className="text-gray-800">{currentVerse.translation_english || 'غير متوفر'}</p>
+                  <div className="p-4 bg-slate-800/50 rounded-lg border border-teal-500/20">
+                    <p className="text-sm text-slate-400 mb-1">الترجمة:</p>
+                    <p className="text-slate-200">{currentVerse.translation_english || 'غير متوفر'}</p>
                   </div>
 
                   <div className="flex gap-3">
                     <Button
                       onClick={handleDownload}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800"
+                      className="flex-1 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800"
                     >
                       <Download className="w-4 h-4 ml-2" />
                       توليد صورة احترافية
@@ -271,15 +273,15 @@ export default function CalligraphyPage() {
                     <Button
                       onClick={handleShare}
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 border-teal-500/30 text-teal-300 hover:bg-teal-500/20"
                     >
                       <Share2 className="w-4 h-4 ml-2" />
                       مشاركة
                     </Button>
                   </div>
 
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800">
+                  <div className="p-4 bg-teal-500/10 border border-teal-500/30 rounded-lg">
+                    <p className="text-sm text-teal-200">
                       💡 <strong>نصيحة:</strong> اضغط على "توليد صورة احترافية" لإنشاء تصميم خطوط إسلامية مزخرفة بالذكاء الاصطناعي
                     </p>
                   </div>
@@ -289,27 +291,27 @@ export default function CalligraphyPage() {
           </div>
         </div>
 
-        {/* Info Cards */}
+        {/* بطاقات المعلومات */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <Card className="p-6 text-center bg-gradient-to-br from-emerald-50 to-white">
+          <Card className="p-6 text-center bg-slate-900/60 backdrop-blur-xl border border-teal-500/20">
             <div className="text-4xl mb-3">🎨</div>
-            <h3 className="font-bold text-lg mb-2">خطوط متنوعة</h3>
-            <p className="text-sm text-gray-600">استكشف أنواع الخطوط العربية الجميلة</p>
+            <h3 className="font-bold text-lg mb-2 text-amber-200">خطوط متنوعة</h3>
+            <p className="text-sm text-slate-400">استكشف أنواع الخطوط العربية الجميلة</p>
           </Card>
 
-          <Card className="p-6 text-center bg-gradient-to-br from-amber-50 to-white">
+          <Card className="p-6 text-center bg-slate-900/60 backdrop-blur-xl border border-amber-500/20">
             <div className="text-4xl mb-3">📖</div>
-            <h3 className="font-bold text-lg mb-2">كل القرآن</h3>
-            <p className="text-sm text-gray-600">اختر من بين 6236 آية قرآنية</p>
+            <h3 className="font-bold text-lg mb-2 text-amber-200">كل القرآن</h3>
+            <p className="text-sm text-slate-400">اختر من بين 6236 آية قرآنية</p>
           </Card>
 
-          <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-white">
+          <Card className="p-6 text-center bg-slate-900/60 backdrop-blur-xl border border-indigo-500/20">
             <div className="text-4xl mb-3">✨</div>
-            <h3 className="font-bold text-lg mb-2">ذكاء اصطناعي</h3>
-            <p className="text-sm text-gray-600">توليد خطوط احترافية بالـ AI</p>
+            <h3 className="font-bold text-lg mb-2 text-amber-200">ذكاء اصطناعي</h3>
+            <p className="text-sm text-slate-400">توليد خطوط احترافية بالـ AI</p>
           </Card>
         </div>
       </div>
-    </div>
+    </IslamicBackground>
   );
 }

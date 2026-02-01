@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Send, Mail, Heart, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/AuthProvider';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function MessagesPage() {
   const [newMessage, setNewMessage] = useState({ recipient_email: '', message_type: 'reminder', subject: '', content: '' });
@@ -65,34 +66,38 @@ export default function MessagesPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center" dir="rtl">
-        <Card className="p-12 text-center">
-          <Mail className="w-16 h-16 mx-auto text-blue-500 mb-4" />
-          <h2 className="text-2xl font-bold mb-2">يرجى تسجيل الدخول</h2>
-          <p className="text-gray-600">للوصول إلى الرسائل الدعوية</p>
-        </Card>
-      </div>
+      <IslamicBackground variant="default">
+        <div className="flex items-center justify-center min-h-screen">
+          <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
+            <Mail className="w-16 h-16 mx-auto text-blue-400 mb-4" />
+            <h2 className="text-2xl font-bold mb-2 text-amber-100">يرجى تسجيل الدخول</h2>
+            <p className="text-slate-400">للوصول إلى الرسائل الدعوية</p>
+          </Card>
+        </div>
+      </IslamicBackground>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50" dir="rtl">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full mb-4">
-            <Mail className="w-5 h-5" />
-            <span className="font-bold">الرسائل الدعوية</span>
+    <IslamicBackground variant="default">
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* الرأس */}
+        <div className="text-center mb-12 pt-8">
+          <div className="mb-6">
+            <div className="inline-block p-5 bg-gradient-to-br from-blue-500/20 to-indigo-600/10 rounded-3xl backdrop-blur-sm border border-blue-400/20">
+              <Mail className="w-14 h-14 text-blue-300" />
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">شارك الخير والتذكير</h1>
-          <p className="text-gray-600">أرسل رسائل تذكير ودعوة لإخوانك المسلمين 🤲</p>
+          <h1 className="text-4xl font-bold text-amber-100 mb-3">الرسائل الدعوية</h1>
+          <p className="text-xl text-indigo-200 font-arabic">﴿ وَمَنْ أَحْسَنُ قَوْلًا مِّمَّن دَعَا إِلَى اللَّهِ ﴾</p>
+          <p className="text-slate-300 mt-2">شارك الخير والتذكير مع إخوانك المسلمين 🤲</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Send Message */}
-          <Card className="p-6 bg-white shadow-lg h-fit">
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Send className="w-5 h-5 text-blue-600" />
+          {/* إرسال رسالة */}
+          <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border border-blue-500/20 h-fit">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-200">
+              <Send className="w-5 h-5 text-blue-400" />
               إرسال رسالة جديدة
             </h3>
             <div className="space-y-4">
@@ -100,11 +105,12 @@ export default function MessagesPage() {
                 placeholder="البريد الإلكتروني للمستلم"
                 value={newMessage.recipient_email}
                 onChange={(e) => setNewMessage({ ...newMessage, recipient_email: e.target.value })}
+                className="bg-slate-800/50 border-blue-500/30 text-white placeholder:text-slate-400"
               />
               <select
                 value={newMessage.message_type}
                 onChange={(e) => setNewMessage({ ...newMessage, message_type: e.target.value })}
-                className="w-full p-3 border rounded-lg"
+                className="w-full p-3 border border-blue-500/30 rounded-lg bg-slate-800/50 text-white"
               >
                 <option value="reminder">تذكير</option>
                 <option value="dawah">دعوة</option>
@@ -115,21 +121,22 @@ export default function MessagesPage() {
                 placeholder="الموضوع"
                 value={newMessage.subject}
                 onChange={(e) => setNewMessage({ ...newMessage, subject: e.target.value })}
+                className="bg-slate-800/50 border-blue-500/30 text-white placeholder:text-slate-400"
               />
               <Textarea
                 placeholder="نص الرسالة..."
                 value={newMessage.content}
                 onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })}
-                className="min-h-[150px]"
+                className="min-h-[150px] bg-slate-800/50 border-blue-500/30 text-white placeholder:text-slate-400"
               />
-              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                <p className="text-sm text-amber-800">
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                <p className="text-sm text-amber-200">
                   ⚠️ <strong>ملاحظة:</strong> يرجى التأكد من محتوى الرسالة ومراعاة الأدب الإسلامي والاحترام
                 </p>
               </div>
               <Button
                 onClick={handleSendMessage}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                 disabled={sendMessageMutation.isPending}
               >
                 <Send className="w-4 h-4 ml-2" />
@@ -138,21 +145,21 @@ export default function MessagesPage() {
             </div>
           </Card>
 
-          {/* Received Messages */}
+          {/* الرسائل الواردة */}
           <div className="space-y-6">
-            <h3 className="text-xl font-bold flex items-center gap-2">
-              <Mail className="w-5 h-5 text-blue-600" />
+            <h3 className="text-xl font-bold flex items-center gap-2 text-amber-200">
+              <Mail className="w-5 h-5 text-blue-400" />
               الرسائل الواردة ({receivedMessages.length})
             </h3>
             {receivedMessages.length === 0 ? (
-              <Card className="p-12 text-center bg-white">
-                <Mail className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-600">لا توجد رسائل واردة</p>
+              <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
+                <Mail className="w-16 h-16 mx-auto text-blue-400 mb-4" />
+                <p className="text-slate-400">لا توجد رسائل واردة</p>
               </Card>
             ) : (
               <div className="space-y-4">
                 {receivedMessages.map((msg) => (
-                  <Card key={msg.id} className={`p-4 bg-gradient-to-br ${messageTypeColors[msg.message_type]} text-white`}>
+                  <Card key={msg.id} className={`p-4 bg-gradient-to-br ${messageTypeColors[msg.message_type]} text-white border-0`}>
                     <div className="flex items-start gap-3 mb-3">
                       <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
                         {messageTypeIcons[msg.message_type]}
@@ -173,40 +180,19 @@ export default function MessagesPage() {
           </div>
         </div>
 
-        {/* Sent Messages */}
+        {/* الرسائل المرسلة */}
         <div className="mt-12">
-          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <Send className="w-5 h-5 text-blue-600" />
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-amber-200">
+            <Send className="w-5 h-5 text-blue-400" />
             الرسائل المرسلة ({sentMessages.length})
           </h3>
           {sentMessages.length === 0 ? (
-            <Card className="p-12 text-center bg-white">
-              <Send className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600">لم ترسل أي رسائل بعد</p>
+            <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
+              <Send className="w-16 h-16 mx-auto text-blue-400 mb-4" />
+              <p className="text-slate-400">لم ترسل أي رسائل بعد</p>
             </Card>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
               {sentMessages.map((msg) => (
-                <Card key={msg.id} className="p-4 bg-white shadow">
+                <Card key={msg.id} className="p-4 bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
                   <div className="flex items-start gap-3 mb-2">
-                    <div className={`w-10 h-10 bg-gradient-to-br ${messageTypeColors[msg.message_type]} rounded-full flex items-center justify-center text-white`}>
-                      {messageTypeIcons[msg.message_type]}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-900">{msg.subject || 'رسالة دعوية'}</p>
-                      <p className="text-sm text-gray-600">إلى: {msg.recipient_email}</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-700 text-sm">{msg.content}</p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {new Date(msg.created_date).toLocaleString('ar')}
-                  </p>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}

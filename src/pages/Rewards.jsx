@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Trophy, Star, Award, TrendingUp, Zap, Crown, Target } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 const BADGES = [
   { name: 'القارئ المبتدئ', icon: '📖', points: 100, description: 'أول خطوة في رحلة القرآن' },
@@ -67,31 +68,35 @@ export default function RewardsPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center" dir="rtl">
-        <Card className="p-12 text-center">
-          <Trophy className="w-16 h-16 mx-auto text-amber-500 mb-4" />
-          <h2 className="text-2xl font-bold mb-2">يرجى تسجيل الدخول</h2>
-          <p className="text-gray-600">للوصول إلى نظام المكافآت والنقاط</p>
-        </Card>
-      </div>
+      <IslamicBackground variant="purple">
+        <div className="flex items-center justify-center min-h-screen">
+          <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border border-amber-500/20">
+            <Trophy className="w-16 h-16 mx-auto text-amber-400 mb-4" />
+            <h2 className="text-2xl font-bold mb-2 text-amber-100">يرجى تسجيل الدخول</h2>
+            <p className="text-slate-400">للوصول إلى نظام المكافآت والنقاط</p>
+          </Card>
+        </div>
+      </IslamicBackground>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" dir="rtl">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3 rounded-full mb-4">
-            <Trophy className="w-5 h-5" />
-            <span className="font-bold">نظام المكافآت</span>
+    <IslamicBackground variant="purple">
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* الرأس */}
+        <div className="text-center mb-12 pt-8">
+          <div className="mb-6">
+            <div className="inline-block p-5 bg-gradient-to-br from-amber-500/20 to-orange-600/10 rounded-3xl backdrop-blur-sm border border-amber-400/20">
+              <Trophy className="w-14 h-14 text-amber-300" />
+            </div>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-3">إنجازاتك القرآنية</h1>
-          <p className="text-purple-200 text-lg">واصل الطريق واجمع النقاط والأوسمة 🌟</p>
+          <h1 className="text-4xl font-bold text-amber-100 mb-3">إنجازاتك القرآنية</h1>
+          <p className="text-xl text-indigo-200 font-arabic">﴿ وَسَارِعُوا إِلَىٰ مَغْفِرَةٍ مِّن رَّبِّكُمْ ﴾</p>
+          <p className="text-slate-300 mt-2">واصل الطريق واجمع النقاط والأوسمة 🌟</p>
         </div>
 
-        {/* Current Level Card */}
-        <Card className={`p-8 mb-8 bg-gradient-to-br ${currentLevel.color} text-white shadow-2xl`}>
+        {/* بطاقة المستوى الحالي */}
+        <Card className={`p-8 mb-8 bg-gradient-to-br ${currentLevel.color} text-white shadow-2xl border-0`}>
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -124,32 +129,32 @@ export default function RewardsPage() {
           )}
         </Card>
 
-        {/* Stats Grid */}
+        {/* شبكة الإحصائيات */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white">
+          <Card className="p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white border-0">
             <Target className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.khatam_count || 0}</div>
             <div className="text-sm opacity-90">ختمة كاملة</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+          <Card className="p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-0">
             <TrendingUp className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.shares_count || 0}</div>
             <div className="text-sm opacity-90">مشاركة</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
+          <Card className="p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0">
             <Zap className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.current_streak || 0}</div>
             <div className="text-sm opacity-90">يوم متتالي</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+          <Card className="p-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white border-0">
             <Star className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{Math.floor((userPoints?.listening_hours || 0))} ساعة</div>
             <div className="text-sm opacity-90">استماع</div>
           </Card>
         </div>
 
-        {/* Badges */}
-        <Card className="p-8 bg-white/10 backdrop-blur-xl border-white/20 mb-8">
+        {/* الأوسمة */}
+        <Card className="p-8 bg-slate-900/60 backdrop-blur-xl border-amber-500/20 mb-8">
           <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
             <Award className="w-7 h-7 text-amber-400" />
             الأوسمة والإنجازات
@@ -179,9 +184,9 @@ export default function RewardsPage() {
           </div>
         </Card>
 
-        {/* All Levels */}
-        <Card className="p-8 bg-white/10 backdrop-blur-xl border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        {/* جميع المستويات */}
+        <Card className="p-8 bg-slate-900/60 backdrop-blur-xl border-amber-500/20">
+          <h2 className="text-2xl font-bold text-amber-100 mb-6 flex items-center gap-2">
             <Trophy className="w-7 h-7 text-amber-400" />
             جميع المستويات
           </h2>
@@ -221,6 +226,6 @@ export default function RewardsPage() {
           </div>
         </Card>
       </div>
-    </div>
+    </IslamicBackground>
   );
 }
