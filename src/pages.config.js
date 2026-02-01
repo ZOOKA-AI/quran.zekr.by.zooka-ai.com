@@ -69,6 +69,7 @@ import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
 import AdminPanel from './pages/AdminPanel';
+import StaticPageView from './pages/StaticPageView';
 import __Layout from './Layout.jsx';
 
 
@@ -95,6 +96,7 @@ export const PAGES = {
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
     "AdminPanel": AdminPanel,
+    "StaticPageView": StaticPageView,
 }
 
 export const pagesConfig = {
