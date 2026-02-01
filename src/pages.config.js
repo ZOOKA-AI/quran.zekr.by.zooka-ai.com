@@ -67,6 +67,7 @@ import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
 import Ibtihaalat from './pages/Ibtihaalat';
+import Muathin from './pages/Muathin';
 import __Layout from './Layout.jsx';
 
 
@@ -91,6 +92,7 @@ export const PAGES = {
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
     "Ibtihaalat": Ibtihaalat,
+    "Muathin": Muathin,
 }
 
 export const pagesConfig = {

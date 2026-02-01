@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -29,6 +29,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'الإذاعة', path: 'QuranRadio', icon: Radio, color: 'text-indigo-600' },
     { name: 'التواشيح', path: 'Tawasheeh', icon: Music, color: 'text-amber-600' },
     { name: 'الابتهالات', path: 'Ibtihaalat', icon: AudioLines, color: 'text-orange-600' },
+    { name: 'المؤذن', path: 'Muathin', icon: AlarmClock, color: 'text-teal-600' },
     { name: 'الأيتام', path: 'Orphans', icon: Heart, color: 'text-red-600' },
     { name: 'المجتمع', path: 'Community', icon: MessageSquare, color: 'text-pink-600' },
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
