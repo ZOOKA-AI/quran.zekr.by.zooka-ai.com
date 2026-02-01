@@ -51,6 +51,7 @@ import Assistant from './pages/Assistant';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
 import Home from './pages/Home';
+import IntegrationGuide from './pages/IntegrationGuide';
 import NotificationDocs from './pages/NotificationDocs';
 import NotificationSettings from './pages/NotificationSettings';
 import Notifications from './pages/Notifications';
@@ -62,7 +63,6 @@ import RecitationPlayer from './pages/RecitationPlayer';
 import Reciters from './pages/Reciters';
 import SurahView from './pages/SurahView';
 import Tilawa from './pages/Tilawa';
-import IntegrationGuide from './pages/IntegrationGuide';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +71,7 @@ export const PAGES = {
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
     "Home": Home,
+    "IntegrationGuide": IntegrationGuide,
     "NotificationDocs": NotificationDocs,
     "NotificationSettings": NotificationSettings,
     "Notifications": Notifications,
@@ -82,7 +83,6 @@ export const PAGES = {
     "Reciters": Reciters,
     "SurahView": SurahView,
     "Tilawa": Tilawa,
-    "IntegrationGuide": IntegrationGuide,
 }
 
 export const pagesConfig = {

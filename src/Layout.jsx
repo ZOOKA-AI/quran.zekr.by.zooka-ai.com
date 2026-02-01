@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2 } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
+import { AuthProvider } from '@/components/AuthProvider';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
@@ -18,6 +19,7 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   return (
+    <AuthProvider>
     <div className="min-h-screen relative overflow-hidden" dir="rtl">
       {/* Spiritual Background */}
       <div className="fixed inset-0 z-0">
@@ -149,6 +151,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
       </div>
-    </div>
-  );
-}
+      </div>
+      </AuthProvider>
+      );
+      }
