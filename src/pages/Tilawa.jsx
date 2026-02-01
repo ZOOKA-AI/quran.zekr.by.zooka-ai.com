@@ -3,8 +3,9 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Play, Square, Volume2, BookOpen } from 'lucide-react';
+import { Play, Square, Volume2, BookOpen, Headphones } from 'lucide-react';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 const RECITERS = {
   khalid_al_jaleel: { name: "خالد الجليل", baseUrl: "https://server8.mp3quran.net/khalid_al_jalil/hafs/" },
@@ -111,37 +112,38 @@ export default function TilawaPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+    <IslamicBackground variant="emerald">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="text-center">
             <div className="mb-6">
-              <div className="inline-block p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <Volume2 className="w-16 h-16 text-amber-300" />
+              <div className="inline-block p-5 bg-gradient-to-br from-amber-500/20 to-amber-600/10 rounded-3xl backdrop-blur-sm border border-amber-400/20">
+                <Headphones className="w-16 h-16 text-amber-300" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">تلاوة القرآن الكريم</h1>
-            <p className="text-xl text-emerald-100">استمع لكتاب الله بصوت أشهر القراء</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-100">تلاوة القرآن الكريم</h1>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
+            <p className="text-lg text-slate-300 mt-2">استمع لكتاب الله بصوت أشهر القراء</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-12">
-        <Card className="bg-white shadow-2xl border-2 border-emerald-100">
+      <div className="max-w-2xl mx-auto px-6 py-8">
+        <Card className="bg-slate-900/60 backdrop-blur-xl shadow-2xl border border-amber-900/30">
           <div className="p-8">
             <div className="flex items-center gap-3 mb-6">
-              <BookOpen className="w-8 h-8 text-emerald-600" />
-              <h2 className="text-2xl font-bold text-gray-800">اختر القارئ والآيات</h2>
+              <BookOpen className="w-8 h-8 text-amber-400" />
+              <h2 className="text-2xl font-bold text-amber-100">اختر القارئ والآيات</h2>
             </div>
 
-            {/* Reciter Selection */}
+            {/* اختيار القارئ */}
             <div className="mb-6">
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-amber-200 mb-2">
                 القارئ:
               </label>
               <Select value={selectedReciter} onValueChange={setSelectedReciter}>
-                <SelectTrigger className="h-12 text-lg border-2 border-emerald-200">
+                <SelectTrigger className="h-12 text-lg border border-amber-700/50 bg-slate-800/50 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -154,10 +156,10 @@ export default function TilawaPage() {
               </Select>
             </div>
 
-            {/* Surah and Ayah Selection */}
+            {/* اختيار السورة والآيات */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-amber-200 mb-2">
                   رقم السورة:
                 </label>
                 <Input
@@ -166,11 +168,11 @@ export default function TilawaPage() {
                   max="114"
                   value={surahNumber}
                   onChange={(e) => setSurahNumber(e.target.value)}
-                  className="h-12 text-lg text-center border-2 border-emerald-200"
+                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-amber-200 mb-2">
                   من الآية:
                 </label>
                 <Input
@@ -178,11 +180,11 @@ export default function TilawaPage() {
                   min="1"
                   value={fromAyah}
                   onChange={(e) => setFromAyah(e.target.value)}
-                  className="h-12 text-lg text-center border-2 border-emerald-200"
+                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-amber-200 mb-2">
                   إلى الآية:
                 </label>
                 <Input
@@ -190,17 +192,17 @@ export default function TilawaPage() {
                   min="1"
                   value={toAyah}
                   onChange={(e) => setToAyah(e.target.value)}
-                  className="h-12 text-lg text-center border-2 border-emerald-200"
+                  className="h-12 text-lg text-center border border-amber-700/50 bg-slate-800/50 text-white"
                 />
               </div>
             </div>
 
-            {/* Control Buttons */}
+            {/* أزرار التحكم */}
             <div className="flex gap-3">
               <Button
                 onClick={handlePlay}
                 disabled={isPlaying}
-                className="flex-1 h-14 text-lg bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 disabled:opacity-50"
+                className="flex-1 h-14 text-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 disabled:opacity-50"
               >
                 <Play className="w-5 h-5 ml-2" />
                 {isPlaying ? 'جاري التشغيل...' : 'تشغيل التلاوة'}
@@ -216,21 +218,21 @@ export default function TilawaPage() {
               </Button>
             </div>
 
-            {/* Info Note */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-lg">
-              <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                ✨ <strong>التشغيل الآلي:</strong> يبدأ بالاستعاذة، ثم البسملة (ما عدا سورة التوبة)، ثم تشغيل الآيات المحددة تلقائياً واحدة تلو الأخرى.
+            {/* ملاحظة */}
+            <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+              <p className="text-sm text-amber-100 leading-relaxed mb-2">
+                ✨ <strong>التشغيل الآلي:</strong> يبدأ بالاستعاذة، ثم البسملة (ما عدا سورة التوبة)، ثم تشغيل الآيات تلقائياً
               </p>
-              <p className="text-xs text-gray-600">
-                🎧 يتم استخدام ملفات mp3quran.net عالية الجودة لجميع القراء
+              <p className="text-xs text-indigo-300">
+                🎧 جودة صوت عالية من mp3quran.net
               </p>
             </div>
           </div>
         </Card>
 
-        {/* Quick Surahs */}
+        {/* سور مختارة */}
         <div className="mt-8">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">سور مختارة سريعة:</h3>
+          <h3 className="text-xl font-bold text-amber-100 mb-4">سور مختارة:</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
               { name: 'الفاتحة', surah: 1, from: 1, to: 7 },
@@ -249,7 +251,7 @@ export default function TilawaPage() {
                   setToAyah(surah.to);
                   toast.success(`تم اختيار سورة ${surah.name}`);
                 }}
-                className="h-12 border-2 border-emerald-200 hover:bg-emerald-50"
+                className="h-12 border border-amber-600/40 bg-slate-800/40 text-amber-200 hover:bg-amber-600/20"
               >
                 {surah.name}
               </Button>
@@ -257,6 +259,6 @@ export default function TilawaPage() {
           </div>
         </div>
       </div>
-    </div>
+    </IslamicBackground>
   );
 }

@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Mic, BookOpen, Star, Users, Sparkles } from 'lucide-react';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 const RECITERS = [
   {
@@ -146,50 +147,54 @@ export default function RecitersPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-green-900" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-700 via-emerald-800 to-emerald-900 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+    <IslamicBackground variant="emerald">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="text-center">
-            <h1 className="text-5xl font-bold mb-4">مكتبة المقرئين المصريين</h1>
-            <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-              استكشف أشهر قراء القرآن الكريم من مصر، مع تمييز خاص للشيخ محمد متولي الشعراوي
-            </p>
+            <div className="mb-6">
+              <div className="inline-block p-5 bg-gradient-to-br from-amber-500/20 to-amber-600/10 rounded-3xl backdrop-blur-sm border border-amber-400/20">
+                <Mic className="w-14 h-14 text-amber-300" />
+              </div>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-100">مكتبة المقرئين</h1>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ ﴾</p>
+            <p className="text-slate-300 mt-2">استكشف أشهر قراء القرآن الكريم</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Sharawi Special Section */}
-        <Card className="bg-gradient-to-r from-amber-400 to-amber-500 border-none shadow-2xl mb-12">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* قسم الشيخ الشعراوي */}
+        <Card className="bg-gradient-to-r from-amber-500/20 to-amber-600/10 border border-amber-400/30 shadow-2xl mb-12 backdrop-blur-xl">
           <div className="p-8 flex items-center gap-6 flex-col md:flex-row">
-            <div className="w-36 h-36 rounded-full bg-emerald-900 flex items-center justify-center flex-shrink-0 border-4 border-emerald-800">
-              <Sparkles className="w-16 h-16 text-amber-400" />
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center flex-shrink-0 border-4 border-amber-500/50">
+              <Sparkles className="w-14 h-14 text-white" />
             </div>
             <div className="flex-1 text-center md:text-right">
-              <h2 className="text-3xl font-bold text-emerald-900 mb-3">
+              <h2 className="text-3xl font-bold text-amber-200 mb-3">
                 الشيخ محمد متولي الشعراوي
               </h2>
-              <p className="text-emerald-900 text-lg leading-relaxed">
-                إمام وداعية إسلامي مصري، اشتهر بتفسيره البسيط للقرآن الكريم بلغة مفهومة للعامة. 
-                عُرف بـ"إمام الدعاة" وترك إرثاً كبيراً من التفسيرات والدروس الدينية التي لا تزال تذاع حتى اليوم.
+              <p className="text-slate-300 text-lg leading-relaxed">
+                إمام وداعية إسلامي مصري، اشتهر بتفسيره البسيط للقرآن الكريم. 
+                عُرف بـ"إمام الدعاة" وترك إرثاً كبيراً من التفسيرات والدروس الدينية.
               </p>
             </div>
           </div>
         </Card>
 
-        {/* Search Box */}
+        {/* مربع البحث */}
         <div className="relative max-w-2xl mx-auto mb-8">
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ابحث عن مقرئ..."
-            className="pr-12 h-14 text-lg bg-white/10 border-2 border-white/20 text-white placeholder:text-white/60 focus:border-amber-400"
+            className="pr-12 h-14 text-lg bg-slate-900/60 border border-amber-500/30 text-white placeholder:text-slate-400 focus:border-amber-400"
           />
         </div>
 
-        {/* Filter Buttons */}
+        {/* أزرار الفلترة */}
         <div className="flex justify-center gap-4 mb-12 flex-wrap">
           {[
             { id: 'all', label: 'الكل' },
@@ -203,8 +208,8 @@ export default function RecitersPage() {
               variant="outline"
               className={`rounded-full px-6 py-3 transition-all ${
                 activeFilter === filter.id
-                  ? 'bg-amber-400 text-emerald-900 border-amber-400 hover:bg-amber-500'
-                  : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                  ? 'bg-amber-500 text-slate-900 border-amber-500 hover:bg-amber-400'
+                  : 'bg-slate-900/60 text-amber-200 border-amber-500/30 hover:bg-amber-500/20'
               }`}
             >
               {filter.label}
@@ -212,29 +217,29 @@ export default function RecitersPage() {
           ))}
         </div>
 
-        {/* Reciters Grid */}
+        {/* شبكة المقرئين */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredReciters.map(reciter => {
             const Icon = reciter.icon;
             return (
               <Card 
                 key={reciter.id}
-                className="bg-white/5 border-white/10 hover:bg-white/10 transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-amber-400/30"
+                className="bg-slate-900/60 backdrop-blur-xl border-amber-500/20 hover:border-amber-400/40 transition-all hover:-translate-y-2 hover:shadow-2xl"
               >
-                <div className="h-48 bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center">
-                  <Icon className="w-16 h-16 text-amber-400" />
+                <div className="h-40 bg-gradient-to-br from-amber-600/30 to-emerald-600/20 flex items-center justify-center">
+                  <Icon className="w-14 h-14 text-amber-400" />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold text-amber-400 mb-3">
+                  <h3 className="text-xl font-bold text-amber-200 mb-3">
                     {reciter.name}
                   </h3>
-                  <p className="text-gray-300 leading-relaxed mb-4 text-sm">
+                  <p className="text-slate-400 leading-relaxed mb-4 text-sm">
                     {reciter.description}
                   </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                    <span className="text-gray-400 text-sm">{reciter.birthYear}</span>
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-700">
+                    <span className="text-slate-500 text-sm">{reciter.birthYear}</span>
                     {reciter.famous && (
-                      <Badge className="bg-amber-400 text-emerald-900 hover:bg-amber-500">
+                      <Badge className="bg-amber-500 text-slate-900 hover:bg-amber-400">
                         مشهور
                       </Badge>
                     )}
@@ -247,15 +252,10 @@ export default function RecitersPage() {
 
         {filteredReciters.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-white/60 text-xl">لم يتم العثور على نتائج</p>
+            <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
           </div>
         )}
       </div>
-
-      {/* Footer */}
-      <footer className="text-center py-8 mt-16 border-t border-white/10">
-        <p className="text-white/60">© 2024 مكتبة المقرئين المصريين - جميع الحقوق محفوظة</p>
-      </footer>
-    </div>
+    </IslamicBackground>
   );
 }

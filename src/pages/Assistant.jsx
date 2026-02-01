@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2, Volume2, VolumeX, Menu, X, Settings } from 'lucide-react';
+import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2, Volume2, VolumeX, Menu, X, Settings, Bot } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { toast } from 'sonner';
 import MessageBubble from '../components/assistant/MessageBubble';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function AssistantPage() {
   const [conversationId, setConversationId] = useState(null);
@@ -218,14 +219,14 @@ export default function AssistantPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-4xl mx-auto px-6 py-12">
+    <IslamicBackground variant="default">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                <Button variant="ghost" size="icon" className="text-amber-200 hover:bg-white/10">
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
@@ -327,38 +328,39 @@ export default function AssistantPage() {
                 </div>
               </SheetContent>
             </Sheet>
-            <h1 className="text-2xl font-bold">المساعد القرآني</h1>
+            <h1 className="text-2xl font-bold text-amber-100">المساعد القرآني</h1>
             <div className="w-10"></div>
           </div>
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <div className="p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <Sparkles className="w-12 h-12 text-amber-300" />
+              <div className="p-5 bg-gradient-to-br from-indigo-500/20 to-purple-600/10 rounded-3xl backdrop-blur-sm border border-indigo-400/20">
+                <Bot className="w-14 h-14 text-indigo-300" />
               </div>
             </div>
-            <p className="text-emerald-100">اسأل أي سؤال عن القرآن الكريم وسأجيبك بإذن الله</p>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ فَاسْأَلُوا أَهْلَ الذِّكْرِ إِن كُنتُمْ لَا تَعْلَمُونَ ﴾</p>
+            <p className="text-slate-300 mt-2">اسأل أي سؤال عن القرآن الكريم وسأجيبك بإذن الله</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Chat Container */}
-        <Card className="bg-white shadow-xl border-2 border-emerald-100 h-[600px] flex flex-col">
-          {/* Messages Area */}
+      <div className="max-w-4xl mx-auto px-6 py-6">
+        {/* حاوية المحادثة */}
+        <Card className="bg-slate-900/60 backdrop-blur-xl shadow-xl border border-indigo-500/20 h-[600px] flex flex-col">
+          {/* منطقة الرسائل */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center">
-                <MessageSquare className="w-16 h-16 text-emerald-300 mb-4" />
-                <h3 className="text-xl font-bold text-gray-800 mb-2">مرحباً بك!</h3>
-                <p className="text-gray-600 mb-6">ابدأ بطرح سؤالك أو اختر أحد الأسئلة المقترحة</p>
+                <MessageSquare className="w-16 h-16 text-indigo-400 mb-4" />
+                <h3 className="text-xl font-bold text-amber-100 mb-2">مرحباً بك!</h3>
+                <p className="text-slate-400 mb-6">ابدأ بطرح سؤالك أو اختر أحد الأسئلة المقترحة</p>
                 
-                {/* Suggested Questions */}
+                {/* الأسئلة المقترحة */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
                   {suggestedQuestions.map((question, idx) => (
                     <button
                       key={idx}
                       onClick={() => setInputMessage(question)}
-                      className="p-4 bg-emerald-50 hover:bg-emerald-100 rounded-lg text-right text-sm text-gray-700 transition-colors border border-emerald-200 hover:border-emerald-300"
+                      className="p-4 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-lg text-right text-sm text-indigo-200 transition-colors border border-indigo-500/30 hover:border-indigo-400/50"
                     >
                       {question}
                     </button>
@@ -385,34 +387,32 @@ export default function AssistantPage() {
             )}
           </div>
 
-          {/* Input Area */}
-          <div className="border-t-2 border-emerald-100 p-4 bg-gray-50">
+          {/* منطقة الإدخال */}
+          <div className="border-t border-indigo-500/20 p-4 bg-slate-800/50">
             <div className="flex gap-3">
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="اكتب سؤالك هنا..."
-                className="flex-1 h-12 text-lg border-2 border-emerald-200 focus:border-emerald-400"
+                className="flex-1 h-12 text-lg border border-indigo-500/30 bg-slate-900/50 text-white placeholder:text-slate-500 focus:border-indigo-400"
                 disabled={isSending}
               />
               
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputMessage.trim() || isSending}
-                className="flex-shrink-0 h-12 px-6 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800"
+                className="flex-shrink-0 h-12 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               >
                 <Send className="w-5 h-5" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2 text-center">
+            <p className="text-xs text-slate-500 mt-2 text-center">
               اضغط على القائمة الجانبية للوصول لجميع الميزات 👆
             </p>
           </div>
         </Card>
-
-
       </div>
-    </div>
+    </IslamicBackground>
   );
 }
