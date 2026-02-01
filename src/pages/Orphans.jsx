@@ -3,17 +3,10 @@ import { Heart, Users, Gift, Phone, Mail, CreditCard, Smartphone } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import DonationForm from '@/components/donation/DonationForm';
+import ZiinaAmountSelector from '@/components/donation/ZiinaAmountSelector';
 
 export default function Orphans() {
   const donationMethods = [
-    {
-      name: 'Ziina زينة',
-      icon: CreditCard,
-      description: 'تبرع مباشر وآمن',
-      link: 'https://pay.ziina.com/RoyalHaroonZLLC/6gIekkkfy',
-      color: 'from-teal-500 to-cyan-600',
-      isLink: true
-    },
     {
       name: 'فودافون كاش',
       icon: Smartphone,
@@ -59,10 +52,15 @@ export default function Orphans() {
           <DonationForm />
         </div>
 
+        {/* التبرع عبر Ziina */}
+        <div className="mb-8">
+          <ZiinaAmountSelector />
+        </div>
+
         {/* طرق التبرع الأخرى */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-emerald-800 mb-6 text-center">💝 طرق التبرع</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <h2 className="text-2xl font-bold text-emerald-800 mb-6 text-center">💝 طرق أخرى للتبرع</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {donationMethods.map((method, index) => {
               const Icon = method.icon;
               return (
