@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import DonationForm from '@/components/donation/DonationForm';
 import ZiinaAmountSelector from '@/components/donation/ZiinaAmountSelector';
+import DonationNotification from '@/components/donation/DonationNotification';
 
 export default function Orphans() {
   const donationMethods = [
@@ -27,6 +28,7 @@ export default function Orphans() {
 
   return (
     <div className="min-h-screen py-12 px-4" dir="rtl">
+      <DonationNotification />
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
