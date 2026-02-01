@@ -7,7 +7,6 @@ import { Play, Square, Volume2, BookOpen, Headphones } from 'lucide-react';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 import AudioManager from '@/components/audio/AudioManager';
-import { toast } from 'sonner';
 
 // روابط صوت القراء - كل سورة كاملة
 const RECITERS = {
@@ -60,6 +59,9 @@ export default function TilawaPage() {
 
     stoppedByUserRef.current = false;
 
+    // إيقاف أي صوت آخر أولاً
+    AudioManager.stopAll();
+    
     // تشغيل السورة كاملة
     const surahStr = s.toString().padStart(3, "0");
     const url = `${reciter.baseUrl}${surahStr}.mp3`;
@@ -68,7 +70,7 @@ export default function TilawaPage() {
       playerRef.current = new Audio();
     }
     
-    // تسجيل الصوت في المدير المركزي (سيوقف أي صوت آخر تلقائياً)
+    // تسجيل الصوت في المدير المركزي
     AudioManager.register(playerRef.current, 'tilawa');
     
     playerRef.current.src = url;
