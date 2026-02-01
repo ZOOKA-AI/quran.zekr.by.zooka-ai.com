@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ArrowRight, BookOpen, Shield, FileText, Mail, Loader2 } from 'lucide-react';
+import { ArrowRight, BookOpen, Shield, FileText, Mail, Loader2, Info, Phone, Scale, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -9,7 +9,11 @@ const ICONS = {
   BookOpen,
   Shield,
   FileText,
-  Mail
+  Mail,
+  Info,
+  Phone,
+  Scale,
+  HelpCircle
 };
 
 export default function StaticPageView() {
@@ -93,10 +97,37 @@ export default function StaticPageView() {
         {/* Content */}
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <div 
-            className="prose prose-lg max-w-none prose-headings:text-emerald-800 prose-a:text-emerald-600"
+            className="prose prose-lg max-w-none prose-headings:text-emerald-800 prose-a:text-emerald-600 prose-p:text-gray-700 prose-li:text-gray-700"
             dangerouslySetInnerHTML={{ __html: currentPage.content }}
           />
+          
+          {/* Footer Info */}
+          <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
+            <p>آخر تحديث: {new Date(currentPage.updated_date).toLocaleDateString('ar-EG')}</p>
+          </div>
         </div>
+
+        {/* Quick Links to Other Pages */}
+        {pages?.length > 1 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">صفحات أخرى</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {pages?.filter(p => p.slug !== slug).map(page => {
+                const PageIcon = page.icon ? ICONS[page.icon] : FileText;
+                return (
+                  <Link
+                    key={page.id}
+                    to={createPageUrl(`StaticPageView?slug=${page.slug}`)}
+                    className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-colors"
+                  >
+                    <PageIcon className="w-4 h-4 text-emerald-600" />
+                    <span className="text-sm font-medium text-gray-700">{page.title}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

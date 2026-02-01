@@ -11,10 +11,10 @@ import { toast } from 'sonner';
 import ReactQuill from 'react-quill';
 
 const ICON_OPTIONS = [
-  { value: 'BookOpen', label: 'كتاب', icon: BookOpen },
-  { value: 'Shield', label: 'درع', icon: Shield },
-  { value: 'FileText', label: 'ملف', icon: FileText },
-  { value: 'Mail', label: 'بريد', icon: Mail },
+  { value: 'BookOpen', label: 'كتاب - عن التطبيق', icon: BookOpen },
+  { value: 'Shield', label: 'درع - الخصوصية', icon: Shield },
+  { value: 'FileText', label: 'ملف - الشروط', icon: FileText },
+  { value: 'Mail', label: 'بريد - التواصل', icon: Mail },
 ];
 
 const quillModules = {
