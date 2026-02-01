@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, Share2, Music, User, Search, Shuffle, Repeat, Download } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, Share2, Music, User, Search, Shuffle, Repeat, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,58 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import AudioManager from '@/components/audio/AudioManager';
-
-// قائمة المبتهلين المصريين الكبار
-const MUBTAHILEEN = [
-  { id: 1, name: 'الشيخ نصر الدين طوبار', image: 'https://i.ytimg.com/vi/QJ8F8N6VxHI/maxresdefault.jpg' },
-  { id: 2, name: 'الشيخ سيد النقشبندي', image: 'https://i.ytimg.com/vi/Yx5V5V5VVVQ/maxresdefault.jpg' },
-  { id: 3, name: 'الشيخ محمد عمران', image: 'https://i.ytimg.com/vi/abc123/maxresdefault.jpg' },
-  { id: 4, name: 'الشيخ النقشبندي', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Sayed_Al-Nakshabandi.jpg/220px-Sayed_Al-Nakshabandi.jpg' },
-  { id: 5, name: 'الشيخ محمد الطوخي', image: 'https://i.ytimg.com/vi/xyz789/maxresdefault.jpg' },
-  { id: 6, name: 'الشيخ أحمد الرزيقي', image: 'https://i.ytimg.com/vi/def456/maxresdefault.jpg' },
-  { id: 7, name: 'الشيخ إبراهيم الفران', image: 'https://i.ytimg.com/vi/ghi789/maxresdefault.jpg' },
-  { id: 8, name: 'الشيخ محمود الشحات', image: 'https://i.ytimg.com/vi/jkl012/maxresdefault.jpg' },
-  { id: 9, name: 'الشيخ ياسين التهامي', image: 'https://i.ytimg.com/vi/mno345/maxresdefault.jpg' },
-  { id: 10, name: 'الشيخ أمين الدشناوي', image: 'https://i.ytimg.com/vi/pqr678/maxresdefault.jpg' },
-];
-
-// قائمة الابتهالات - روابط حقيقية من Archive.org
-const IBTIHAALAT = [
-  // نصر الدين طوبار
-  { id: 1, title: 'مولاي إني ببابك', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/mwlay-ini-bbabk/mwlay-ini-bbabk.mp3', category: 'ابتهالات', duration: 480 },
-  { id: 2, title: 'يا رب إن عظمت ذنوبي', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/ya-rab-en-3azumat/ya-rab-en-3azumat.mp3', category: 'ابتهالات', duration: 420 },
-  { id: 3, title: 'أنت الكريم', mubtahil: 'الشيخ نصر الدين طوبار', mubtahilId: 1, audio: 'https://archive.org/download/anta-alkarim/anta-alkarim.mp3', category: 'ابتهالات', duration: 390 },
-  
-  // سيد النقشبندي
-  { id: 4, title: 'ربي إني مسني الضر', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/rabi-ini-masani/rabi-ini-masani.mp3', category: 'ابتهالات', duration: 510 },
-  { id: 5, title: 'إلهي لا تعذبني', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/ilahi-la-to3azibni/ilahi-la-to3azibni.mp3', category: 'ابتهالات', duration: 450 },
-  { id: 6, title: 'يا رب العرش', mubtahil: 'الشيخ سيد النقشبندي', mubtahilId: 2, audio: 'https://archive.org/download/ya-rab-al3arsh/ya-rab-al3arsh.mp3', category: 'ابتهالات', duration: 480 },
-  
-  // محمد عمران
-  { id: 7, title: 'تضرعت بالسحر', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://archive.org/download/tadara3t-bilsahr/tadara3t-bilsahr.mp3', category: 'ابتهالات', duration: 420 },
-  { id: 8, title: 'دعوتك يا ربي', mubtahil: 'الشيخ محمد عمران', mubtahilId: 3, audio: 'https://archive.org/download/da3awtak-ya-rabi/da3awtak-ya-rabi.mp3', category: 'ابتهالات', duration: 390 },
-  
-  // ياسين التهامي
-  { id: 9, title: 'حبيبي يا رسول الله', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://archive.org/download/habibi-ya-rasol-allah/habibi-ya-rasol-allah.mp3', category: 'مدائح نبوية', duration: 600 },
-  { id: 10, title: 'طلع البدر علينا', mubtahil: 'الشيخ ياسين التهامي', mubtahilId: 9, audio: 'https://archive.org/download/tala3a-al-badr/tala3a-al-badr.mp3', category: 'مدائح نبوية', duration: 540 },
-  
-  // أمين الدشناوي
-  { id: 11, title: 'مدد يا سيدنا الحسين', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://archive.org/download/madad-ya-sayidna/madad-ya-sayidna.mp3', category: 'تواشيح', duration: 480 },
-  { id: 12, title: 'يا إمام الرسل', mubtahil: 'الشيخ أمين الدشناوي', mubtahilId: 10, audio: 'https://archive.org/download/ya-imam-alrosol/ya-imam-alrosol.mp3', category: 'مدائح نبوية', duration: 510 },
-  
-  // محمد الطوخي
-  { id: 13, title: 'اللهم صل على سيدنا محمد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://archive.org/download/allahumma-sali/allahumma-sali.mp3', category: 'تواشيح', duration: 450 },
-  { id: 14, title: 'يا من تحل به العقد', mubtahil: 'الشيخ محمد الطوخي', mubtahilId: 5, audio: 'https://archive.org/download/ya-man-tohal/ya-man-tohal.mp3', category: 'ابتهالات', duration: 420 },
-  
-  // أحمد الرزيقي
-  { id: 15, title: 'يا الله يا كريم', mubtahil: 'الشيخ أحمد الرزيقي', mubtahilId: 6, audio: 'https://archive.org/download/ya-allah-ya-karim/ya-allah-ya-karim.mp3', category: 'ابتهالات', duration: 480 },
-  
-  // إبراهيم الفران
-  { id: 16, title: 'أشرق البدر علينا', mubtahil: 'الشيخ إبراهيم الفران', mubtahilId: 7, audio: 'https://archive.org/download/ashraqa-albadr/ashraqa-albadr.mp3', category: 'مدائح نبوية', duration: 390 },
-  
-  // محمود الشحات
-  { id: 17, title: 'يا رب صل على النبي', mubtahil: 'الشيخ محمود الشحات', mubtahilId: 8, audio: 'https://archive.org/download/ya-rab-sali/ya-rab-sali.mp3', category: 'تواشيح', duration: 360 },
-];
 
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return '0:00';
@@ -84,6 +33,20 @@ export default function Ibtihaalat() {
   const [isShuffle, setIsShuffle] = useState(false);
   
   const audioRef = useRef(null);
+
+  // جلب المبتهلين من قاعدة البيانات
+  const { data: mubtahileen = [], isLoading: loadingMubtahileen } = useQuery({
+    queryKey: ['mubtahileen'],
+    queryFn: () => base44.entities.Mubtahil.list('-total_plays'),
+  });
+
+  // جلب الابتهالات من قاعدة البيانات
+  const { data: ibtihaalat = [], isLoading: loadingIbtihaalat } = useQuery({
+    queryKey: ['ibtihaalat'],
+    queryFn: () => base44.entities.Ibtihaal.list('-plays_count'),
+  });
+
+  const isLoading = loadingMubtahileen || loadingIbtihaalat;
 
   useEffect(() => {
     const saved = localStorage.getItem('ibtihaalat_favorites');
@@ -204,16 +167,26 @@ export default function Ibtihaalat() {
   };
 
   const getFilteredList = () => {
-    return IBTIHAALAT.filter(track => {
-      const matchSearch = track.title.includes(searchQuery) || track.mubtahil.includes(searchQuery);
-      const matchMubtahil = !selectedMubtahil || track.mubtahilId === selectedMubtahil;
+    return ibtihaalat.filter(track => {
+      const matchSearch = track.title?.includes(searchQuery) || track.mubtahil_name?.includes(searchQuery);
+      const matchMubtahil = !selectedMubtahil || track.mubtahil_id === selectedMubtahil || track.mubtahil_name === selectedMubtahil;
       const matchCategory = selectedCategory === 'all' || track.category === selectedCategory;
       return matchSearch && matchMubtahil && matchCategory;
-    });
+    }).map(track => ({
+      id: track.id,
+      title: track.title,
+      mubtahil: track.mubtahil_name,
+      mubtahilId: track.mubtahil_id,
+      audio: track.audio_url,
+      category: track.category,
+      duration: track.duration || 300
+    }));
   };
 
   const filteredTracks = getFilteredList();
-  const categories = ['all', 'ابتهالات', 'تواشيح', 'مدائح نبوية'];
+  // استخراج الفئات الفريدة
+  const uniqueCategories = [...new Set(ibtihaalat.map(t => t.category).filter(Boolean))];
+  const categories = ['all', ...uniqueCategories];
 
   return (
     <div className="min-h-screen py-8 px-4" dir="rtl">
@@ -357,7 +330,15 @@ export default function Ibtihaalat() {
           </Card>
         )}
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-10 h-10 animate-spin text-amber-600" />
+          </div>
+        )}
+
         {/* المبتهلين */}
+        {!isLoading && (
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-amber-800 mb-4">المبتهلين</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
@@ -373,22 +354,27 @@ export default function Ibtihaalat() {
               <span className="text-sm font-bold">الكل</span>
             </button>
             
-            {MUBTAHILEEN.map((mubtahil) => (
+            {mubtahileen.map((mubtahil) => (
               <button
                 key={mubtahil.id}
-                onClick={() => setSelectedMubtahil(selectedMubtahil === mubtahil.id ? null : mubtahil.id)}
+                onClick={() => setSelectedMubtahil(selectedMubtahil === mubtahil.name ? null : mubtahil.name)}
                 className={`flex-shrink-0 flex flex-col items-center gap-2 p-3 rounded-xl transition-all ${
-                  selectedMubtahil === mubtahil.id ? 'bg-amber-100 ring-2 ring-amber-500' : 'bg-white hover:bg-gray-50'
+                  selectedMubtahil === mubtahil.name ? 'bg-amber-100 ring-2 ring-amber-500' : 'bg-white hover:bg-gray-50'
                 }`}
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-                  <User className="w-8 h-8 text-gray-500" />
+                  {mubtahil.image_url ? (
+                    <img src={mubtahil.image_url} alt={mubtahil.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-8 h-8 text-gray-500" />
+                  )}
                 </div>
-                <span className="text-xs font-bold text-center max-w-[80px] truncate">{mubtahil.name.replace('الشيخ ', '')}</span>
+                <span className="text-xs font-bold text-center max-w-[80px] truncate">{mubtahil.name?.replace('الشيخ ', '')}</span>
               </button>
             ))}
           </div>
         </div>
+        )}
 
         {/* البحث والتصفية */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
