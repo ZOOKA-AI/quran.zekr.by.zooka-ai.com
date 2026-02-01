@@ -268,7 +268,7 @@ export default function QuranPage() {
             </Sheet>
             
             <h1 className="text-2xl font-bold text-amber-100">
-              {greeting} {isAuthenticated && user?.full_name && `، ${user.full_name}`}
+              {greeting} {isAuthenticated && user?.full_name && `، ${user.full_name.split(' ')[0]}`}
             </h1>
             <div className="w-10"></div>
           </div>
@@ -280,7 +280,78 @@ export default function QuranPage() {
               </div>
             </div>
             <p className="text-3xl font-arabic text-amber-200/90 mb-2">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-            <p className="text-indigo-200 text-lg">اقرأ واستمع إلى كتاب الله</p>
+            <p className="text-indigo-200 text-lg mb-6">اقرأ واستمع إلى كتاب الله</p>
+            
+            {/* شرح التطبيق */}
+            <Card className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 backdrop-blur-sm border border-emerald-500/30 p-6 max-w-4xl mx-auto text-right">
+              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">🌟 مميزات التطبيق</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">📖</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">القرآن الكريم كاملاً</p>
+                      <p className="text-indigo-200/80">114 سورة مع التفسير والترجمة</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🎧</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">تلاوات بأصوات مشاهير القراء</p>
+                      <p className="text-indigo-200/80">الحصري، المنشاوي، العفاسي وغيرهم</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">📻</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">إذاعات القرآن الكريم</p>
+                      <p className="text-indigo-200/80">بث مباشر على مدار الساعة</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🤲</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">الأذكار والأدعية</p>
+                      <p className="text-indigo-200/80">أذكار الصباح والمساء والنوم</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🎵</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">الابتهالات والتواشيح</p>
+                      <p className="text-indigo-200/80">نخبة من أجمل الابتهالات الدينية</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🕌</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">أصوات المؤذنين</p>
+                      <p className="text-indigo-200/80">أجمل أصوات الأذان من الحرمين</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🌙</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">محتوى رمضان</p>
+                      <p className="text-indigo-200/80">أدعية وبرامج خاصة بالشهر الكريم</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">💝</span>
+                    <div>
+                      <p className="font-bold text-emerald-300">كفالة الأيتام</p>
+                      <p className="text-indigo-200/80">صفحة خاصة للتبرع والصدقة</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 pt-4 border-t border-emerald-500/30 text-center">
+                <p className="text-amber-200 font-bold">🤲 صدقة جارية لوجه الله تعالى - مجاني بالكامل</p>
+                <p className="text-indigo-300/80 text-xs mt-2">من إنتاج Royal Haroon Cleaning FZ-LLC 🇦🇪</p>
+              </div>
+            </Card>
           </div>
         </div>
       </div>
