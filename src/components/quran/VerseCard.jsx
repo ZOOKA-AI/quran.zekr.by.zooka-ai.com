@@ -142,6 +142,15 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
               مقارنة التفاسير
             </Button>
           )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowTafsirViewer(true)}
+            className="flex items-center gap-2 border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
+          >
+            <BookMarked className="w-4 h-4" />
+            تفسير من الإنترنت
+          </Button>
         </div>
 
         <BookmarkDialog
