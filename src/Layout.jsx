@@ -233,89 +233,51 @@ export default function Layout({ children, currentPageName }) {
             <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
             <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
 
-            {/* صدقة جارية */}
-            <div className="bg-gradient-to-r from-amber-600/30 to-orange-600/30 rounded-xl p-6 mb-6 max-w-3xl mx-auto border border-amber-400/40">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <span className="text-4xl">🤲</span>
-                <div>
-                  <p className="text-amber-300 text-2xl font-bold">صدقة جارية</p>
-                  <p className="text-white text-lg">على روح المغفور لها بإذن الله</p>
-                </div>
-              </div>
-              <p className="text-amber-100 text-xl font-bold mb-2 font-arabic">جزبية عبد الرحيم هارون علي</p>
-              <p className="text-emerald-200 text-base mb-4">وموتانا وموتى المسلمين أجمعين • اللهم اغفر لهم وارحمهم</p>
+            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-4 mb-4 max-w-2xl mx-auto border border-purple-400/30">
+              <p className="text-amber-300 text-xl font-bold mb-2">📢 باص إسلامي صدقة جارية</p>
+              <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-white text-lg hover:text-amber-300 transition-colors underline font-bold block mb-2">
+                🌐 zaka.ai
+              </a>
+              <p className="text-emerald-100 text-sm mb-2">من مصر 🇪🇬 • نطاق .egypt</p>
+              <p className="text-white font-bold">👍 اشتركوا في القناة</p>
+            </div>
+
+            <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
+              <p className="text-lg font-bold text-white mb-2">🤲 صدقة جارية لوجه الله تعالى</p>
+              <p className="text-emerald-100 text-sm mb-3">تطبيق مجاني بالكامل - من المسلمين إلى المسلمين</p>
               
-              {/* طرق التبرع */}
-              <div className="bg-white/10 rounded-xl p-4 mt-4">
-                <p className="text-white text-lg font-bold mb-4">💰 طرق التبرع والتحويل</p>
+              <div className="border-t border-emerald-600/50 pt-3 mt-3">
+                <div className="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-lg p-3 mb-3 border border-emerald-500/30">
+                  <p className="text-white text-base mb-2 font-arabic">✨ من دولة الإمارات العربية المتحدة 🇦🇪</p>
+                  <p className="text-emerald-100 text-sm italic font-arabic">بلد الخير والعطاء • أرض التسامح والمحبة</p>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Ziina */}
-                  <a href="https://pay.ziina.com/helmyharoon822/OG15QzAAUK" target="_blank" rel="noopener noreferrer" 
-                     className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg p-4 hover:opacity-90 transition-opacity block">
-                    <p className="text-white font-bold text-lg mb-1">💳 Ziina زينة</p>
-                    <p className="text-purple-100 text-sm">اضغط للتبرع مباشرة</p>
-                    <p className="text-white text-xs mt-2">خيارات متعددة للمتبرعين</p>
+                <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg p-3 mb-3 border border-purple-400/30">
+                  <p className="text-amber-300 text-lg font-bold mb-1">🤖 ZOOKA-AI المرزوق</p>
+                  <p className="text-white text-sm mb-1">مساعد التنفيذ الذكي</p>
+                  <p className="text-emerald-100 text-xs italic">أول مشروع دعائي • تقنية الذكاء الاصطناعي في خدمة القرآن</p>
+                </div>
+                <p className="text-emerald-200 text-xs mb-1">المطورون: موسى وهارون بالإمارات 🇦🇪</p>
+                <p className="text-emerald-200 text-xs mb-2">حفظ الملكية وتأمين كتاب الله وسنة رسوله</p>
+                <p className="text-emerald-100 text-xs">من الفقراء لله المصريين 🇪🇬</p>
+                
+                <div className="border-t border-emerald-600/50 pt-3 mt-3">
+                  <p className="text-amber-300 text-xs font-bold mb-1">🔐 المشرف العام الوحيد</p>
+                  <a href="mailto:Zookaalmrzwq@gmail.com" className="text-emerald-100 text-xs hover:text-white transition-colors underline block mb-1">
+                    Zookaalmrzwq@gmail.com
                   </a>
-                  
-                  {/* Vodafone Cash */}
-                  <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-4">
-                    <p className="text-white font-bold text-lg mb-1">📱 فودافون كاش</p>
-                    <a href="tel:00201090193337" className="text-red-100 text-lg hover:text-white transition-colors block">
-                      00201090193337
-                    </a>
-                    <p className="text-white text-xs mt-2">🇪🇬 مصر</p>
-                  </div>
-                  
-                  {/* Etisalat / e& */}
-                  <div className="bg-gradient-to-r from-green-600 to-teal-600 rounded-lg p-4">
-                    <p className="text-white font-bold text-lg mb-1">📲 اتصالات e&</p>
-                    <a href="tel:+971566047579" className="text-green-100 text-lg hover:text-white transition-colors block">
-                      +971 56 604 7579
-                    </a>
-                    <p className="text-white text-xs mt-2">🇦🇪 الإمارات</p>
-                  </div>
-                  
-                  {/* صفحة الأيتام */}
-                  <Link to={createPageUrl('Rewards')} className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-4 hover:opacity-90 transition-opacity block">
-                    <p className="text-white font-bold text-lg mb-1">👶 كفالة الأيتام</p>
-                    <p className="text-blue-100 text-sm">اضغط لمعرفة المزيد</p>
-                    <p className="text-white text-xs mt-2">أجر عظيم في الدنيا والآخرة</p>
-                  </Link>
+                  <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-amber-300 text-xs hover:text-amber-200 transition-colors underline font-bold block mb-2">
+                    🌐 zaka.ai
+                  </a>
+                  <p className="text-emerald-200 text-xs mt-1">مسؤول حماية المنصة والملكية الفكرية</p>
+                  <p className="text-white text-xs font-bold mt-2">⚠️ جميع الحقوق محفوظة • ممنوع النسخ أو التعديل بدون إذن</p>
                 </div>
               </div>
             </div>
-
-            {/* معلومات الشركة */}
-            <div className="bg-emerald-700/30 rounded-xl p-5 mb-6 max-w-3xl mx-auto">
-              <div className="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-lg p-4 mb-4 border border-emerald-500/30">
-                <p className="text-amber-300 text-lg font-bold mb-2">🏢 من إنتاج</p>
-                <p className="text-white text-base font-bold">Royal Haroon Cleaning and Disinfection Services FZ-LLC</p>
-                <p className="text-emerald-200 text-sm mt-2">🇦🇪 دولة الإمارات العربية المتحدة</p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="bg-white/5 rounded-lg p-3">
-                  <p className="text-amber-300 font-bold mb-2">📧 للتواصل</p>
-                  <a href="mailto:info@zooka-ai.com" className="text-emerald-100 hover:text-white transition-colors block mb-1">
-                    info@zooka-ai.com
-                  </a>
-                  <a href="mailto:info@royalcleanuae.com" className="text-emerald-100 hover:text-white transition-colors block">
-                    info@royalcleanuae.com
-                  </a>
-                </div>
-                <div className="bg-white/5 rounded-lg p-3">
-                  <p className="text-amber-300 font-bold mb-2">🔐 حفظ الملكية</p>
-                  <p className="text-emerald-100 text-xs">جميع الحقوق محفوظة</p>
-                  <p className="text-white text-xs font-bold mt-1">⚠️ ممنوع النسخ أو التعديل بدون إذن</p>
-                </div>
-              </div>
-            </div>
-
             <div className="flex justify-center gap-8 text-sm text-emerald-300">
               <span>© 2024 القرآن الكريم</span>
               <span>•</span>
-              <span>صدقة جارية • منصة إسلامية متكاملة</span>
+              <span>منصة إسلامية متكاملة</span>
             </div>
           </div>
         </div>
