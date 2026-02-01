@@ -200,8 +200,23 @@ export default function AdminPanel() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="bg-slate-800 border-slate-700 mb-6">
-            <TabsTrigger value="stats">الإحصائيات</TabsTrigger>
+          <TabsList className="bg-slate-800 border-slate-700 mb-6 flex-wrap h-auto gap-1 p-1">
+            <TabsTrigger value="stats" className="gap-1">
+              <BarChart3 className="w-4 h-4" />
+              الإحصائيات
+            </TabsTrigger>
+            <TabsTrigger value="advanced" className="gap-1">
+              <Activity className="w-4 h-4" />
+              تحليلات متقدمة
+            </TabsTrigger>
+            <TabsTrigger value="cms" className="gap-1">
+              <FileText className="w-4 h-4" />
+              إدارة المحتوى
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="gap-1">
+              <Bell className="w-4 h-4" />
+              الإشعارات
+            </TabsTrigger>
             <TabsTrigger value="users">المستخدمين</TabsTrigger>
             <TabsTrigger value="orphans">الأيتام</TabsTrigger>
             <TabsTrigger value="donations">التبرعات</TabsTrigger>
