@@ -243,6 +243,19 @@ export function PlayerProvider({ children }) {
     }
   };
 
+  // دالة تشغيل مسار جديد (للاستخدام من الصفحات الأخرى)
+  const playTrack = (trackData) => {
+    const track = {
+      id: trackData.id,
+      title: trackData.title,
+      artist: trackData.artist || trackData.reciter,
+      url: trackData.audioUrl || trackData.url || trackData.audio_url,
+      type: trackData.type || 'quran',
+      imageUrl: trackData.imageUrl || trackData.image_url,
+    };
+    play(track);
+  };
+
   const value = {
     currentTrack,
     isPlaying,
@@ -266,6 +279,7 @@ export function PlayerProvider({ children }) {
     setIsRepeat,
     setIsShuffle,
     downloadTrack,
+    playTrack,
   };
 
   return (
