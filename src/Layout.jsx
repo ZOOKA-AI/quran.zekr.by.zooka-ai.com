@@ -6,7 +6,7 @@ import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
-import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
+import ClassicAudioPlayer, { PlayerProvider } from '@/components/player/ClassicAudioPlayer';
 import AppLogo from '@/components/brand/AppLogo';
 import { Button } from '@/components/ui/button';
 import {
