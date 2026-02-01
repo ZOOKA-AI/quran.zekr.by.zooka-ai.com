@@ -11,14 +11,10 @@ import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
 export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: 'الرئيسية', path: 'Home', icon: Home },
-    { name: 'التلاوة', path: 'Tilawa', icon: Volume2 },
-    { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
+    { name: 'القرآن', path: 'Quran', icon: BookOpen },
+    { name: 'المكتبة', path: 'Library', icon: BookMarked },
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
-    { name: 'المساعد الذكي', path: 'Assistant', icon: MessageSquare },
-    { name: 'مواقيت الصلاة', path: 'PrayerTimes', icon: Clock },
-    { name: 'التذكيرات', path: 'Notifications', icon: Bell },
-    { name: 'المحفوظات', path: 'Bookmarks', icon: BookMarked },
-    { name: 'الملف الشخصي', path: 'Profile', icon: User },
+    { name: 'المساعد', path: 'Assistant', icon: MessageSquare },
   ];
 
   return (
@@ -61,15 +57,15 @@ export default function Layout({ children, currentPageName }) {
         }
       `}</style>
 
-      {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-xl border-b-2 border-emerald-200/50 shadow-lg sticky top-0 z-50">
+      {/* Navigation - Spotify Style */}
+      <nav className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            <Link to={createPageUrl('Quran')} className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center">
+            <Link to={createPageUrl('Home')} className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-emerald-700">القرآن الكريم</span>
+              <span className="text-xl font-bold text-white">القرآن الكريم</span>
             </Link>
             
             <div className="flex gap-2">
@@ -81,8 +77,8 @@ export default function Layout({ children, currentPageName }) {
                     <button
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                         isActive
-                          ? 'bg-emerald-600 text-white shadow-md'
-                          : 'text-gray-700 hover:bg-emerald-50'
+                          ? 'bg-slate-800 text-white'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                       }`}
                     >
                       <Icon className="w-4 h-4" />

@@ -63,6 +63,7 @@ import RecitationPlayer from './pages/RecitationPlayer';
 import Reciters from './pages/Reciters';
 import SurahView from './pages/SurahView';
 import Tilawa from './pages/Tilawa';
+import Library from './pages/Library';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +84,7 @@ export const PAGES = {
     "Reciters": Reciters,
     "SurahView": SurahView,
     "Tilawa": Tilawa,
+    "Library": Library,
 }
 
 export const pagesConfig = {
