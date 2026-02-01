@@ -317,6 +317,6 @@ export default function Layout({ children, currentPageName }) {
       </div>
       </div>
       </PlayerProvider>
-      </AuthProvider>
-      );
-      }
+    </AuthProvider>
+  );
+}
