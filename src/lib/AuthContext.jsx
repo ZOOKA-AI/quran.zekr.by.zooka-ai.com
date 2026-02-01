@@ -48,29 +48,29 @@ export const AuthProvider = ({ children }) => {
       } catch (appError) {
         console.error('App state check failed:', appError);
         
-        // Handle app-level errors
+        // Handle app-level errors with Arabic messages
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
             setAuthError({
               type: 'auth_required',
-              message: 'Authentication required'
+              message: 'يجب تسجيل الدخول للوصول إلى التطبيق'
             });
           } else if (reason === 'user_not_registered') {
             setAuthError({
               type: 'user_not_registered',
-              message: 'User not registered for this app'
+              message: 'المستخدم غير مسجل في هذا التطبيق'
             });
           } else {
             setAuthError({
               type: reason,
-              message: appError.message
+              message: appError.message || 'حدث خطأ في التحقق من الحساب'
             });
           }
         } else {
           setAuthError({
             type: 'unknown',
-            message: appError.message || 'Failed to load app'
+            message: appError.message || 'فشل تحميل التطبيق'
           });
         }
         setIsLoadingPublicSettings(false);
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Unexpected error:', error);
       setAuthError({
         type: 'unknown',
-        message: error.message || 'An unexpected error occurred'
+        message: error.message || 'حدث خطأ غير متوقع'
       });
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
@@ -104,22 +104,30 @@ export const AuthProvider = ({ children }) => {
       if (error.status === 401 || error.status === 403) {
         setAuthError({
           type: 'auth_required',
-          message: 'Authentication required'
+          message: 'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى'
         });
       }
     }
   };
 
-  const logout = (shouldRedirect = true) => {
-    setUser(null);
-    setIsAuthenticated(false);
-    
-    if (shouldRedirect) {
-      // Use the SDK's logout method which handles token cleanup and redirect
-      base44.auth.logout(window.location.href);
-    } else {
-      // Just remove the token without redirect
-      base44.auth.logout();
+  const logout = async (shouldRedirect = true) => {
+    try {
+      setUser(null);
+      setIsAuthenticated(false);
+      
+      if (shouldRedirect) {
+        // Use the SDK's logout method which handles token cleanup and redirect
+        await base44.auth.logout(window.location.href);
+      } else {
+        // Just remove the token without redirect
+        await base44.auth.logout();
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails, clear local state
+      setUser(null);
+      setIsAuthenticated(false);
+      throw error; // Re-throw so caller can handle it
     }
   };
 

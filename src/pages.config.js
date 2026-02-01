@@ -67,7 +67,7 @@ import Tilawa from './pages/Tilawa';
 import Community from './pages/Community';
 import Rewards from './pages/Rewards';
 import Messages from './pages/Messages';
-import __Layout from './Layout.jsx';
+import __Layout from './Layout.tsx';
 
 
 export const PAGES = {
