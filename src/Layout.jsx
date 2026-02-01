@@ -10,11 +10,12 @@ import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
-    { name: 'الرئيسية', path: 'Home', icon: Home },
-    { name: 'القرآن', path: 'Quran', icon: BookOpen },
-    { name: 'المكتبة', path: 'Library', icon: BookMarked },
+    { name: 'الرئيسية', path: 'Quran', icon: Home },
+    { name: 'التلاوة', path: 'Tilawa', icon: Volume2 },
+    { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
     { name: 'المساعد', path: 'Assistant', icon: MessageSquare },
+    { name: 'المكتبة', path: 'Library', icon: BookMarked },
   ];
 
   return (
