@@ -4,6 +4,8 @@ import { createPageUrl } from '@/utils';
 import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2 } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
+import InstallPrompt from '@/components/pwa/InstallPrompt';
+import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
@@ -30,6 +32,8 @@ export default function Layout({ children, currentPageName }) {
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/70 via-white/80 to-emerald-100/70" />
       </div>
       <div className="relative z-10">
+      <OfflineIndicator />
+      <InstallPrompt />
       <DailyReminders />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap');
