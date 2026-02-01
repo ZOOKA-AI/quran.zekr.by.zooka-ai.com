@@ -4,7 +4,14 @@ import { createPageUrl } from '@/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Search, MessageSquare, Share2, Copy, Play } from 'lucide-react';
+import { Search, MessageSquare, Share2, Copy, Play, Menu, Filter, BookOpen, List } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 const FEATURED_SURAHS = [
   { number: 1, name: 'الفاتحة', color: 'from-emerald-500 to-green-600' },
@@ -42,6 +49,7 @@ const SURAHS = [
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [greeting, setGreeting] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
@@ -92,10 +100,161 @@ export default function QuranPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-purple-600/10" />
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
-          <div className="mb-6">
-            <h1 className="text-5xl font-bold text-white mb-2">
+          <div className="flex items-center justify-between mb-6">
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                  <Menu className="w-6 h-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80 overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-2 text-xl">
+                    <Filter className="w-6 h-6 text-emerald-600" />
+                    القائمة الرئيسية
+                  </SheetTitle>
+                </SheetHeader>
+                
+                <div className="mt-8 space-y-6">
+                  {/* Search Section */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <Search className="w-5 h-5 text-emerald-600" />
+                      البحث
+                    </h3>
+                    <div className="relative">
+                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="ابحث عن سورة..."
+                        className="pr-10"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick Links */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 text-emerald-600" />
+                      روابط سريعة
+                    </h3>
+                    <div className="space-y-2">
+                      <Link to={createPageUrl('Tilawa')} onClick={() => setSidebarOpen(false)}>
+                        <Button variant="outline" className="w-full justify-start">
+                          🎧 التلاوات
+                        </Button>
+                      </Link>
+                      <Link to={createPageUrl('Library')} onClick={() => setSidebarOpen(false)}>
+                        <Button variant="outline" className="w-full justify-start">
+                          📚 مكتبتي
+                        </Button>
+                      </Link>
+                      <Link to={createPageUrl('Calligraphy')} onClick={() => setSidebarOpen(false)}>
+                        <Button variant="outline" className="w-full justify-start">
+                          ✨ الخطوط
+                        </Button>
+                      </Link>
+                      <Link to={createPageUrl('Assistant')} onClick={() => setSidebarOpen(false)}>
+                        <Button variant="outline" className="w-full justify-start">
+                          🤖 المساعد الذكي
+                        </Button>
+                      </Link>
+                      <Link to={createPageUrl('Reciters')} onClick={() => setSidebarOpen(false)}>
+                        <Button variant="outline" className="w-full justify-start">
+                          🎤 المقرئين
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Featured Surahs */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <List className="w-5 h-5 text-emerald-600" />
+                      سور مميزة
+                    </h3>
+                    <div className="space-y-2">
+                      {FEATURED_SURAHS.map(surah => (
+                        <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)} onClick={() => setSidebarOpen(false)}>
+                          <div className={`p-3 bg-gradient-to-br ${surah.color} rounded-lg text-white hover:opacity-90 transition-opacity cursor-pointer`}>
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-black/20 rounded flex items-center justify-center text-sm font-bold">
+                                {surah.number}
+                              </div>
+                              <span className="font-bold">{surah.name}</span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Share Actions */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <Share2 className="w-5 h-5 text-emerald-600" />
+                      مشاركة التطبيق
+                    </h3>
+                    <div className="space-y-2">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start bg-emerald-50 hover:bg-emerald-100 border-emerald-300"
+                        onClick={() => {
+                          handleShare();
+                          setSidebarOpen(false);
+                        }}
+                      >
+                        <Share2 className="w-4 h-4 ml-2" />
+                        مشاركة التطبيق
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start bg-amber-50 hover:bg-amber-100 border-amber-300"
+                        onClick={() => {
+                          handleCopyLink();
+                          setSidebarOpen(false);
+                        }}
+                      >
+                        <Copy className="w-4 h-4 ml-2" />
+                        نسخ الرابط
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Statistics */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800">📊 إحصائيات</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-emerald-700">114</div>
+                        <div className="text-xs text-emerald-600">سورة</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-amber-100 to-amber-50 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-amber-700">30</div>
+                        <div className="text-xs text-amber-600">جزء</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-100 to-blue-50 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-blue-700">6236</div>
+                        <div className="text-xs text-blue-600">آية</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-purple-100 to-purple-50 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-purple-700">10</div>
+                        <div className="text-xs text-purple-600">مقرئ</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            
+            <h1 className="text-2xl font-bold text-white">
               {greeting} {isAuthenticated && user?.full_name && `، ${user.full_name}`}
             </h1>
+            <div className="w-10"></div>
+          </div>
+          
+          <div className="text-center">
             <p className="text-slate-300 text-lg">استمع إلى القرآن الكريم</p>
           </div>
         </div>
@@ -128,18 +287,7 @@ export default function QuranPage() {
           </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-12">
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-emerald-500" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="ابحث عن سورة بالاسم أو الرقم..."
-              className="pr-16 h-16 text-xl font-bold border-4 border-emerald-400 focus:border-emerald-600 rounded-2xl shadow-2xl bg-white"
-            />
-          </div>
-        </div>
+
 
         {/* Browse by Category */}
         <div className="mb-12">
