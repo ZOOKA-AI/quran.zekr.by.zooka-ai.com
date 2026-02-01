@@ -21,4 +21,4 @@ This is a sub-issue for issue #8 to get/fetch all files in the project.
 <!-- Add any additional notes here -->
 
 ## Related to
-Closes #8
+Part of #8
