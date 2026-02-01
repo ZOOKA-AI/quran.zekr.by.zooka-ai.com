@@ -50,9 +50,11 @@
 import Assistant from './pages/Assistant';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
+import Community from './pages/Community';
 import Home from './pages/Home';
 import IntegrationGuide from './pages/IntegrationGuide';
 import Library from './pages/Library';
+import Messages from './pages/Messages';
 import NotificationDocs from './pages/NotificationDocs';
 import NotificationSettings from './pages/NotificationSettings';
 import Notifications from './pages/Notifications';
@@ -62,11 +64,9 @@ import Profile from './pages/Profile';
 import Quran from './pages/Quran';
 import RecitationPlayer from './pages/RecitationPlayer';
 import Reciters from './pages/Reciters';
+import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
 import Tilawa from './pages/Tilawa';
-import Community from './pages/Community';
-import Rewards from './pages/Rewards';
-import Messages from './pages/Messages';
 import __Layout from './Layout.jsx';
 
 
@@ -74,9 +74,11 @@ export const PAGES = {
     "Assistant": Assistant,
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
+    "Community": Community,
     "Home": Home,
     "IntegrationGuide": IntegrationGuide,
     "Library": Library,
+    "Messages": Messages,
     "NotificationDocs": NotificationDocs,
     "NotificationSettings": NotificationSettings,
     "Notifications": Notifications,
@@ -86,11 +88,9 @@ export const PAGES = {
     "Quran": Quran,
     "RecitationPlayer": RecitationPlayer,
     "Reciters": Reciters,
+    "Rewards": Rewards,
     "SurahView": SurahView,
     "Tilawa": Tilawa,
-    "Community": Community,
-    "Rewards": Rewards,
-    "Messages": Messages,
 }
 
 export const pagesConfig = {

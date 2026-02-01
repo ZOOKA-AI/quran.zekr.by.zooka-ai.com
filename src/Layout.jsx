@@ -163,18 +163,22 @@ export default function Layout({ children, currentPageName }) {
             <div className="space-y-3">
               <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider px-2">الإعدادات</h3>
               <div className="space-y-2">
-                <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Settings className="w-5 h-5 text-blue-600" />
+                <Link to={createPageUrl('NotificationSettings')} onClick={() => setSidebarOpen(false)}>
+                  <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <span className="font-bold text-gray-700">إعدادات القراءة</span>
                   </div>
-                  <span className="font-bold text-gray-700">إعدادات القراءة</span>
-                </div>
-                <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Bell className="w-5 h-5 text-purple-600" />
+                </Link>
+                <Link to={createPageUrl('NotificationSettings')} onClick={() => setSidebarOpen(false)}>
+                  <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <Bell className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <span className="font-bold text-gray-700">الإشعارات والتذكيرات</span>
                   </div>
-                  <span className="font-bold text-gray-700">الإشعارات</span>
-                </div>
+                </Link>
               </div>
             </div>
 

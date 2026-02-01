@@ -1,195 +1,215 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Settings, Bell, Clock, Save, Sun, Moon, BookOpen, Heart } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Bell, Clock, BookOpen, Sun, Moon, Sunrise, Volume2, Download } from 'lucide-react';
 import { toast } from 'sonner';
 
-const NOTIFICATION_TYPES = [
-  {
-    id: 'morning_adhkar',
-    icon: Sun,
-    title: 'أذكار الصباح',
-    defaultTime: '06:00',
-    enabled: true
-  },
-  {
-    id: 'quran_reading',
-    icon: BookOpen,
-    title: 'تذكير القراءة اليومية',
-    defaultTime: '09:00',
-    enabled: true
-  },
-  {
-    id: 'afternoon_dua',
-    icon: Heart,
-    title: 'دعاء منتصف اليوم',
-    defaultTime: '12:00',
-    enabled: true
-  },
-  {
-    id: 'evening_adhkar',
-    icon: Moon,
-    title: 'أذكار المساء',
-    defaultTime: '18:00',
-    enabled: true
-  },
-  {
-    id: 'night_reminder',
-    icon: Moon,
-    title: 'تذكير ما قبل النوم',
-    defaultTime: '22:00',
-    enabled: false
-  }
-];
-
 export default function NotificationSettingsPage() {
-  const [notifications, setNotifications] = useState(NOTIFICATION_TYPES);
+  const [settings, setSettings] = useState({
+    morningReminder: true,
+    morningTime: '06:00',
+    eveningReminder: true,
+    eveningTime: '18:00',
+    fridayKahf: true,
+    dailyVerse: true,
+    soundEnabled: true,
+  });
 
-  const toggleNotification = (id) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, enabled: !n.enabled } : n
-    ));
-    toast.success('تم تحديث الإعدادات ✓');
-  };
-
-  const updateTime = (id, time) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, defaultTime: time } : n
-    ));
-  };
+  useEffect(() => {
+    const saved = localStorage.getItem('quran-notification-settings');
+    if (saved) {
+      setSettings(JSON.parse(saved));
+    }
+  }, []);
 
   const saveSettings = () => {
-    // Save to local storage or backend
-    localStorage.setItem('notification_settings', JSON.stringify(notifications));
-    toast.success('تم حفظ الإعدادات بنجاح! ✓');
+    localStorage.setItem('quran-notification-settings', JSON.stringify(settings));
+    toast.success('تم حفظ الإعدادات بنجاح! ✅');
+  };
+
+  const requestNotificationPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        toast.success('تم تفعيل الإشعارات! 🔔');
+      } else {
+        toast.error('تم رفض إذن الإشعارات');
+      }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <div className="mb-6">
-              <div className="inline-block p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
-                <Settings className="w-16 h-16 text-amber-300" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50" dir="rtl">
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full mb-4">
+            <Bell className="w-5 h-5" />
+            <span className="font-bold">إعدادات الإشعارات</span>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">تذكيرات الورد اليومي</h1>
+          <p className="text-gray-600">اضبط تذكيراتك للمحافظة على ورد القرآن 🤲</p>
+        </div>
+
+        {/* Permission Card */}
+        <Card className="p-6 mb-6 bg-gradient-to-r from-emerald-500 to-green-600 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <Bell className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">تفعيل الإشعارات</h3>
+                <p className="text-emerald-100 text-sm">اسمح للتطبيق بإرسال تذكيرات</p>
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">⚙️ إعدادات الإشعارات</h1>
-            <p className="text-xl text-emerald-100">تحكم في أوقات ونوعية التذكيرات اليومية</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* Info Card */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 mb-8">
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-blue-800 mb-2 flex items-center gap-2">
-              <Bell className="w-6 h-6" />
-              كيف تعمل التذكيرات؟
-            </h3>
-            <p className="text-gray-700 leading-relaxed">
-              ستصلك تذكيرات لطيفة في الأوقات المحددة لمساعدتك على الاستمرار في أعمالك اليومية من قراءة القرآن والأذكار والأدعية. 
-              يمكنك تفعيل أو إيقاف أي تذكير، وتغيير الوقت المناسب لك.
-            </p>
+            <Button onClick={requestNotificationPermission} variant="secondary" className="bg-white text-emerald-700">
+              تفعيل
+            </Button>
           </div>
         </Card>
 
-        {/* Notifications List */}
-        <div className="space-y-4">
-          {notifications.map(notification => {
-            const Icon = notification.icon;
-            return (
-              <Card key={notification.id} className={`border-2 transition-all ${
-                notification.enabled 
-                  ? 'bg-white border-emerald-200 hover:border-emerald-400' 
-                  : 'bg-gray-50 border-gray-200'
-              }`}>
-                <div className="p-6">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        notification.enabled 
-                          ? 'bg-gradient-to-br from-emerald-500 to-emerald-600' 
-                          : 'bg-gray-300'
-                      }`}>
-                        <Icon className="w-6 h-6 text-white" />
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold text-gray-800">{notification.title}</h3>
-                          {notification.enabled && (
-                            <Badge className="bg-emerald-100 text-emerald-700">مفعّل</Badge>
-                          )}
-                        </div>
-                        
-                        {notification.enabled && (
-                          <div className="flex items-center gap-3">
-                            <Clock className="w-4 h-4 text-gray-500" />
-                            <Input
-                              type="time"
-                              value={notification.defaultTime}
-                              onChange={(e) => updateTime(notification.id, e.target.value)}
-                              className="w-32 h-8 text-sm"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <button
-                      onClick={() => toggleNotification(notification.id)}
-                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                        notification.enabled ? 'bg-emerald-600' : 'bg-gray-300'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                          notification.enabled ? 'translate-x-7' : 'translate-x-1'
-                        }`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+        {/* Morning Reminder */}
+        <Card className="p-6 mb-4 bg-white shadow-lg">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
+                <Sunrise className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">أذكار الصباح والورد</h3>
+                <p className="text-gray-500 text-sm">تذكير يومي صباحي</p>
+              </div>
+            </div>
+            <Switch
+              checked={settings.morningReminder}
+              onCheckedChange={(checked) => setSettings({ ...settings, morningReminder: checked })}
+            />
+          </div>
+          {settings.morningReminder && (
+            <div className="flex items-center gap-3 mr-16">
+              <Clock className="w-5 h-5 text-gray-400" />
+              <Input
+                type="time"
+                value={settings.morningTime}
+                onChange={(e) => setSettings({ ...settings, morningTime: e.target.value })}
+                className="w-32"
+              />
+            </div>
+          )}
+        </Card>
+
+        {/* Evening Reminder */}
+        <Card className="p-6 mb-4 bg-white shadow-lg">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <Moon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">أذكار المساء والورد</h3>
+                <p className="text-gray-500 text-sm">تذكير يومي مسائي</p>
+              </div>
+            </div>
+            <Switch
+              checked={settings.eveningReminder}
+              onCheckedChange={(checked) => setSettings({ ...settings, eveningReminder: checked })}
+            />
+          </div>
+          {settings.eveningReminder && (
+            <div className="flex items-center gap-3 mr-16">
+              <Clock className="w-5 h-5 text-gray-400" />
+              <Input
+                type="time"
+                value={settings.eveningTime}
+                onChange={(e) => setSettings({ ...settings, eveningTime: e.target.value })}
+                className="w-32"
+              />
+            </div>
+          )}
+        </Card>
+
+        {/* Friday Kahf */}
+        <Card className="p-6 mb-4 bg-white shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">تذكير سورة الكهف</h3>
+                <p className="text-gray-500 text-sm">كل يوم جمعة</p>
+              </div>
+            </div>
+            <Switch
+              checked={settings.fridayKahf}
+              onCheckedChange={(checked) => setSettings({ ...settings, fridayKahf: checked })}
+            />
+          </div>
+        </Card>
+
+        {/* Daily Verse */}
+        <Card className="p-6 mb-4 bg-white shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center">
+                <Sun className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">آية اليوم</h3>
+                <p className="text-gray-500 text-sm">آية عشوائية يومياً</p>
+              </div>
+            </div>
+            <Switch
+              checked={settings.dailyVerse}
+              onCheckedChange={(checked) => setSettings({ ...settings, dailyVerse: checked })}
+            />
+          </div>
+        </Card>
+
+        {/* Sound */}
+        <Card className="p-6 mb-8 bg-white shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                <Volume2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">صوت الإشعارات</h3>
+                <p className="text-gray-500 text-sm">تشغيل صوت مع الإشعارات</p>
+              </div>
+            </div>
+            <Switch
+              checked={settings.soundEnabled}
+              onCheckedChange={(checked) => setSettings({ ...settings, soundEnabled: checked })}
+            />
+          </div>
+        </Card>
 
         {/* Save Button */}
-        <div className="mt-8 flex justify-center">
-          <Button
-            onClick={saveSettings}
-            className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 px-8 py-6 text-lg"
-          >
-            <Save className="w-5 h-5 ml-2" />
-            حفظ الإعدادات
-          </Button>
-        </div>
+        <Button onClick={saveSettings} className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 h-14 text-lg">
+          حفظ الإعدادات
+        </Button>
 
-        {/* Additional Tips */}
-        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 mt-8">
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-amber-800 mb-3">💡 نصائح</h3>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span>اختر أوقات تكون فيها متفرغاً نسبياً للاستفادة القصوى من التذكيرات</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span>يمكنك تفعيل إشعارات المتصفح للحصول على التذكيرات حتى عند إغلاق التطبيق</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span>ابدأ بتذكير أو اثنين، ثم زِد تدريجياً حتى لا تشعر بالضغط</span>
-              </li>
-            </ul>
+        {/* Offline Download Section */}
+        <Card className="p-6 mt-8 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
+              <Download className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg">التحميل للاستماع بدون إنترنت</h3>
+              <p className="text-slate-400 text-sm">حمّل السور للاستماع بدون اتصال</p>
+            </div>
           </div>
+          <p className="text-slate-300 text-sm mb-4">
+            يمكنك تحميل أي سورة من صفحة التلاوة بالضغط على زر التحميل بجانب المشغل
+          </p>
+          <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+            الذهاب للتلاوات
+          </Button>
         </Card>
       </div>
     </div>
