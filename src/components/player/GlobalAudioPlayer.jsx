@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle, Heart, Download, X, ChevronUp } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle, Heart, Download, X, ChevronUp, Moon, Sun, Wifi, WifiOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
@@ -17,16 +17,7 @@ const RECITERS = {
   abdulbasit: { name: 'عبد الباسط', baseUrl: 'https://server7.mp3quran.net/basit/' },
 };
 
-export default function GlobalAudioPlayer({ 
-  currentSurah = 1, 
-  currentVerse = 1, 
-  isPlaying: externalIsPlaying, 
-  onPlayPause: externalOnPlayPause,
-  onNext: externalOnNext,
-  onPrevious: externalOnPrevious,
-  onVolumeChange: externalOnVolumeChange,
-  onProgressChange: externalOnProgressChange,
-}) {
+export default function GlobalAudioPlayer() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -36,10 +27,36 @@ export default function GlobalAudioPlayer({
   const [volume, setVolume] = useState(80);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [surah, setSurah] = useState(currentSurah);
+  const [surah, setSurah] = useState(1);
   const [reciter, setReciter] = useState('husary');
   const [isMinimized, setIsMinimized] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  // Monitor online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Load dark mode preference
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('player-dark-mode');
+    if (savedDarkMode) setDarkMode(JSON.parse(savedDarkMode));
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('player-dark-mode', JSON.stringify(newMode));
+  };
 
   const getAudioUrl = (surahNum) => {
     const paddedNum = surahNum.toString().padStart(3, '0');
@@ -76,8 +93,37 @@ export default function GlobalAudioPlayer({
     };
   }, [isRepeating]);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     const audio = audioRef.current;
+    
+    // Try offline first if available
+    if (isOffline) {
+      try {
+        const dbRequest = indexedDB.open('QuranOfflineDB', 1);
+        dbRequest.onsuccess = (e) => {
+          const db = e.target.result;
+          const tx = db.transaction('surahs', 'readonly');
+          const store = tx.objectStore('surahs');
+          const request = store.get(surah);
+          request.onsuccess = () => {
+            if (request.result) {
+              const blob = request.result.audio;
+              audio.src = URL.createObjectURL(blob);
+              audio.play();
+              setIsPlaying(true);
+              toast.success('تشغيل من الملفات المحملة');
+            } else {
+              toast.error('السورة غير متاحة بدون إنترنت');
+            }
+          };
+        };
+        return;
+      } catch {
+        toast.error('لا يوجد اتصال بالإنترنت');
+        return;
+      }
+    }
+    
     if (!audio.src) {
       audio.src = getAudioUrl(surah);
     }
@@ -173,13 +219,19 @@ export default function GlobalAudioPlayer({
     );
   }
 
+  const bgClass = darkMode 
+    ? 'bg-slate-950/98 border-slate-800' 
+    : 'bg-slate-900/95 border-slate-700';
+
   return (
-    <Card className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-700 shadow-2xl">
+    <Card className={`fixed bottom-0 left-0 right-0 z-50 ${bgClass} backdrop-blur-xl border-t shadow-2xl transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
           {/* Current Playing Info */}
           <div className="flex items-center gap-4 w-full md:w-auto md:min-w-[240px]">
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-emerald-600 to-green-600 rounded-lg flex items-center justify-center">
+            <div className={`w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center ${
+              darkMode ? 'bg-gradient-to-br from-indigo-600 to-purple-600' : 'bg-gradient-to-br from-emerald-600 to-green-600'
+            }`}>
               <span className="text-white font-bold text-lg">{surah}</span>
             </div>
             <div className="flex-1">
@@ -188,7 +240,10 @@ export default function GlobalAudioPlayer({
                   {SURAH_NAMES[surah] || `سورة ${surah}`}
                 </p>
               </Link>
-              <p className="text-slate-400 text-sm">{RECITERS[reciter].name}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-slate-400 text-sm">{RECITERS[reciter].name}</p>
+                {isOffline && <WifiOff className="w-3 h-3 text-amber-500" />}
+              </div>
             </div>
             <div className="flex md:hidden gap-2">
               <Button size="icon" variant="ghost" onClick={() => setIsMinimized(true)} className="text-slate-400">
@@ -271,13 +326,23 @@ export default function GlobalAudioPlayer({
             </div>
           </div>
 
-          {/* Volume & Download */}
-          <div className="hidden md:flex items-center gap-3 min-w-[200px]">
+          {/* Volume & Download & Dark Mode */}
+          <div className="hidden md:flex items-center gap-2 min-w-[240px]">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className={`${darkMode ? 'text-indigo-400' : 'text-amber-400'} hover:text-white`}
+              title={darkMode ? 'الوضع العادي' : 'الوضع الليلي'}
+            >
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={handleDownload}
               className="text-slate-400 hover:text-white"
+              title="تحميل السورة"
             >
               <Download className="w-5 h-5" />
             </Button>
@@ -299,7 +364,7 @@ export default function GlobalAudioPlayer({
               onValueChange={([value]) => handleVolumeChange(value)}
               max={100}
               step={1}
-              className="w-24"
+              className="w-20"
             />
             <Button
               variant="ghost"

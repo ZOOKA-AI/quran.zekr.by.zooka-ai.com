@@ -8,8 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Settings, Plus, Minus } from 'lucide-react';
+import { Settings, Plus, Minus, Moon, Sun, Download, Check } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -17,22 +18,74 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 const FONT_FAMILIES = [
-  { value: 'amiri', label: 'خط أميري', className: 'font-[Amiri]' },
-  { value: 'uthmanic', label: 'الخط العثماني', className: 'font-[KFGQPC_Uthmanic_Script_HAFS]' },
-  { value: 'hafs', label: 'خط حفص', className: 'font-[Hafs]' },
-  { value: 'naskh', label: 'خط النسخ', className: 'font-[Noto_Naskh_Arabic]' },
+  { value: 'amiri', label: 'خط أميري', className: 'font-[Amiri]', preview: 'بِسْمِ اللَّهِ' },
+  { value: 'naskh', label: 'خط النسخ', className: 'font-[Noto_Naskh_Arabic]', preview: 'بِسْمِ اللَّهِ' },
+  { value: 'uthmanic', label: 'الخط العثماني', className: 'font-[KFGQPC]', preview: 'بِسْمِ ٱللَّهِ' },
+  { value: 'scheherazade', label: 'خط شهرزاد', className: 'font-serif', preview: 'بِسْمِ اللَّهِ' },
+  { value: 'lateef', label: 'خط لطيف', className: 'font-sans', preview: 'بِسْمِ اللَّهِ' },
+];
+
+const DOWNLOADABLE_SURAHS = [
+  { number: 1, name: 'الفاتحة' },
+  { number: 18, name: 'الكهف' },
+  { number: 36, name: 'يس' },
+  { number: 67, name: 'الملك' },
+  { number: 55, name: 'الرحمن' },
 ];
 
 export default function ReadingSettings({ settings, onSettingsChange }) {
   const [fontSize, setFontSize] = useState(settings?.fontSize || 24);
   const [fontFamily, setFontFamily] = useState(settings?.fontFamily || 'amiri');
   const [lineHeight, setLineHeight] = useState(settings?.lineHeight || 2);
+  const [darkMode, setDarkMode] = useState(settings?.darkMode || false);
+  const [downloadedSurahs, setDownloadedSurahs] = useState([]);
+  const [downloading, setDownloading] = useState(null);
 
   useEffect(() => {
-    onSettingsChange({ fontSize, fontFamily, lineHeight });
-  }, [fontSize, fontFamily, lineHeight]);
+    // Load downloaded surahs from localStorage
+    const saved = localStorage.getItem('downloaded-surahs');
+    if (saved) setDownloadedSurahs(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    onSettingsChange({ fontSize, fontFamily, lineHeight, darkMode });
+  }, [fontSize, fontFamily, lineHeight, darkMode]);
+
+  const handleDownloadSurah = async (surahNum, surahName) => {
+    setDownloading(surahNum);
+    try {
+      const url = `https://server8.mp3quran.net/afs/${surahNum.toString().padStart(3, '0')}.mp3`;
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      // Save to IndexedDB for offline use
+      const dbRequest = indexedDB.open('QuranOfflineDB', 1);
+      dbRequest.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('surahs')) {
+          db.createObjectStore('surahs', { keyPath: 'number' });
+        }
+      };
+      dbRequest.onsuccess = (e) => {
+        const db = e.target.result;
+        const tx = db.transaction('surahs', 'readwrite');
+        const store = tx.objectStore('surahs');
+        store.put({ number: surahNum, name: surahName, audio: blob });
+        
+        const newDownloaded = [...downloadedSurahs, surahNum];
+        setDownloadedSurahs(newDownloaded);
+        localStorage.setItem('downloaded-surahs', JSON.stringify(newDownloaded));
+        toast.success(`تم تحميل سورة ${surahName} للاستماع بدون إنترنت`);
+      };
+    } catch (error) {
+      toast.error('فشل التحميل، تحقق من الاتصال بالإنترنت');
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   const increaseFontSize = () => setFontSize(prev => Math.min(prev + 2, 48));
   const decreaseFontSize = () => setFontSize(prev => Math.max(prev - 2, 16));
@@ -131,6 +184,54 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
             />
           </div>
 
+          {/* الوضع الليلي */}
+          <div className="flex items-center justify-between p-4 bg-slate-100 rounded-lg">
+            <div className="flex items-center gap-3">
+              {darkMode ? <Moon className="w-5 h-5 text-indigo-600" /> : <Sun className="w-5 h-5 text-amber-500" />}
+              <span className="font-bold text-gray-700">الوضع الليلي</span>
+            </div>
+            <Switch
+              checked={darkMode}
+              onCheckedChange={setDarkMode}
+            />
+          </div>
+
+          {/* تحميل السور للاستماع بدون إنترنت */}
+          <div>
+            <label className="text-sm font-bold text-gray-700 mb-3 block flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              تحميل للاستماع بدون إنترنت
+            </label>
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {DOWNLOADABLE_SURAHS.map(surah => (
+                <div key={surah.number} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <span className="font-medium">{surah.name}</span>
+                  {downloadedSurahs.includes(surah.number) ? (
+                    <span className="flex items-center gap-1 text-emerald-600 text-sm">
+                      <Check className="w-4 h-4" /> محمّل
+                    </span>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDownloadSurah(surah.number, surah.name)}
+                      disabled={downloading === surah.number}
+                      className="text-xs"
+                    >
+                      {downloading === surah.number ? (
+                        <span className="animate-pulse">جاري...</span>
+                      ) : (
+                        <>
+                          <Download className="w-3 h-3 ml-1" /> تحميل
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* إعادة تعيين */}
           <Button
             variant="outline"
@@ -138,6 +239,7 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
               setFontSize(24);
               setFontFamily('amiri');
               setLineHeight(2);
+              setDarkMode(false);
             }}
             className="w-full"
           >
