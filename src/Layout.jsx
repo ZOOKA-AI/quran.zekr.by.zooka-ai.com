@@ -226,8 +226,8 @@ export default function Layout({ children, currentPageName }) {
       {/* Main Content */}
       <main className="pb-24">{children}</main>
 
-      {/* Global Audio Player */}
-      <GlobalAudioPlayer />
+      {/* Classic Audio Player */}
+      <ClassicAudioPlayer />
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
