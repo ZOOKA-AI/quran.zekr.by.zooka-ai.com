@@ -178,6 +178,13 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
           verse={verse}
         />
 
+        <TafsirViewer
+          surahNumber={verse.surah_number}
+          verseNumber={verse.verse_number}
+          isOpen={showTafsirViewer}
+          onClose={() => setShowTafsirViewer(false)}
+        />
+
         {/* Arabic Text */}
         <div className="mb-6 text-center">
           <p 
