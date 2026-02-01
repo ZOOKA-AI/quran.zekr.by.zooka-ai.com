@@ -250,7 +250,7 @@ export default function Layout({ children, currentPageName }) {
                 <p className="text-amber-200 font-bold mb-3">💝 طرق التبرع والتحويل:</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-right">
-                  <a href="https://pay.ziina.com/helmyharoon822/OG15QzAAUK" target="_blank" rel="noopener noreferrer" 
+                  <a href="https://pay.ziina.com/RoyalHaroonZLLC/6gIekkkfy" target="_blank" rel="noopener noreferrer" 
                      className="bg-gradient-to-r from-teal-600/40 to-cyan-600/40 p-3 rounded-lg hover:opacity-80 transition-opacity block border border-teal-400/30">
                     <p className="text-white font-bold">💳 Ziina زينة</p>
                     <p className="text-emerald-200 text-sm">اضغط للتبرع مباشرة - خيارات متعددة</p>

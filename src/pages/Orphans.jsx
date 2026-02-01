@@ -9,7 +9,7 @@ export default function Orphans() {
       name: 'Ziina زينة',
       icon: CreditCard,
       description: 'تبرع مباشر وآمن',
-      link: 'https://pay.ziina.com/helmyharoon822/OG15QzAAUK',
+      link: 'https://pay.ziina.com/RoyalHaroonZLLC/6gIekkkfy',
       color: 'from-teal-500 to-cyan-600',
       isLink: true
     },

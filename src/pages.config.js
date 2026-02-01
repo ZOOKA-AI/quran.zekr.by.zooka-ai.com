@@ -48,47 +48,47 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import Assistant from './pages/Assistant';
+import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
 import Community from './pages/Community';
 import Library from './pages/Library';
 import Messages from './pages/Messages';
 import NotificationSettings from './pages/NotificationSettings';
+import Orphans from './pages/Orphans';
 import PrayerTimes from './pages/PrayerTimes';
 import Profile from './pages/Profile';
 import Quran from './pages/Quran';
+import QuranRadio from './pages/QuranRadio';
+import Ramadan from './pages/Ramadan';
 import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
-import Tilawa from './pages/Tilawa';
-import Orphans from './pages/Orphans';
-import QuranRadio from './pages/QuranRadio';
 import Tawasheeh from './pages/Tawasheeh';
-import Ramadan from './pages/Ramadan';
-import Athkar from './pages/Athkar';
+import Tilawa from './pages/Tilawa';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Assistant": Assistant,
+    "Athkar": Athkar,
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
     "Community": Community,
     "Library": Library,
     "Messages": Messages,
     "NotificationSettings": NotificationSettings,
+    "Orphans": Orphans,
     "PrayerTimes": PrayerTimes,
     "Profile": Profile,
     "Quran": Quran,
+    "QuranRadio": QuranRadio,
+    "Ramadan": Ramadan,
     "Reciters": Reciters,
     "Rewards": Rewards,
     "SurahView": SurahView,
-    "Tilawa": Tilawa,
-    "Orphans": Orphans,
-    "QuranRadio": QuranRadio,
     "Tawasheeh": Tawasheeh,
-    "Ramadan": Ramadan,
-    "Athkar": Athkar,
+    "Tilawa": Tilawa,
 }
 
 export const pagesConfig = {
