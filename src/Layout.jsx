@@ -1,22 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2 } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  
   const navItems = [
-    { name: 'الرئيسية', path: 'Quran', icon: Home },
-    { name: 'التلاوة', path: 'Tilawa', icon: Volume2 },
-    { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
-    { name: 'المقرئين', path: 'Reciters', icon: Mic },
-    { name: 'المساعد', path: 'Assistant', icon: MessageSquare },
-    { name: 'المكتبة', path: 'Library', icon: BookMarked },
+    { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
+    { name: 'التلاوة', path: 'Tilawa', icon: Volume2, color: 'text-blue-600' },
+    { name: 'المقرئين', path: 'Reciters', icon: Mic, color: 'text-purple-600' },
+    { name: 'الخطوط', path: 'Calligraphy', icon: Palette, color: 'text-amber-600' },
+    { name: 'المساعد الذكي', path: 'Assistant', icon: MessageSquare, color: 'text-teal-600' },
+    { name: 'المكتبة', path: 'Library', icon: Library, color: 'text-pink-600' },
   ];
+
+  const handleLogout = async () => {
+    await base44.auth.logout();
+    setSidebarOpen(false);
+  };
 
   return (
     <AuthProvider>
@@ -58,40 +74,144 @@ export default function Layout({ children, currentPageName }) {
         }
       `}</style>
 
-      {/* Navigation - Spotify Style */}
-      <nav className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            <Link to={createPageUrl('Home')} className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
+      {/* Floating Menu Button */}
+      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+        <SheetTrigger asChild>
+          <Button
+            size="lg"
+            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-2xl"
+          >
+            <Menu className="w-7 h-7 text-white" />
+          </Button>
+        </SheetTrigger>
+        
+        <SheetContent side="right" className="w-96 overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-3 text-2xl">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-xl flex items-center justify-center">
+                <BookOpen className="w-7 h-7 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">القرآن الكريم</span>
-            </Link>
-            
-            <div className="flex gap-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentPageName === item.path;
-                return (
-                  <Link key={item.path} to={createPageUrl(item.path)}>
-                    <button
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                        isActive
-                          ? 'bg-slate-800 text-white'
-                          : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span className="font-medium">{item.name}</span>
-                    </button>
-                  </Link>
-                );
-              })}
+              القرآن الكريم
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="mt-8 space-y-6">
+            {/* Main Navigation */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider px-2">الصفحات الرئيسية</h3>
+              <div className="space-y-1">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentPageName === item.path;
+                  return (
+                    <Link key={item.path} to={createPageUrl(item.path)} onClick={() => setSidebarOpen(false)}>
+                      <div className={`flex items-center gap-3 p-4 rounded-xl transition-all cursor-pointer ${
+                        isActive 
+                          ? 'bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300' 
+                          : 'hover:bg-gray-50 border-2 border-transparent'
+                      }`}>
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          isActive ? 'bg-white shadow-sm' : 'bg-gray-100'
+                        }`}>
+                          <Icon className={`w-5 h-5 ${isActive ? item.color : 'text-gray-600'}`} />
+                        </div>
+                        <span className={`font-bold ${isActive ? 'text-emerald-700' : 'text-gray-700'}`}>
+                          {item.name}
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider px-2">إجراءات سريعة</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Link to={createPageUrl('SurahView?surah=1')} onClick={() => setSidebarOpen(false)}>
+                  <div className="p-4 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl text-white hover:opacity-90 transition-opacity cursor-pointer">
+                    <BookOpen className="w-6 h-6 mb-2" />
+                    <p className="font-bold text-sm">الفاتحة</p>
+                  </div>
+                </Link>
+                <Link to={createPageUrl('SurahView?surah=18')} onClick={() => setSidebarOpen(false)}>
+                  <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl text-white hover:opacity-90 transition-opacity cursor-pointer">
+                    <BookOpen className="w-6 h-6 mb-2" />
+                    <p className="font-bold text-sm">الكهف</p>
+                  </div>
+                </Link>
+                <Link to={createPageUrl('SurahView?surah=36')} onClick={() => setSidebarOpen(false)}>
+                  <div className="p-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl text-white hover:opacity-90 transition-opacity cursor-pointer">
+                    <BookOpen className="w-6 h-6 mb-2" />
+                    <p className="font-bold text-sm">يس</p>
+                  </div>
+                </Link>
+                <Link to={createPageUrl('SurahView?surah=67')} onClick={() => setSidebarOpen(false)}>
+                  <div className="p-4 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl text-white hover:opacity-90 transition-opacity cursor-pointer">
+                    <BookOpen className="w-6 h-6 mb-2" />
+                    <p className="font-bold text-sm">الملك</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* Settings */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider px-2">الإعدادات</h3>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Settings className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <span className="font-bold text-gray-700">إعدادات القراءة</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 rounded-xl hover:bg-gray-50 cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Bell className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <span className="font-bold text-gray-700">الإشعارات</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider px-2">إحصائيات القرآن</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+                  <div className="text-3xl font-bold text-emerald-700 mb-1">114</div>
+                  <div className="text-xs text-emerald-600 font-medium">سورة</div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border border-amber-200">
+                  <div className="text-3xl font-bold text-amber-700 mb-1">30</div>
+                  <div className="text-xs text-amber-600 font-medium">جزء</div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                  <div className="text-3xl font-bold text-blue-700 mb-1">6236</div>
+                  <div className="text-xs text-blue-600 font-medium">آية</div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200">
+                  <div className="text-3xl font-bold text-purple-700 mb-1">604</div>
+                  <div className="text-xs text-purple-600 font-medium">صفحة</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Logout */}
+            <div className="pt-4 border-t">
+              <Button
+                variant="outline"
+                className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-5 h-5 ml-2" />
+                <span className="font-bold">تسجيل الخروج</span>
+              </Button>
             </div>
           </div>
-        </div>
-      </nav>
+        </SheetContent>
+      </Sheet>
 
       {/* Main Content */}
       <main className="pb-24">{children}</main>
