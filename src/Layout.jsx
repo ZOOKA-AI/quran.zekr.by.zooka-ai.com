@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -315,6 +315,26 @@ export default function Layout({ children, currentPageName }) {
             <div className="mb-6">
               <p className="text-amber-300 font-bold mb-4">تابعنا على</p>
               <SocialLinks variant="footer" />
+            </div>
+
+            {/* روابط الصفحات الثابتة */}
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              <Link to={createPageUrl('StaticPageView?slug=about')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
+                <Info className="w-4 h-4" />
+                عن التطبيق
+              </Link>
+              <Link to={createPageUrl('StaticPageView?slug=privacy')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
+                <Shield className="w-4 h-4" />
+                سياسة الخصوصية
+              </Link>
+              <Link to={createPageUrl('StaticPageView?slug=terms')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
+                <FileText className="w-4 h-4" />
+                الشروط والأحكام
+              </Link>
+              <Link to={createPageUrl('StaticPageView?slug=contact')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
+                <Mail className="w-4 h-4" />
+                اتصل بنا
+              </Link>
             </div>
 
             <div className="flex justify-center gap-8 text-sm text-emerald-300">
