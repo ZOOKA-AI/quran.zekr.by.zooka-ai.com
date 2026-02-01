@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Radio, Play, Pause, Volume2, VolumeX, Heart, Search, Globe, Wifi, Signal } from 'lucide-react';
 import { toast } from 'sonner';
+import AudioManager from '@/components/audio/AudioManager';
 
 const RADIO_STATIONS = [
   { id: 'quran-radio', name: 'إذاعة القرآن الكريم', country: '🇸🇦', url: 'https://stream.radiojar.com/0tpy1h0kxtzuv', category: 'قرآن' },
@@ -30,13 +31,27 @@ export default function QuranRadio() {
   useEffect(() => {
     const saved = localStorage.getItem('radio-favorites');
     if (saved) setFavorites(JSON.parse(saved));
+    
+    // الاستماع لتغييرات الصوت من المصادر الأخرى
+    const unsubscribe = AudioManager.addListener((source, status) => {
+      if (source !== 'radio' && status === 'playing') {
+        // مصدر آخر بدأ التشغيل - إيقاف الراديو
+        setIsPlaying(false);
+      }
+    });
+    
+    return () => unsubscribe();
   }, []);
 
   const playStation = (station) => {
     if (currentStation?.id === station.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
+      AudioManager.stop();
     } else {
+      // تسجيل الصوت في المدير المركزي (سيوقف أي صوت آخر تلقائياً)
+      AudioManager.register(audioRef.current, 'radio');
+      
       setCurrentStation(station);
       if (audioRef.current) {
         audioRef.current.src = station.url;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Play, Square, Volume2, BookOpen, Headphones } from 'lucide-react';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
+import AudioManager from '@/components/audio/AudioManager';
 
 // روابط صوت القراء - كل سورة كاملة
 const RECITERS = {
@@ -26,6 +27,21 @@ export default function TilawaPage() {
   
   const playerRef = useRef(null);
   const stoppedByUserRef = useRef(false);
+
+  useEffect(() => {
+    // الاستماع لتغييرات الصوت من المصادر الأخرى
+    const unsubscribe = AudioManager.addListener((source, status) => {
+      if (source !== 'tilawa' && status === 'playing') {
+        // مصدر آخر بدأ التشغيل - إيقاف التلاوة
+        if (playerRef.current) {
+          playerRef.current.pause();
+        }
+        setIsPlaying(false);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
   const handlePlay = () => {
     const reciter = RECITERS[selectedReciter];
@@ -51,6 +67,9 @@ export default function TilawaPage() {
       playerRef.current = new Audio();
     }
     
+    // تسجيل الصوت في المدير المركزي (سيوقف أي صوت آخر تلقائياً)
+    AudioManager.register(playerRef.current, 'tilawa');
+    
     playerRef.current.src = url;
     playerRef.current.play()
       .then(() => {
@@ -70,6 +89,7 @@ export default function TilawaPage() {
 
   const handleStop = () => {
     stoppedByUserRef.current = true;
+    AudioManager.stop();
     if (playerRef.current) {
       playerRef.current.pause();
       playerRef.current.currentTime = 0;
