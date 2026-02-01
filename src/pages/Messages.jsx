@@ -196,3 +196,24 @@ export default function MessagesPage() {
               {sentMessages.map((msg) => (
                 <Card key={msg.id} className="p-4 bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
                   <div className="flex items-start gap-3 mb-2">
+                    <div className={`w-10 h-10 bg-gradient-to-br ${messageTypeColors[msg.message_type]} rounded-full flex items-center justify-center text-white`}>
+                      {messageTypeIcons[msg.message_type]}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-amber-100">{msg.subject || 'رسالة دعوية'}</p>
+                      <p className="text-sm text-slate-400">إلى: {msg.recipient_email}</p>
+                    </div>
+                  </div>
+                  <p className="text-slate-300 text-sm">{msg.content}</p>
+                  <p className="text-xs text-slate-500 mt-2">
+                    {new Date(msg.created_date).toLocaleString('ar')}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </IslamicBackground>
+  );
+}
