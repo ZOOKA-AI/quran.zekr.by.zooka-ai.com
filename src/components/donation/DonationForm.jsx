@@ -1,26 +1,70 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Heart, CreditCard, Loader2, Gift, Baby, BookOpen, Sparkles } from 'lucide-react';
+import { Heart, CreditCard, Loader2, Gift, Baby, BookOpen, Sparkles, User, Mail, ChevronDown, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 const DONATION_TYPES = [
-  { id: 'كفالة يتيم', name: 'كفالة يتيم', icon: Baby, color: 'from-pink-500 to-rose-600' },
-  { id: 'صدقة جارية', name: 'صدقة جارية', icon: Heart, color: 'from-emerald-500 to-green-600' },
-  { id: 'زكاة', name: 'زكاة', icon: BookOpen, color: 'from-amber-500 to-orange-600' },
-  { id: 'تبرع عام', name: 'تبرع عام', icon: Gift, color: 'from-blue-500 to-indigo-600' },
+  { 
+    id: 'كفالة يتيم', 
+    name: 'كفالة يتيم', 
+    icon: Baby, 
+    color: 'from-pink-500 to-rose-600',
+    bgColor: 'bg-pink-50',
+    borderColor: 'border-pink-300',
+    image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&q=80',
+    description: 'اكفل يتيماً وكن رفيقه في الجنة'
+  },
+  { 
+    id: 'صدقة جارية', 
+    name: 'صدقة جارية', 
+    icon: Heart, 
+    color: 'from-emerald-500 to-green-600',
+    bgColor: 'bg-emerald-50',
+    borderColor: 'border-emerald-300',
+    image: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&q=80',
+    description: 'صدقة تستمر بعد الموت'
+  },
+  { 
+    id: 'زكاة', 
+    name: 'زكاة', 
+    icon: BookOpen, 
+    color: 'from-amber-500 to-orange-600',
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-300',
+    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400&q=80',
+    description: 'طهّر مالك وزكّه'
+  },
+  { 
+    id: 'تبرع عام', 
+    name: 'تبرع عام', 
+    icon: Gift, 
+    color: 'from-blue-500 to-indigo-600',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-300',
+    image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&q=80',
+    description: 'ساهم في أعمال الخير'
+  },
 ];
 
-const PRESET_AMOUNTS = [10, 25, 50, 100, 250, 500];
+const PRESET_AMOUNTS = [
+  { value: 10, label: '10', popular: false },
+  { value: 25, label: '25', popular: false },
+  { value: 50, label: '50', popular: true },
+  { value: 100, label: '100', popular: true },
+  { value: 250, label: '250', popular: false },
+  { value: 500, label: '500', popular: false },
+];
 
 const CURRENCIES = [
-  { code: 'AED', name: 'درهم إماراتي', symbol: 'د.إ' },
-  { code: 'USD', name: 'دولار أمريكي', symbol: '$' },
-  { code: 'SAR', name: 'ريال سعودي', symbol: 'ر.س' },
-  { code: 'EGP', name: 'جنيه مصري', symbol: 'ج.م' },
+  { code: 'AED', name: 'درهم إماراتي', symbol: 'د.إ', flag: '🇦🇪' },
+  { code: 'USD', name: 'دولار أمريكي', symbol: '$', flag: '🇺🇸' },
+  { code: 'SAR', name: 'ريال سعودي', symbol: 'ر.س', flag: '🇸🇦' },
+  { code: 'EGP', name: 'جنيه مصري', symbol: 'ج.م', flag: '🇪🇬' },
 ];
 
 export default function DonationForm() {
