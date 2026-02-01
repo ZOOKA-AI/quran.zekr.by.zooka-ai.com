@@ -9,9 +9,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Lock, Users, Heart, DollarSign, BarChart3, 
   Plus, Trash2, Edit, Eye, Search, RefreshCw,
-  TrendingUp, UserCheck, Baby, Gift
+  TrendingUp, UserCheck, Baby, Gift, FileText, Bell, Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
+import CMSManager from '@/components/admin/CMSManager';
+import AdvancedStats from '@/components/admin/AdvancedStats';
+import NotificationSender from '@/components/admin/NotificationSender';
 
 const ADMIN_PASSWORD = '3219@';
 
