@@ -12,6 +12,7 @@ import VerseCard from '../components/quran/VerseCard';
 import NavigationControls from '../components/quran/NavigationControls';
 import ReadingSettings from '../components/quran/ReadingSettings';
 import ReciterSelector from '../components/quran/ReciterSelector';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 import { toast } from 'sonner';
 
 export default function SurahView() {
@@ -138,24 +139,25 @@ export default function SurahView() {
   const versesToShow = displayedVerses.length > 0 ? displayedVerses : sampleVerses;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-12">
+    <IslamicBackground variant="default">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-6xl mx-auto px-6 py-8">
           <Link to={createPageUrl('Quran')}>
-            <Button variant="ghost" className="text-white hover:bg-white/10 mb-6">
+            <Button variant="ghost" className="text-amber-200 hover:bg-white/10 mb-6 border border-amber-500/20">
               <ArrowRight className="w-5 h-5 ml-2" />
               العودة للقائمة
             </Button>
           </Link>
           <div className="text-center">
-            <h1 className="text-4xl font-bold mb-2">سورة رقم {surahNumber}</h1>
-            <p className="text-emerald-100">اقرأ واستمع وتدبّر</p>
+            <h1 className="text-4xl font-bold mb-3 text-amber-100">سورة رقم {surahNumber}</h1>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ ﴾</p>
+            <p className="text-slate-300 mt-2">اقرأ واستمع وتدبّر</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-6">
         {/* Reading Settings */}
         <ReadingSettings 
           settings={readingSettings}
@@ -227,10 +229,10 @@ export default function SurahView() {
             <p className="mt-4 text-gray-600">جاري التحميل...</p>
           </div>
         ) : versesToShow.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
-            <BookMarked className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 text-lg mb-4">لا توجد آيات متاحة حالياً</p>
-            <p className="text-gray-500 text-sm">سيتم تحميل البيانات قريباً بإذن الله</p>
+          <div className="text-center py-16 bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-amber-500/20">
+            <BookMarked className="w-16 h-16 mx-auto text-amber-400 mb-4" />
+            <p className="text-amber-100 text-lg mb-4">لا توجد آيات متاحة حالياً</p>
+            <p className="text-slate-400 text-sm">سيتم تحميل البيانات قريباً بإذن الله</p>
           </div>
         ) : (
           <div className="space-y-6">

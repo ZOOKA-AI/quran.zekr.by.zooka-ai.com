@@ -8,6 +8,7 @@ import { BookMarked, Trash2, ExternalLink, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function BookmarksPage() {
   const queryClient = useQueryClient();
@@ -48,29 +49,34 @@ export default function BookmarksPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-16">
+    <IslamicBackground variant="default">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="text-center">
-            <BookMarked className="w-16 h-16 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold mb-2">الآيات المحفوظة</h1>
-            <p className="text-emerald-100">مجموعتك الخاصة من الآيات المفضلة</p>
+            <div className="mb-6">
+              <div className="inline-block p-5 bg-gradient-to-br from-emerald-500/20 to-green-600/10 rounded-3xl backdrop-blur-sm border border-emerald-400/20">
+                <BookMarked className="w-14 h-14 text-emerald-300" />
+              </div>
+            </div>
+            <h1 className="text-4xl font-bold mb-3 text-amber-100">الآيات المحفوظة</h1>
+            <p className="text-xl text-indigo-200 font-arabic">﴿ إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ ﴾</p>
+            <p className="text-slate-300 mt-2">مجموعتك الخاصة من الآيات المفضلة</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-6">
         {isLoading ? (
           <div className="text-center py-16">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
-            <p className="mt-4 text-gray-600">جاري التحميل...</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-amber-500 border-t-transparent"></div>
+            <p className="mt-4 text-amber-200">جاري التحميل...</p>
           </div>
         ) : sortedBookmarks.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
-            <BookMarked className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 text-lg mb-4">لا توجد آيات محفوظة</p>
-            <p className="text-gray-500 text-sm mb-6">ابدأ بحفظ آياتك المفضلة</p>
+          <div className="text-center py-16 bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-emerald-500/20">
+            <BookMarked className="w-16 h-16 mx-auto text-emerald-400 mb-4" />
+            <p className="text-amber-100 text-lg mb-4">لا توجد آيات محفوظة</p>
+            <p className="text-slate-400 text-sm mb-6">ابدأ بحفظ آياتك المفضلة</p>
             <Link to={createPageUrl('Quran')}>
               <Button className="bg-emerald-600 hover:bg-emerald-700">
                 تصفح القرآن
@@ -80,20 +86,20 @@ export default function BookmarksPage() {
         ) : (
           <div className="space-y-6">
             <div className="flex justify-end mb-4">
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
+              <Button variant="outline" size="sm" onClick={() => refetch()} className="border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20">
                 <RefreshCw className="w-4 h-4 ml-2" />
                 تحديث
               </Button>
             </div>
             {sortedBookmarks.map((bookmark) => (
-              <Card key={bookmark.id} className="bg-white border-2 border-gray-100 hover:border-emerald-200 transition-all shadow-md">
+              <Card key={bookmark.id} className="bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20 hover:border-emerald-400/40 transition-all shadow-md">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Badge className="bg-emerald-100 text-emerald-700">
+                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30">
                         سورة {bookmark.surah_number}
                       </Badge>
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="border-amber-500/30 text-amber-300">
                         آية {bookmark.verse_number}
                       </Badge>
                     </div>
@@ -102,7 +108,7 @@ export default function BookmarksPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="hover:bg-blue-50 hover:text-blue-600"
+                          className="hover:bg-blue-500/20 text-blue-400"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </Button>
@@ -110,7 +116,7 @@ export default function BookmarksPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="hover:bg-red-50 hover:text-red-600"
+                        className="hover:bg-red-500/20 text-red-400"
                         onClick={() => deleteBookmarkMutation.mutate(bookmark.id)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -119,15 +125,15 @@ export default function BookmarksPage() {
                   </div>
 
                   {bookmark.note && (
-                    <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
-                      <p className="text-sm text-gray-700">{bookmark.note}</p>
+                    <div className="p-4 bg-amber-500/10 rounded-lg border border-amber-500/30">
+                      <p className="text-sm text-amber-100">{bookmark.note}</p>
                     </div>
                   )}
 
                   {bookmark.tags && bookmark.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       {bookmark.tags.map((tag, idx) => (
-                        <Badge key={idx} variant="secondary" className="bg-gray-100">
+                        <Badge key={idx} variant="secondary" className="bg-slate-800/50 text-slate-300 border-slate-700">
                           {tag}
                         </Badge>
                       ))}
@@ -139,6 +145,6 @@ export default function BookmarksPage() {
           </div>
         )}
       </div>
-    </div>
+    </IslamicBackground>
   );
 }

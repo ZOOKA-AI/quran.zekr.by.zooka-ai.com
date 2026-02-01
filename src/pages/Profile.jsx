@@ -11,6 +11,7 @@ import { User, BookMarked, Settings, Mail, Calendar, Edit2, Save, X } from 'luci
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -54,33 +55,37 @@ export default function ProfilePage() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 flex items-center justify-center" dir="rtl">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
-          <p className="mt-4 text-gray-600">جاري التحميل...</p>
+      <IslamicBackground variant="default">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-amber-500 border-t-transparent"></div>
+            <p className="mt-4 text-amber-200">جاري التحميل...</p>
+          </div>
         </div>
-      </div>
+      </IslamicBackground>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-16">
+    <IslamicBackground variant="default">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="text-center">
-            <div className="inline-block p-4 bg-white/10 rounded-full backdrop-blur-sm mb-4">
-              <User className="w-16 h-16" />
+            <div className="mb-6">
+              <div className="inline-block p-5 bg-gradient-to-br from-emerald-500/20 to-green-600/10 rounded-3xl backdrop-blur-sm border border-emerald-400/20">
+                <User className="w-14 h-14 text-emerald-300" />
+              </div>
             </div>
-            <h1 className="text-4xl font-bold mb-2">الملف الشخصي</h1>
-            <p className="text-emerald-100">إدارة حسابك وإعداداتك</p>
+            <h1 className="text-4xl font-bold mb-2 text-amber-100">الملف الشخصي</h1>
+            <p className="text-indigo-200">إدارة حسابك وإعداداتك</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-6">
         <Tabs defaultValue="info" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-3 h-14">
+          <TabsList className="grid w-full grid-cols-3 h-14 bg-slate-900/60 backdrop-blur-xl border-emerald-500/20">
             <TabsTrigger value="info" className="text-lg">
               <User className="w-4 h-4 ml-2" />
               المعلومات الشخصية
@@ -95,14 +100,14 @@ export default function ProfilePage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Personal Info Tab */}
+          {/* معلومات شخصية */}
           <TabsContent value="info">
-            <Card className="shadow-lg border-2 border-emerald-100">
-              <CardHeader className="border-b bg-gradient-to-r from-emerald-50 to-white">
-                <CardTitle className="flex items-center justify-between">
+            <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20">
+              <CardHeader className="border-b border-emerald-500/20 bg-slate-800/50">
+                <CardTitle className="flex items-center justify-between text-amber-200">
                   <span>معلوماتك الشخصية</span>
                   {!isEditing && (
-                    <Button variant="outline" size="sm" onClick={handleStartEdit}>
+                    <Button variant="outline" size="sm" onClick={handleStartEdit} className="border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20">
                       <Edit2 className="w-4 h-4 ml-2" />
                       تعديل
                     </Button>
@@ -112,60 +117,60 @@ export default function ProfilePage() {
               <CardContent className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-emerald-600" />
+                    <Label className="flex items-center gap-2 text-slate-300">
+                      <User className="w-4 h-4 text-emerald-400" />
                       الاسم الكامل
                     </Label>
                     {isEditing ? (
                       <Input
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="h-12 border-2"
+                        className="h-12 border border-emerald-500/30 bg-slate-800/50 text-white"
                       />
                     ) : (
-                      <p className="text-lg font-semibold text-gray-800 p-3 bg-gray-50 rounded-lg">
+                      <p className="text-lg font-semibold text-amber-100 p-3 bg-slate-800/50 rounded-lg">
                         {user?.full_name || 'غير محدد'}
                       </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-emerald-600" />
+                    <Label className="flex items-center gap-2 text-slate-300">
+                      <Mail className="w-4 h-4 text-emerald-400" />
                       البريد الإلكتروني
                     </Label>
-                    <p className="text-lg font-semibold text-gray-800 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-lg font-semibold text-amber-100 p-3 bg-slate-800/50 rounded-lg">
                       {user?.email || 'غير متاح'}
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Badge className="bg-emerald-600">الدور</Badge>
+                    <Label className="flex items-center gap-2 text-slate-300">
+                      <Badge className="bg-emerald-600 border-0">الدور</Badge>
                     </Label>
-                    <p className="text-lg font-semibold text-gray-800 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-lg font-semibold text-amber-100 p-3 bg-slate-800/50 rounded-lg">
                       {user?.role === 'admin' ? 'مشرف' : 'مستخدم'}
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-emerald-600" />
+                    <Label className="flex items-center gap-2 text-slate-300">
+                      <Calendar className="w-4 h-4 text-emerald-400" />
                       تاريخ التسجيل
                     </Label>
-                    <p className="text-lg font-semibold text-gray-800 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-lg font-semibold text-amber-100 p-3 bg-slate-800/50 rounded-lg">
                       {user?.created_date ? new Date(user.created_date).toLocaleDateString('ar-EG') : 'غير متاح'}
                     </p>
                   </div>
                 </div>
 
                 {isEditing && (
-                  <div className="flex gap-3 pt-4 border-t">
+                  <div className="flex gap-3 pt-4 border-t border-slate-700">
                     <Button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700">
                       <Save className="w-4 h-4 ml-2" />
                       حفظ التغييرات
                     </Button>
-                    <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    <Button variant="outline" onClick={() => setIsEditing(false)} className="border-slate-700 text-slate-300">
                       <X className="w-4 h-4 ml-2" />
                       إلغاء
                     </Button>
@@ -175,24 +180,24 @@ export default function ProfilePage() {
             </Card>
           </TabsContent>
 
-          {/* Bookmarks Tab */}
+          {/* المفضلات */}
           <TabsContent value="bookmarks">
-            <Card className="shadow-lg border-2 border-emerald-100">
-              <CardHeader className="border-b bg-gradient-to-r from-emerald-50 to-white">
-                <CardTitle className="flex items-center justify-between">
+            <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20">
+              <CardHeader className="border-b border-emerald-500/20 bg-slate-800/50">
+                <CardTitle className="flex items-center justify-between text-amber-200">
                   <span>الآيات المحفوظة</span>
-                  <Badge className="bg-emerald-600">{bookmarks.length} آية</Badge>
+                  <Badge className="bg-emerald-600 border-0">{bookmarks.length} آية</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 {bookmarksLoading ? (
                   <div className="text-center py-8">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-600 border-t-transparent"></div>
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-500 border-t-transparent"></div>
                   </div>
                 ) : bookmarks.length === 0 ? (
                   <div className="text-center py-12">
-                    <BookMarked className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <p className="text-gray-500 mb-4">لا توجد آيات محفوظة بعد</p>
+                    <BookMarked className="w-16 h-16 mx-auto text-emerald-400 mb-4" />
+                    <p className="text-slate-400 mb-4">لا توجد آيات محفوظة بعد</p>
                     <Link to={createPageUrl('Quran')}>
                       <Button className="bg-emerald-600 hover:bg-emerald-700">
                         ابدأ بتصفح القرآن
@@ -204,32 +209,32 @@ export default function ProfilePage() {
                     {bookmarks.slice(0, 10).map((bookmark) => (
                       <div
                         key={bookmark.id}
-                        className="p-4 bg-gradient-to-r from-emerald-50 to-white rounded-lg border border-emerald-200 hover:shadow-md transition-shadow"
+                        className="p-4 bg-slate-800/50 rounded-lg border border-emerald-500/30 hover:border-emerald-400/50 transition-all"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex gap-2">
-                            <Badge className="bg-emerald-600">
+                            <Badge className="bg-emerald-600 border-0">
                               سورة {bookmark.surah_number}
                             </Badge>
-                            <Badge variant="outline">
+                            <Badge variant="outline" className="border-amber-500/30 text-amber-300">
                               آية {bookmark.verse_number}
                             </Badge>
                           </div>
                           <Link to={createPageUrl(`SurahView?surah=${bookmark.surah_number}`)}>
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" className="text-emerald-300 hover:bg-emerald-500/20">
                               عرض
                             </Button>
                           </Link>
                         </div>
                         {bookmark.note && (
-                          <p className="text-gray-700 mb-2 text-sm bg-amber-50 p-3 rounded border border-amber-100">
+                          <p className="text-slate-300 mb-2 text-sm bg-amber-500/10 p-3 rounded border border-amber-500/30">
                             {bookmark.note}
                           </p>
                         )}
                         {bookmark.tags && bookmark.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2">
                             {bookmark.tags.map((tag, idx) => (
-                              <Badge key={idx} variant="secondary" className="text-xs">
+                              <Badge key={idx} variant="secondary" className="text-xs bg-slate-700 text-slate-300">
                                 {tag}
                               </Badge>
                             ))}
@@ -240,7 +245,7 @@ export default function ProfilePage() {
                     {bookmarks.length > 10 && (
                       <div className="text-center pt-4">
                         <Link to={createPageUrl('Bookmarks')}>
-                          <Button variant="outline">
+                          <Button variant="outline" className="border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20">
                             عرض جميع المفضلات ({bookmarks.length})
                           </Button>
                         </Link>
@@ -252,32 +257,32 @@ export default function ProfilePage() {
             </Card>
           </TabsContent>
 
-          {/* Settings Tab */}
+          {/* الإعدادات */}
           <TabsContent value="settings">
-            <Card className="shadow-lg border-2 border-emerald-100">
-              <CardHeader className="border-b bg-gradient-to-r from-emerald-50 to-white">
-                <CardTitle>الإعدادات</CardTitle>
+            <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20">
+              <CardHeader className="border-b border-emerald-500/20 bg-slate-800/50">
+                <CardTitle className="text-amber-200">الإعدادات</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-6">
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h3 className="font-bold text-blue-900 mb-2">🔒 الأمان والخصوصية</h3>
-                    <p className="text-sm text-blue-800 mb-4">
+                  <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <h3 className="font-bold text-blue-300 mb-2">🔒 الأمان والخصوصية</h3>
+                    <p className="text-sm text-blue-200">
                       جميع بياناتك محمية ومشفرة بأعلى معايير الأمان
                     </p>
                   </div>
 
-                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                    <h3 className="font-bold text-amber-900 mb-2">📱 التفضيلات</h3>
-                    <p className="text-sm text-amber-800">
+                  <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                    <h3 className="font-bold text-amber-300 mb-2">📱 التفضيلات</h3>
+                    <p className="text-sm text-amber-200">
                       إعدادات إضافية ستكون متاحة قريباً بإذن الله
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t">
+                  <div className="pt-4 border-t border-slate-700">
                     <Button
                       variant="outline"
-                      className="w-full text-red-600 border-red-300 hover:bg-red-50"
+                      className="w-full text-red-400 border-red-500/30 hover:bg-red-500/20"
                       onClick={() => base44.auth.logout()}
                     >
                       تسجيل الخروج
@@ -289,6 +294,6 @@ export default function ProfilePage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </IslamicBackground>
   );
 }

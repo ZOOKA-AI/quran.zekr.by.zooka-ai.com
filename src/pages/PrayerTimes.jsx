@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MapPin, Clock, Sunrise, Sun, Sunset, Moon, Search, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function PrayerTimesPage() {
   const [location, setLocation] = useState(null);
@@ -156,27 +157,29 @@ export default function PrayerTimesPage() {
   const currentPrayer = getCurrentPrayer();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-16">
+    <IslamicBackground variant="default">
+      {/* الرأس */}
+      <div className="relative text-white pt-8">
+        <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="text-center">
-            <div className="inline-block p-4 bg-white/10 rounded-full backdrop-blur-sm mb-4">
-              <Clock className="w-16 h-16" />
+            <div className="mb-6">
+              <div className="inline-block p-5 bg-gradient-to-br from-blue-500/20 to-indigo-600/10 rounded-3xl backdrop-blur-sm border border-blue-400/20">
+                <Clock className="w-14 h-14 text-blue-300" />
+              </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">مواقيت الصلاة</h1>
-            <p className="text-xl text-blue-100 mb-2">﴿ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا ﴾</p>
-            <p className="text-blue-200">احرص على الصلاة في وقتها</p>
+            <h1 className="text-4xl font-bold mb-3 text-amber-100">مواقيت الصلاة</h1>
+            <p className="text-xl text-indigo-200 font-arabic mb-2">﴿ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا ﴾</p>
+            <p className="text-slate-300">احرص على الصلاة في وقتها</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Location Selection */}
-        <Card className="mb-8 shadow-lg border-2 border-blue-100">
-          <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-white">
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-blue-600" />
+      <div className="max-w-6xl mx-auto px-6 py-6">
+        {/* اختيار الموقع */}
+        <Card className="mb-8 shadow-lg bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
+          <CardHeader className="border-b border-blue-500/20 bg-slate-800/50">
+            <CardTitle className="flex items-center gap-2 text-amber-200">
+              <MapPin className="w-5 h-5 text-blue-400" />
               تحديد الموقع
             </CardTitle>
           </CardHeader>
@@ -188,10 +191,10 @@ export default function PrayerTimesPage() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && fetchPrayerTimesByCity()}
-                  className="h-12 border-2"
+                  className="h-12 border border-blue-500/30 bg-slate-800/50 text-white placeholder:text-slate-400"
                 />
                 <Select value={country} onValueChange={setCountry}>
-                  <SelectTrigger className="h-12 border-2">
+                  <SelectTrigger className="h-12 border-blue-500/30 bg-slate-800/50 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -203,7 +206,7 @@ export default function PrayerTimesPage() {
                   </SelectContent>
                 </Select>
                 <Select value={method} onValueChange={setMethod}>
-                  <SelectTrigger className="h-12 border-2">
+                  <SelectTrigger className="h-12 border-blue-500/30 bg-slate-800/50 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -245,26 +248,26 @@ export default function PrayerTimesPage() {
           </CardContent>
         </Card>
 
-        {/* Prayer Times */}
+        {/* مواقيت الصلاة */}
         {loading ? (
           <div className="text-center py-16">
-            <Loader2 className="w-12 h-12 mx-auto animate-spin text-blue-600 mb-4" />
-            <p className="text-gray-600">جاري تحميل مواقيت الصلاة...</p>
+            <Loader2 className="w-12 h-12 mx-auto animate-spin text-blue-400 mb-4" />
+            <p className="text-slate-300">جاري تحميل مواقيت الصلاة...</p>
           </div>
         ) : prayerTimes ? (
           <div className="space-y-6">
-            {/* Date & Location Info */}
-            <Card className="shadow-lg border-2 border-purple-100 bg-gradient-to-br from-white to-purple-50">
+            {/* التاريخ والموقع */}
+            <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-purple-500/20">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800 mb-2">
+                  <p className="text-2xl font-bold text-amber-100 mb-2">
                     {prayerTimes.date.hijri.day} {prayerTimes.date.hijri.month.ar} {prayerTimes.date.hijri.year} هـ
                   </p>
-                  <p className="text-lg text-gray-600">
+                  <p className="text-lg text-slate-300">
                     {prayerTimes.date.readable} م
                   </p>
                   {prayerTimes.meta?.timezone && (
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-slate-400 mt-2">
                       {prayerTimes.meta.timezone}
                     </p>
                   )}
@@ -272,7 +275,7 @@ export default function PrayerTimesPage() {
               </CardContent>
             </Card>
 
-            {/* Prayer Times Grid */}
+            {/* شبكة مواقيت الصلاة */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].map((prayer) => {
                 const Icon = prayerIcons[prayer];
@@ -283,22 +286,22 @@ export default function PrayerTimesPage() {
                     key={prayer}
                     className={`shadow-lg transition-all duration-300 ${
                       isCurrent
-                        ? 'border-4 border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 scale-105'
-                        : 'border-2 border-gray-200 hover:shadow-xl'
+                        ? 'border-2 border-amber-500 bg-gradient-to-br from-amber-500/20 to-blue-500/20 scale-105 backdrop-blur-xl'
+                        : 'bg-slate-900/60 backdrop-blur-xl border border-blue-500/20 hover:border-blue-400/40'
                     }`}
                   >
                     <CardContent className="p-6 text-center">
                       <div className="mb-4">
-                        <Icon className={`w-12 h-12 mx-auto ${isCurrent ? 'text-blue-600' : 'text-gray-400'}`} />
+                        <Icon className={`w-12 h-12 mx-auto ${isCurrent ? 'text-amber-400' : 'text-blue-400'}`} />
                       </div>
-                      <h3 className={`text-2xl font-bold mb-2 ${isCurrent ? 'text-blue-700' : 'text-gray-800'}`}>
+                      <h3 className={`text-2xl font-bold mb-2 ${isCurrent ? 'text-amber-200' : 'text-amber-100'}`}>
                         {prayerNames[prayer]}
                       </h3>
-                      <p className={`text-3xl font-mono font-bold ${isCurrent ? 'text-blue-600' : 'text-gray-700'}`}>
+                      <p className={`text-3xl font-mono font-bold ${isCurrent ? 'text-amber-300' : 'text-slate-300'}`}>
                         {prayerTimes.timings[prayer].split(' ')[0]}
                       </p>
                       {isCurrent && (
-                        <Badge className="mt-3 bg-blue-600">الوقت الحالي</Badge>
+                        <Badge className="mt-3 bg-amber-600 border-0">الوقت الحالي</Badge>
                       )}
                     </CardContent>
                   </Card>
@@ -306,47 +309,47 @@ export default function PrayerTimesPage() {
               })}
             </div>
 
-            {/* Additional Times */}
-            <Card className="shadow-lg border-2 border-amber-100">
-              <CardHeader className="border-b bg-gradient-to-r from-amber-50 to-white">
-                <CardTitle>أوقات إضافية</CardTitle>
+            {/* أوقات إضافية */}
+            <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-amber-500/20">
+              <CardHeader className="border-b border-amber-500/20 bg-slate-800/50">
+                <CardTitle className="text-amber-200">أوقات إضافية</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">الشروق</p>
-                    <p className="text-xl font-bold text-amber-600">{prayerTimes.timings.Sunrise}</p>
+                    <p className="text-sm text-slate-400 mb-1">الشروق</p>
+                    <p className="text-xl font-bold text-amber-300">{prayerTimes.timings.Sunrise}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">منتصف الليل</p>
-                    <p className="text-xl font-bold text-purple-600">{prayerTimes.timings.Midnight}</p>
+                    <p className="text-sm text-slate-400 mb-1">منتصف الليل</p>
+                    <p className="text-xl font-bold text-purple-300">{prayerTimes.timings.Midnight}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">الثلث الأخير من الليل</p>
-                    <p className="text-xl font-bold text-indigo-600">{prayerTimes.timings.Lastthird}</p>
+                    <p className="text-sm text-slate-400 mb-1">الثلث الأخير</p>
+                    <p className="text-xl font-bold text-indigo-300">{prayerTimes.timings.Lastthird}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">الإمساك</p>
-                    <p className="text-xl font-bold text-green-600">{prayerTimes.timings.Imsak}</p>
+                    <p className="text-sm text-slate-400 mb-1">الإمساك</p>
+                    <p className="text-xl font-bold text-green-300">{prayerTimes.timings.Imsak}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
         ) : (
-          <Card className="shadow-lg border-2 border-gray-200">
+          <Card className="shadow-lg bg-slate-900/60 backdrop-blur-xl border border-blue-500/20">
             <CardContent className="p-16 text-center">
-              <Clock className="w-20 h-20 mx-auto text-gray-300 mb-4" />
-              <p className="text-xl text-gray-600 mb-4">
+              <Clock className="w-20 h-20 mx-auto text-blue-400 mb-4" />
+              <p className="text-xl text-amber-100 mb-4">
                 اختر موقعك لعرض مواقيت الصلاة
               </p>
-              <p className="text-gray-500">
+              <p className="text-slate-400">
                 يمكنك استخدام موقعك الحالي أو البحث عن مدينة معينة
               </p>
             </CardContent>
           </Card>
         )}
       </div>
-    </div>
+    </IslamicBackground>
   );
 }
