@@ -45,7 +45,8 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <AuthProvider>
-    <div className="min-h-screen relative overflow-hidden" dir="rtl">
+      <PlayerProvider>
+      <div className="min-h-screen relative overflow-hidden" dir="rtl">
       {/* Spiritual Background */}
       <div className="fixed inset-0 z-0">
         <div 
