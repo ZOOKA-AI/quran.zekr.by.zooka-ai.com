@@ -67,7 +67,6 @@ import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
-import Tilawa from './pages/Tilawa';
 import AdminPanel from './pages/AdminPanel';
 import StaticPageView from './pages/StaticPageView';
 import __Layout from './Layout.jsx';
@@ -94,7 +93,6 @@ export const PAGES = {
     "Rewards": Rewards,
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
-    "Tilawa": Tilawa,
     "AdminPanel": AdminPanel,
     "StaticPageView": StaticPageView,
 }
