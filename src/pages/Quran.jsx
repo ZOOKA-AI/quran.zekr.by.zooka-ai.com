@@ -26,6 +26,8 @@ import SurahCard from '../components/quran/SurahCard';
 import { useAuth } from '@/components/AuthProvider';
 import DailyContent from '../components/daily/DailyContent';
 import AppLogo from '../components/brand/AppLogo';
+import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
+import WeatherWidget from '../components/weather/WeatherWidget';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
