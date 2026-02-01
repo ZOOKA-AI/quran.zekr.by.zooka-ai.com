@@ -62,6 +62,10 @@ import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
 import Tilawa from './pages/Tilawa';
 import Orphans from './pages/Orphans';
+import QuranRadio from './pages/QuranRadio';
+import Tawasheeh from './pages/Tawasheeh';
+import Ramadan from './pages/Ramadan';
+import Athkar from './pages/Athkar';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +85,10 @@ export const PAGES = {
     "SurahView": SurahView,
     "Tilawa": Tilawa,
     "Orphans": Orphans,
+    "QuranRadio": QuranRadio,
+    "Tawasheeh": Tawasheeh,
+    "Ramadan": Ramadan,
+    "Athkar": Athkar,
 }
 
 export const pagesConfig = {
