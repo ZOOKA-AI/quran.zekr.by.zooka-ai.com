@@ -2,10 +2,61 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle, Heart, Download, X, ChevronUp, Moon, Sun, Wifi, WifiOff } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle, Heart, Download, X, ChevronUp, Moon, Sun, Wifi, WifiOff, Loader2, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
+import AudioManager from '@/components/audio/AudioManager';
+
+// دوال التخزين المحلي للصوت
+const openOfflineDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('QuranOfflineDB', 2);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('surahs')) {
+        db.createObjectStore('surahs', { keyPath: 'id' });
+      }
+    };
+  });
+};
+
+const saveSurahOffline = async (surahNum, reciterId, audioBlob) => {
+  const db = await openOfflineDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('surahs', 'readwrite');
+    const store = tx.objectStore('surahs');
+    const id = `${reciterId}_${surahNum}`;
+    store.put({ id, surah: surahNum, reciter: reciterId, audio: audioBlob, savedAt: Date.now() });
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+  });
+};
+
+const getSurahOffline = async (surahNum, reciterId) => {
+  const db = await openOfflineDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('surahs', 'readonly');
+    const store = tx.objectStore('surahs');
+    const id = `${reciterId}_${surahNum}`;
+    const request = store.get(id);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
+
+const getDownloadedSurahs = async () => {
+  const db = await openOfflineDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('surahs', 'readonly');
+    const store = tx.objectStore('surahs');
+    const request = store.getAllKeys();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
+  });
+};
 
 const SURAH_NAMES = {
   1: 'الفاتحة', 2: 'البقرة', 3: 'آل عمران', 18: 'الكهف', 36: 'يس', 67: 'الملك'
@@ -34,6 +85,9 @@ export default function GlobalAudioPlayer() {
   const [isVisible, setIsVisible] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadedSurahs, setDownloadedSurahs] = useState([]);
+  const [isCurrentSurahDownloaded, setIsCurrentSurahDownloaded] = useState(false);
 
   // Monitor online/offline status
   useEffect(() => {
@@ -45,6 +99,38 @@ export default function GlobalAudioPlayer() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+  }, []);
+
+  // تحميل قائمة السور المحملة
+  useEffect(() => {
+    const loadDownloaded = async () => {
+      try {
+        const keys = await getDownloadedSurahs();
+        setDownloadedSurahs(keys);
+      } catch (e) {
+        console.log('Error loading downloaded surahs:', e);
+      }
+    };
+    loadDownloaded();
+  }, []);
+
+  // تحقق إذا السورة الحالية محملة
+  useEffect(() => {
+    const key = `${reciter}_${surah}`;
+    setIsCurrentSurahDownloaded(downloadedSurahs.includes(key));
+  }, [surah, reciter, downloadedSurahs]);
+
+  // الاستماع لتغييرات الصوت من المصادر الأخرى
+  useEffect(() => {
+    const unsubscribe = AudioManager.addListener((source, status) => {
+      if (source !== 'global-player' && status === 'playing') {
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        setIsPlaying(false);
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   // Load dark mode preference
@@ -97,44 +183,55 @@ export default function GlobalAudioPlayer() {
   const handlePlayPause = async () => {
     const audio = audioRef.current;
     
-    // Try offline first if available
-    if (isOffline) {
-      try {
-        const dbRequest = indexedDB.open('QuranOfflineDB', 1);
-        dbRequest.onsuccess = (e) => {
-          const db = e.target.result;
-          const tx = db.transaction('surahs', 'readonly');
-          const store = tx.objectStore('surahs');
-          const request = store.get(surah);
-          request.onsuccess = () => {
-            if (request.result) {
-              const blob = request.result.audio;
-              audio.src = URL.createObjectURL(blob);
-              audio.play();
-              setIsPlaying(true);
-              toast.success('تشغيل من الملفات المحملة');
-            } else {
-              toast.error('السورة غير متاحة بدون إنترنت');
-            }
-          };
-        };
-        return;
-      } catch {
-        toast.error('لا يوجد اتصال بالإنترنت');
+    // تسجيل الصوت في المدير المركزي
+    AudioManager.register(audio, 'global-player');
+    
+    // محاولة التشغيل من الملفات المحملة أولاً
+    try {
+      const offlineData = await getSurahOffline(surah, reciter);
+      if (offlineData && offlineData.audio) {
+        const blobUrl = URL.createObjectURL(offlineData.audio);
+        if (audio.src !== blobUrl) {
+          audio.src = blobUrl;
+        }
+        if (isPlaying) {
+          audio.pause();
+          setIsPlaying(false);
+        } else {
+          await audio.play();
+          setIsPlaying(true);
+          if (isOffline) {
+            toast.success('تشغيل من الملفات المحملة 📥');
+          }
+        }
         return;
       }
+    } catch (e) {
+      console.log('Offline not available:', e);
     }
     
-    if (!audio.src) {
+    // إذا لم تكن السورة محملة ولا يوجد إنترنت
+    if (isOffline) {
+      toast.error('السورة غير محملة - تحتاج اتصال بالإنترنت للتحميل');
+      return;
+    }
+    
+    // التشغيل من الإنترنت
+    if (!audio.src || !audio.src.includes(surah.toString().padStart(3, '0'))) {
       audio.src = getAudioUrl(surah);
     }
     
     if (isPlaying) {
       audio.pause();
+      setIsPlaying(false);
     } else {
-      audio.play().catch(() => toast.error('تعذر تشغيل الصوت'));
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        toast.error('تعذر تشغيل الصوت');
+      }
     }
-    setIsPlaying(!isPlaying);
   };
 
   const handleNext = () => {
@@ -149,8 +246,29 @@ export default function GlobalAudioPlayer() {
     loadAndPlay(prevSurah);
   };
 
-  const loadAndPlay = (surahNum) => {
+  const loadAndPlay = async (surahNum) => {
     const audio = audioRef.current;
+    AudioManager.register(audio, 'global-player');
+    
+    // محاولة التشغيل من الملفات المحملة أولاً
+    try {
+      const offlineData = await getSurahOffline(surahNum, reciter);
+      if (offlineData && offlineData.audio) {
+        audio.src = URL.createObjectURL(offlineData.audio);
+        audio.play().catch(() => {});
+        setIsPlaying(true);
+        return;
+      }
+    } catch (e) {
+      console.log('Offline not available');
+    }
+    
+    if (isOffline) {
+      toast.error('السورة غير محملة');
+      setIsPlaying(false);
+      return;
+    }
+    
     audio.src = getAudioUrl(surahNum);
     audio.play().catch(() => {});
     setIsPlaying(true);
@@ -171,13 +289,45 @@ export default function GlobalAudioPlayer() {
     }
   };
 
-  const handleDownload = () => {
-    const url = getAudioUrl(surah);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `surah_${surah}.mp3`;
-    a.click();
-    toast.success('جاري التحميل...');
+  const handleDownload = async () => {
+    if (isDownloading) return;
+    
+    // إذا السورة محملة مسبقاً
+    if (isCurrentSurahDownloaded) {
+      toast.info('السورة محملة مسبقاً ✓');
+      return;
+    }
+    
+    if (isOffline) {
+      toast.error('تحتاج اتصال بالإنترنت للتحميل');
+      return;
+    }
+    
+    setIsDownloading(true);
+    toast.info(`جاري تحميل السورة ${surah} للاستماع دون نت...`);
+    
+    try {
+      const url = getAudioUrl(surah);
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('فشل التحميل');
+      }
+      
+      const blob = await response.blob();
+      await saveSurahOffline(surah, reciter, blob);
+      
+      // تحديث قائمة السور المحملة
+      const keys = await getDownloadedSurahs();
+      setDownloadedSurahs(keys);
+      
+      toast.success(`تم تحميل السورة ${surah} بنجاح! يمكنك الاستماع دون نت 📥`);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('فشل تحميل السورة - جرب مرة أخرى');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const formatTime = (seconds) => {
@@ -342,10 +492,17 @@ export default function GlobalAudioPlayer() {
               variant="ghost"
               size="icon"
               onClick={handleDownload}
-              className="text-slate-400 hover:text-white"
-              title="تحميل السورة"
+              disabled={isDownloading}
+              className={`hover:text-white ${isCurrentSurahDownloaded ? 'text-emerald-500' : 'text-slate-400'}`}
+              title={isCurrentSurahDownloaded ? 'السورة محملة ✓' : 'تحميل للاستماع دون نت'}
             >
-              <Download className="w-5 h-5" />
+              {isDownloading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : isCurrentSurahDownloaded ? (
+                <Check className="w-5 h-5" />
+              ) : (
+                <Download className="w-5 h-5" />
+              )}
             </Button>
             <Button
               variant="ghost"
