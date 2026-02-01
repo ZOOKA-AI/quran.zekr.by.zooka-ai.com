@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Input } from '@/components/ui/input';
@@ -172,37 +172,35 @@ export default function QuranPage() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">جميع السور</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSurahs.map(surah => (
-            <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
-              <Card className="bg-slate-800/50 hover:bg-slate-700/50 transition-all cursor-pointer p-4 border-slate-700 group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-lg flex items-center justify-center text-white font-bold">
-                    {surah.number}
+            {filteredSurahs.map(surah => (
+              <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                <Card className="bg-slate-800/50 hover:bg-slate-700/50 transition-all cursor-pointer p-4 border-slate-700 group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-lg flex items-center justify-center text-white font-bold">
+                      {surah.number}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-bold">{surah.name}</p>
+                      <p className="text-slate-400 text-sm">{surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}</p>
+                    </div>
+                    <Button
+                      size="icon"
+                      className="bg-emerald-500 hover:bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Play className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-white font-bold">{surah.name}</p>
-                    <p className="text-slate-400 text-sm">{surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}</p>
-                  </div>
-                  <Button
-                    size="icon"
-                    className="bg-emerald-500 hover:bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Play className="w-4 h-4" />
-                  </Button>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
-
+                </Card>
+              </Link>
+            ))}
           </div>
-        </div>
 
-        {filteredSurahs.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
-          </div>
-        )}
+          {filteredSurahs.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
