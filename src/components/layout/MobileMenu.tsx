@@ -133,12 +133,12 @@ export default function MobileMenu({ isOpen, onClose, currentPageName }: MobileM
               {QURAN_STATS.map((stat) => (
                 <div
                   key={stat.label}
-                  className={`p-4 bg-gradient-to-br ${stat.gradient} rounded-xl border border-${stat.color}-200`}
+                  className={`p-4 bg-gradient-to-br ${stat.gradient} rounded-xl border ${stat.borderColor}`}
                 >
-                  <div className={`text-3xl font-bold text-${stat.color}-700 mb-1`}>
+                  <div className={`text-3xl font-bold ${stat.textColor} mb-1`}>
                     {stat.value}
                   </div>
-                  <div className={`text-xs text-${stat.color}-600 font-medium`}>
+                  <div className={`text-xs ${stat.labelColor} font-medium`}>
                     {stat.label}
                   </div>
                 </div>

@@ -58,8 +58,36 @@ export const QUICK_ACTIONS: QuickAction[] = [
  * Quran statistics for display
  */
 export const QURAN_STATS = [
-  { value: 114, label: 'سورة', gradient: 'from-emerald-50 to-emerald-100', color: 'emerald' },
-  { value: 30, label: 'جزء', gradient: 'from-amber-50 to-amber-100', color: 'amber' },
-  { value: 6236, label: 'آية', gradient: 'from-blue-50 to-blue-100', color: 'blue' },
-  { value: 604, label: 'صفحة', gradient: 'from-purple-50 to-purple-100', color: 'purple' },
+  { 
+    value: 114, 
+    label: 'سورة', 
+    gradient: 'from-emerald-50 to-emerald-100',
+    borderColor: 'border-emerald-200',
+    textColor: 'text-emerald-700',
+    labelColor: 'text-emerald-600'
+  },
+  { 
+    value: 30, 
+    label: 'جزء', 
+    gradient: 'from-amber-50 to-amber-100',
+    borderColor: 'border-amber-200',
+    textColor: 'text-amber-700',
+    labelColor: 'text-amber-600'
+  },
+  { 
+    value: 6236, 
+    label: 'آية', 
+    gradient: 'from-blue-50 to-blue-100',
+    borderColor: 'border-blue-200',
+    textColor: 'text-blue-700',
+    labelColor: 'text-blue-600'
+  },
+  { 
+    value: 604, 
+    label: 'صفحة', 
+    gradient: 'from-purple-50 to-purple-100',
+    borderColor: 'border-purple-200',
+    textColor: 'text-purple-700',
+    labelColor: 'text-purple-600'
+  },
 ];
