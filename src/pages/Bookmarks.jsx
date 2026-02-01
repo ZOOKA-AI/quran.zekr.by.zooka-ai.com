@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { BookMarked, Trash2, ExternalLink } from 'lucide-react';
+import { BookMarked, Trash2, ExternalLink, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
@@ -12,11 +12,12 @@ import { toast } from 'sonner';
 export default function BookmarksPage() {
   const queryClient = useQueryClient();
 
-  const { data: bookmarks = [], isLoading } = useQuery({
+  const { data: bookmarks = [], isLoading, refetch } = useQuery({
     queryKey: ['bookmarks'],
     queryFn: () => base44.entities.Bookmark.list('-created_date'),
     initialData: [],
-    staleTime: 30000, // 30 seconds cache
+    staleTime: 10000,
+    refetchOnWindowFocus: true,
   });
 
   // Real-time subscription للتحديثات الفورية
@@ -24,20 +25,19 @@ export default function BookmarksPage() {
     const unsubscribe = base44.entities.Bookmark.subscribe((event) => {
       queryClient.setQueryData(['bookmarks'], (old) => {
         if (!old) return old;
-        
-        if (event.type === 'create') {
-          return [event.data, ...old];
-        } else if (event.type === 'update') {
-          return old.map((b) => (b.id === event.id ? event.data : b));
-        } else if (event.type === 'delete') {
-          return old.filter((b) => b.id !== event.id);
-        }
+        if (event.type === 'create') return [event.data, ...old];
+        if (event.type === 'update') return old.map((b) => (b.id === event.id ? event.data : b));
+        if (event.type === 'delete') return old.filter((b) => b.id !== event.id);
         return old;
       });
     });
-
     return unsubscribe;
   }, [queryClient]);
+
+  const sortedBookmarks = useMemo(() => 
+    [...bookmarks].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
+    [bookmarks]
+  );
 
   const deleteBookmarkMutation = useMutation({
     mutationFn: (id) => base44.entities.Bookmark.delete(id),
@@ -66,7 +66,7 @@ export default function BookmarksPage() {
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
             <p className="mt-4 text-gray-600">جاري التحميل...</p>
           </div>
-        ) : bookmarks.length === 0 ? (
+        ) : sortedBookmarks.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
             <BookMarked className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <p className="text-gray-600 text-lg mb-4">لا توجد آيات محفوظة</p>
@@ -79,7 +79,13 @@ export default function BookmarksPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {bookmarks.map((bookmark) => (
+            <div className="flex justify-end mb-4">
+              <Button variant="outline" size="sm" onClick={() => refetch()}>
+                <RefreshCw className="w-4 h-4 ml-2" />
+                تحديث
+              </Button>
+            </div>
+            {sortedBookmarks.map((bookmark) => (
               <Card key={bookmark.id} className="bg-white border-2 border-gray-100 hover:border-emerald-200 transition-all shadow-md">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">

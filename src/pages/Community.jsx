@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Send, Sparkles, TrendingUp } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Send, Sparkles, TrendingUp, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/AuthProvider';
 
@@ -15,11 +15,21 @@ export default function CommunityPage() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: shares = [] } = useQuery({
+  const { data: shares = [], refetch: refetchShares } = useQuery({
     queryKey: ['shares'],
     queryFn: () => base44.entities.DailyShare.list('-created_date', 50),
     initialData: [],
+    staleTime: 10000,
+    refetchOnWindowFocus: true,
   });
+
+  // Real-time subscription
+  useEffect(() => {
+    const unsubscribe = base44.entities.DailyShare.subscribe((event) => {
+      queryClient.invalidateQueries({ queryKey: ['shares'] });
+    });
+    return unsubscribe;
+  }, [queryClient]);
 
   const createShareMutation = useMutation({
     mutationFn: (data) => base44.entities.DailyShare.create(data),

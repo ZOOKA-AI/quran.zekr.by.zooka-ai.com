@@ -224,16 +224,7 @@ export default function Layout({ children, currentPageName }) {
       <main className="pb-24">{children}</main>
 
       {/* Global Audio Player */}
-      <GlobalAudioPlayer 
-        currentSurah={1}
-        currentVerse={1}
-        isPlaying={false}
-        onPlayPause={() => {}}
-        onNext={() => {}}
-        onPrevious={() => {}}
-        onVolumeChange={() => {}}
-        onProgressChange={() => {}}
-      />
+      <GlobalAudioPlayer />
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
