@@ -233,13 +233,37 @@ export default function Layout({ children, currentPageName }) {
             <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
             <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
 
-            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-4 mb-4 max-w-2xl mx-auto border border-purple-400/30">
-              <p className="text-amber-300 text-xl font-bold mb-2">📢 باص إسلامي صدقة جارية</p>
-              <a href="https://zaka.ai/" target="_blank" rel="noopener noreferrer" className="text-white text-lg hover:text-amber-300 transition-colors underline font-bold block mb-2">
-                🌐 zaka.ai
-              </a>
-              <p className="text-emerald-100 text-sm mb-2">من مصر 🇪🇬 • نطاق .egypt</p>
-              <p className="text-white font-bold">👍 اشتركوا في القناة</p>
+            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-4 max-w-3xl mx-auto border border-purple-400/30">
+              <p className="text-amber-300 text-2xl font-bold mb-3">🤲 صدقة جارية على روح المرحومة</p>
+              <p className="text-white text-xl font-arabic mb-2">جزبية عبد الرحيم هارون علي</p>
+              <p className="text-emerald-200 mb-4">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
+              
+              <div className="border-t border-purple-400/30 pt-4 mt-4">
+                <p className="text-amber-200 font-bold mb-3">💝 طرق التبرع والتحويل:</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-right">
+                  <a href="https://pay.ziina.com/helmyharoon822/OG15QzAAUK" target="_blank" rel="noopener noreferrer" 
+                     className="bg-gradient-to-r from-teal-600/40 to-cyan-600/40 p-3 rounded-lg hover:opacity-80 transition-opacity block border border-teal-400/30">
+                    <p className="text-white font-bold">💳 Ziina زينة</p>
+                    <p className="text-emerald-200 text-sm">اضغط للتبرع مباشرة</p>
+                  </a>
+                  
+                  <div className="bg-gradient-to-r from-red-600/40 to-pink-600/40 p-3 rounded-lg border border-red-400/30">
+                    <p className="text-white font-bold">📱 فودافون كاش</p>
+                    <a href="tel:00201090193337" className="text-emerald-200 text-sm hover:text-white">00201090193337</a>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-orange-600/40 to-amber-600/40 p-3 rounded-lg border border-orange-400/30">
+                    <p className="text-white font-bold">📞 e& اتصالات</p>
+                    <a href="tel:+971566047579" className="text-emerald-200 text-sm hover:text-white">+971 56 604 7579</a>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-blue-600/40 to-indigo-600/40 p-3 rounded-lg border border-blue-400/30">
+                    <p className="text-white font-bold">🏦 تحويلات بنكية</p>
+                    <p className="text-emerald-200 text-sm">تواصل معنا للتفاصيل</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
