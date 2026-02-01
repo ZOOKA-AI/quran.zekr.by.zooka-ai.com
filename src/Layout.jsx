@@ -28,6 +28,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'الأذكار', path: 'Athkar', icon: Sun, color: 'text-cyan-600' },
     { name: 'الإذاعة', path: 'QuranRadio', icon: Radio, color: 'text-indigo-600' },
     { name: 'التواشيح', path: 'Tawasheeh', icon: Music, color: 'text-amber-600' },
+    { name: 'الابتهالات', path: 'Ibtihaalat', icon: AudioLines, color: 'text-orange-600' },
     { name: 'الأيتام', path: 'Orphans', icon: Heart, color: 'text-red-600' },
     { name: 'المجتمع', path: 'Community', icon: MessageSquare, color: 'text-pink-600' },
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
