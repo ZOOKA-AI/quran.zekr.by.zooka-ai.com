@@ -10,6 +10,8 @@ import VerseSync from '../components/quran/VerseSync';
 import SearchBar from '../components/quran/SearchBar';
 import VerseCard from '../components/quran/VerseCard';
 import NavigationControls from '../components/quran/NavigationControls';
+import ReadingSettings from '../components/quran/ReadingSettings';
+import ReciterSelector from '../components/quran/ReciterSelector';
 import { toast } from 'sonner';
 
 export default function SurahView() {
@@ -21,7 +23,26 @@ export default function SurahView() {
   const [selectedPage, setSelectedPage] = useState(null);
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [readingSettings, setReadingSettings] = useState({
+    fontSize: 24,
+    fontFamily: 'amiri',
+    lineHeight: 2,
+  });
+  const [selectedReciter, setSelectedReciter] = useState('husary');
   const queryClient = useQueryClient();
+
+  // حفظ الإعدادات في localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('quran-reading-settings');
+    if (saved) {
+      setReadingSettings(JSON.parse(saved));
+    }
+  }, []);
+
+  const handleSettingsChange = (newSettings) => {
+    setReadingSettings(newSettings);
+    localStorage.setItem('quran-reading-settings', JSON.stringify(newSettings));
+  };
 
   const { data: verses = [], isLoading } = useQuery({
     queryKey: ['verses', surahNumber],
@@ -135,8 +156,20 @@ export default function SurahView() {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Audio Player */}
-        <div className="mb-8">
+        {/* Reading Settings */}
+        <ReadingSettings 
+          settings={readingSettings}
+          onSettingsChange={handleSettingsChange}
+        />
+
+        {/* Reciter Selector & Audio Player */}
+        <div className="mb-8 space-y-4">
+          <div className="flex justify-center">
+            <ReciterSelector
+              selectedReciter={selectedReciter}
+              onReciterChange={setSelectedReciter}
+            />
+          </div>
           <AudioPlayer 
             surahNumber={surahNumber}
             onTimeUpdate={setAudioCurrentTime}
@@ -206,6 +239,7 @@ export default function SurahView() {
                 key={verse.id}
                 verse={verse}
                 onBookmark={handleBookmark}
+                readingSettings={readingSettings}
               />
             ))}
           </div>

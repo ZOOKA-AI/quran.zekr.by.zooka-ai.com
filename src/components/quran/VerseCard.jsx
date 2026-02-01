@@ -18,7 +18,7 @@ const RECITERS = [
   { id: 'alafasy', name: 'العفاسي', baseUrl: 'https://EveryAyah.com/data/Alafasy_128kbps/' }
 ];
 
-const VerseCard = ({ verse, onBookmark }) => {
+const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('arabic');
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
@@ -27,6 +27,15 @@ const VerseCard = ({ verse, onBookmark }) => {
   const [showCompareTafsir, setShowCompareTafsir] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+
+  const { fontSize = 24, fontFamily = 'amiri', lineHeight = 2 } = readingSettings;
+  
+  const fontFamilyClass = {
+    'amiri': 'font-[Amiri]',
+    'uthmanic': 'font-[KFGQPC_Uthmanic_Script_HAFS]',
+    'hafs': 'font-[Hafs]',
+    'naskh': 'font-[Noto_Naskh_Arabic]',
+  }[fontFamily] || 'font-[Amiri]';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(verse.arabic_text);
@@ -204,7 +213,13 @@ const VerseCard = ({ verse, onBookmark }) => {
 
         {/* Arabic Text */}
         <div className="mb-6 text-center">
-          <p className="text-3xl leading-loose font-arabic text-gray-800 p-4 bg-gradient-to-br from-emerald-50/50 to-amber-50/30 rounded-xl">
+          <p 
+            className={`text-gray-800 p-4 bg-gradient-to-br from-emerald-50/50 to-amber-50/30 rounded-xl ${fontFamilyClass}`}
+            style={{ 
+              fontSize: `${fontSize}px`,
+              lineHeight: lineHeight,
+            }}
+          >
             {verse.arabic_text} ﴿{verse.verse_number}﴾
           </p>
         </div>
