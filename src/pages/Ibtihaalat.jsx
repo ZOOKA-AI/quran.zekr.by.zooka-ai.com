@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import AudioManager from '@/components/audio/AudioManager';
 
 // قائمة المبتهلين المصريين الكبار
 const MUBTAHILEEN = [
@@ -87,6 +88,18 @@ export default function Ibtihaalat() {
   useEffect(() => {
     const saved = localStorage.getItem('ibtihaalat_favorites');
     if (saved) setFavorites(JSON.parse(saved));
+    
+    // الاستماع لتغييرات الصوت من المصادر الأخرى
+    const unsubscribe = AudioManager.addListener((source, status) => {
+      if (source !== 'ibtihaalat' && status === 'playing') {
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        setIsPlaying(false);
+      }
+    });
+    
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -99,7 +112,11 @@ export default function Ibtihaalat() {
     if (currentTrack?.id === track.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
+      AudioManager.stop();
     } else {
+      // تسجيل الصوت في المدير المركزي
+      AudioManager.register(audioRef.current, 'ibtihaalat');
+      
       setCurrentTrack(track);
       setIsPlaying(true);
       

@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Play, Pause, Heart, Clock, Music2, Mic2, Star, Volume2, SkipBack, SkipForward } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
+import AudioManager from '@/components/audio/AudioManager';
 
 // روابط صوتية حقيقية للتواشيح والابتهالات
 const TAWASHEEH = [
@@ -44,7 +45,24 @@ export default function Tawasheeh() {
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // الاستماع لتغييرات الصوت من المصادر الأخرى
+    const unsubscribe = AudioManager.addListener((source, status) => {
+      if (source !== 'tawasheeh' && status === 'playing') {
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        setIsPlaying(false);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     if (currentTrack && audioRef.current) {
+      // تسجيل الصوت في المدير المركزي
+      AudioManager.register(audioRef.current, 'tawasheeh');
+      
       audioRef.current.src = currentTrack.url;
       audioRef.current.volume = volume;
       audioRef.current.play().catch(err => {
