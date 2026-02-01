@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import CMSManager from '@/components/admin/CMSManager';
 import AdvancedStats from '@/components/admin/AdvancedStats';
 import NotificationSender from '@/components/admin/NotificationSender';
+import StaticPageEditor from '@/components/admin/StaticPageEditor';
 
 const ADMIN_PASSWORD = '3219@';
 
@@ -213,6 +214,10 @@ export default function AdminPanel() {
               <FileText className="w-4 h-4" />
               إدارة المحتوى
             </TabsTrigger>
+            <TabsTrigger value="pages" className="gap-1">
+              <FileText className="w-4 h-4" />
+              الصفحات الثابتة
+            </TabsTrigger>
             <TabsTrigger value="notifications" className="gap-1">
               <Bell className="w-4 h-4" />
               الإشعارات
@@ -281,6 +286,11 @@ export default function AdminPanel() {
           {/* CMS Tab */}
           <TabsContent value="cms">
             <CMSManager />
+          </TabsContent>
+
+          {/* Static Pages Tab */}
+          <TabsContent value="pages">
+            <StaticPageEditor />
           </TabsContent>
 
           {/* Notifications Tab */}
