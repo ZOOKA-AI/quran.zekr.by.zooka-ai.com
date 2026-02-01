@@ -247,6 +247,6 @@ export default function SurahView() {
           </div>
         )}
       </div>
-    </div>
+    </IslamicBackground>
   );
 }
