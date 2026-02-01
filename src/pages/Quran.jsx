@@ -24,6 +24,7 @@ const FEATURED_SURAHS = [
 import { toast } from 'sonner';
 import SurahCard from '../components/quran/SurahCard';
 import { useAuth } from '@/components/AuthProvider';
+import DailyContent from '../components/daily/DailyContent';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
@@ -261,8 +262,15 @@ export default function QuranPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Daily Content Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">✨ محتوى اليوم</h2>
+          <DailyContent />
+        </div>
+
         {/* Quick Access Cards - Spotify Style */}
         <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">السور المميزة</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {FEATURED_SURAHS.slice(0, 6).map(surah => (
               <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
