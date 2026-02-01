@@ -1,40 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sun, Moon, Bed, RefreshCw, Check, Volume2, Share2, Copy } from 'lucide-react';
+import { Sun, Moon, Bed, RefreshCw, Check, Volume2, Share2, Copy, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-const MORNING_ATHKAR = [
-  { id: 1, text: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ', count: 1, benefit: 'من قالها حين يصبح وحين يمسي كفته من كل شيء' },
-  { id: 2, text: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ', count: 1, benefit: 'تفويض الأمر لله' },
-  { id: 3, text: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ', count: 1, benefit: 'سيد الاستغفار - من قالها موقناً بها دخل الجنة' },
-  { id: 4, text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', count: 100, benefit: 'من قالها مائة مرة حين يصبح وحين يمسي لم يأت أحد يوم القيامة بأفضل مما جاء به' },
-  { id: 5, text: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ', count: 10, benefit: 'كتبت له مائة حسنة ومحيت عنه مائة سيئة' },
-  { id: 6, text: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', count: 3, benefit: 'حفظ من كل شر' },
-];
-
-const EVENING_ATHKAR = [
-  { id: 1, text: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ', count: 1, benefit: 'من قالها حين يصبح وحين يمسي كفته من كل شيء' },
-  { id: 2, text: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ', count: 1, benefit: 'تفويض الأمر لله' },
-  { id: 3, text: 'اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ', count: 4, benefit: 'من قالها أعتقه الله من النار' },
-  { id: 4, text: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ', count: 3, benefit: 'لم يضره شيء' },
-];
-
-const SLEEP_ATHKAR = [
-  { id: 1, text: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', count: 1, benefit: 'دعاء النوم' },
-  { id: 2, text: 'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ', count: 3, benefit: 'الوقاية من العذاب' },
-  { id: 3, text: 'سُبْحَانَ اللَّهِ', count: 33, benefit: 'تسبيح قبل النوم' },
-  { id: 4, text: 'الْحَمْدُ لِلَّهِ', count: 33, benefit: 'حمد قبل النوم' },
-  { id: 5, text: 'اللَّهُ أَكْبَرُ', count: 34, benefit: 'تكبير قبل النوم' },
-];
+// تحويل الفئات
+const CATEGORY_MAP = {
+  'morning': 'أذكار الصباح',
+  'evening': 'أذكار المساء',
+  'sleep': 'أذكار النوم',
+  'prayer': 'أذكار الصلاة',
+  'general': 'أذكار متنوعة'
+};
 
 export default function Athkar() {
   const [selectedTab, setSelectedTab] = useState('morning');
   const [completedAthkar, setCompletedAthkar] = useState({});
   const [counters, setCounters] = useState({});
+
+  // جلب الأذكار من قاعدة البيانات
+  const { data: allAthkar = [], isLoading } = useQuery({
+    queryKey: ['athkar'],
+    queryFn: () => base44.entities.Athkar.list('order'),
+  });
 
   useEffect(() => {
     // تحميل التقدم المحفوظ
@@ -56,12 +49,15 @@ export default function Athkar() {
   }, [completedAthkar, counters]);
 
   const getAthkarList = () => {
-    switch (selectedTab) {
-      case 'morning': return MORNING_ATHKAR;
-      case 'evening': return EVENING_ATHKAR;
-      case 'sleep': return SLEEP_ATHKAR;
-      default: return MORNING_ATHKAR;
-    }
+    const categoryName = CATEGORY_MAP[selectedTab];
+    const filtered = allAthkar.filter(a => a.category === categoryName);
+    return filtered.length > 0 ? filtered.map(a => ({
+      id: a.id,
+      text: a.text,
+      count: a.count || 1,
+      benefit: a.benefit,
+      source: a.source
+    })) : [];
   };
 
   const incrementCounter = (thikrId, maxCount) => {
@@ -129,7 +125,15 @@ export default function Athkar() {
           </CardContent>
         </Card>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          </div>
+        )}
+
         {/* Tabs */}
+        {!isLoading && (
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
           <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="morning" className="gap-2">
@@ -148,6 +152,11 @@ export default function Athkar() {
 
           {['morning', 'evening', 'sleep'].map(tab => (
             <TabsContent key={tab} value={tab}>
+              {getAthkarList().length === 0 ? (
+                <Card className="p-8 text-center">
+                  <p className="text-gray-500">لا توجد أذكار لهذا القسم حالياً</p>
+                </Card>
+              ) : (
               <div className="space-y-4">
                 {getAthkarList().map(thikr => {
                   const key = `${tab}-${thikr.id}`;
@@ -207,9 +216,11 @@ export default function Athkar() {
                   );
                 })}
               </div>
+              )}
             </TabsContent>
           ))}
         </Tabs>
+        )}
       </div>
     </div>
   );
