@@ -34,6 +34,23 @@ export default function Tawasheeh() {
   const [volume, setVolume] = useState(0.8);
   const audioRef = useRef(null);
 
+  // جلب التواشيح من قاعدة البيانات
+  const { data: dbTawasheeh = [], isLoading } = useQuery({
+    queryKey: ['tawasheeh'],
+    queryFn: () => base44.entities.Tawasheeh.list('-plays_count'),
+  });
+
+  // تحويل البيانات للصيغة المطلوبة
+  const TAWASHEEH = dbTawasheeh.map(t => ({
+    id: t.id,
+    title: t.title,
+    artist: t.artist,
+    duration: t.duration_text || formatTime(t.duration),
+    category: t.category,
+    url: t.audio_url,
+    featured: t.is_featured
+  }));
+
   useEffect(() => {
     // الاستماع لتغييرات الصوت من المصادر الأخرى
     const unsubscribe = AudioManager.addListener((source, status) => {
@@ -233,7 +250,15 @@ export default function Tawasheeh() {
           </Card>
         )}
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-10 h-10 animate-spin text-amber-600" />
+          </div>
+        )}
+
         {/* Featured Section */}
+        {!isLoading && (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-amber-500" />
@@ -257,8 +282,10 @@ export default function Tawasheeh() {
             ))}
           </div>
         </div>
+        )}
 
         {/* Categories */}
+        {!isLoading && (
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
@@ -326,6 +353,14 @@ export default function Tawasheeh() {
             </Card>
           ))}
         </div>
+        )}
+
+        {!isLoading && filteredTracks.length === 0 && (
+          <div className="text-center py-12">
+            <Music2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500">لا توجد تواشيح متاحة</p>
+          </div>
+        )}
       </div>
     </div>
   );
