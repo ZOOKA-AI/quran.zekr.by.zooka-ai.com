@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -24,6 +24,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
     { name: 'التلاوة', path: 'Tilawa', icon: Volume2, color: 'text-blue-600' },
     { name: 'المقرئين', path: 'Reciters', icon: Mic, color: 'text-purple-600' },
+    { name: 'الأيتام', path: 'Orphans', icon: Heart, color: 'text-red-600' },
     { name: 'المجتمع', path: 'Community', icon: MessageSquare, color: 'text-pink-600' },
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
     { name: 'الرسائل', path: 'Messages', icon: Mail, color: 'text-blue-600' },
@@ -238,6 +239,11 @@ export default function Layout({ children, currentPageName }) {
               <p className="text-white text-xl font-arabic mb-2">جزبية عبد الرحيم هارون علي</p>
               <p className="text-emerald-200 mb-4">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
               
+              <Link to={createPageUrl('Orphans')} className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity mb-4">
+                <Heart className="w-5 h-5" />
+                صفحة كفالة الأيتام والتبرعات
+              </Link>
+              
               <div className="border-t border-purple-400/30 pt-4 mt-4">
                 <p className="text-amber-200 font-bold mb-3">💝 طرق التبرع والتحويل:</p>
                 
@@ -245,22 +251,22 @@ export default function Layout({ children, currentPageName }) {
                   <a href="https://pay.ziina.com/helmyharoon822/OG15QzAAUK" target="_blank" rel="noopener noreferrer" 
                      className="bg-gradient-to-r from-teal-600/40 to-cyan-600/40 p-3 rounded-lg hover:opacity-80 transition-opacity block border border-teal-400/30">
                     <p className="text-white font-bold">💳 Ziina زينة</p>
-                    <p className="text-emerald-200 text-sm">اضغط للتبرع مباشرة</p>
+                    <p className="text-emerald-200 text-sm">اضغط للتبرع مباشرة - خيارات متعددة</p>
                   </a>
                   
-                  <div className="bg-gradient-to-r from-red-600/40 to-pink-600/40 p-3 rounded-lg border border-red-400/30">
+                  <a href="tel:00201090193337" className="bg-gradient-to-r from-red-600/40 to-pink-600/40 p-3 rounded-lg border border-red-400/30 hover:opacity-80 transition-opacity block">
                     <p className="text-white font-bold">📱 فودافون كاش</p>
-                    <a href="tel:00201090193337" className="text-emerald-200 text-sm hover:text-white">00201090193337</a>
-                  </div>
+                    <p className="text-emerald-200 text-sm">00201090193337</p>
+                  </a>
                   
-                  <div className="bg-gradient-to-r from-orange-600/40 to-amber-600/40 p-3 rounded-lg border border-orange-400/30">
+                  <a href="tel:+971566047579" className="bg-gradient-to-r from-orange-600/40 to-amber-600/40 p-3 rounded-lg border border-orange-400/30 hover:opacity-80 transition-opacity block">
                     <p className="text-white font-bold">📞 e& اتصالات</p>
-                    <a href="tel:+971566047579" className="text-emerald-200 text-sm hover:text-white">+971 56 604 7579</a>
-                  </div>
+                    <p className="text-emerald-200 text-sm">+971 56 604 7579</p>
+                  </a>
                   
                   <div className="bg-gradient-to-r from-blue-600/40 to-indigo-600/40 p-3 rounded-lg border border-blue-400/30">
-                    <p className="text-white font-bold">🏦 تحويلات بنكية</p>
-                    <p className="text-emerald-200 text-sm">تواصل معنا للتفاصيل</p>
+                    <p className="text-white font-bold">🏦 Stripe تحويل</p>
+                    <p className="text-emerald-200 text-sm">قريباً بإذن الله</p>
                   </div>
                 </div>
               </div>
@@ -280,15 +286,16 @@ export default function Layout({ children, currentPageName }) {
                   <p className="text-amber-300 text-lg font-bold mb-2">🏢 من إنتاج شركة</p>
                   <p className="text-white text-base font-bold mb-1">Royal Haroon Cleaning and Disinfection Services FZ-LLC</p>
                   <p className="text-emerald-100 text-sm italic">تقنية الذكاء الاصطناعي في خدمة القرآن والإنسانية</p>
+                  <p className="text-amber-200 text-sm mt-2">🇦🇪 من دولة الإمارات العربية المتحدة</p>
                 </div>
                 
                 <div className="border-t border-emerald-600/50 pt-3 mt-3">
                   <p className="text-amber-300 font-bold mb-2">📧 للتواصل:</p>
-                  <div className="space-y-1">
-                    <a href="mailto:info@zooka-ai.com" className="text-emerald-100 hover:text-white transition-colors underline block">
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:info@zooka-ai.com" className="text-emerald-100 hover:text-white transition-colors underline">
                       info@zooka-ai.com
                     </a>
-                    <a href="mailto:info@royalcleanuae.com" className="text-emerald-100 hover:text-white transition-colors underline block">
+                    <a href="mailto:info@royalcleanuae.com" className="text-emerald-100 hover:text-white transition-colors underline">
                       info@royalcleanuae.com
                     </a>
                   </div>

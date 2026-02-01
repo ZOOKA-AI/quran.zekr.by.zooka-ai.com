@@ -61,6 +61,7 @@ import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
 import SurahView from './pages/SurahView';
 import Tilawa from './pages/Tilawa';
+import Orphans from './pages/Orphans';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "Rewards": Rewards,
     "SurahView": SurahView,
     "Tilawa": Tilawa,
+    "Orphans": Orphans,
 }
 
 export const pagesConfig = {
