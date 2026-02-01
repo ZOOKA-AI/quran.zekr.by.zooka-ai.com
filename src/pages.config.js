@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AdminPanel from './pages/AdminPanel';
 import Assistant from './pages/Assistant';
 import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
@@ -65,15 +66,15 @@ import QuranRadio from './pages/QuranRadio';
 import Ramadan from './pages/Ramadan';
 import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
+import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
-import AdminPanel from './pages/AdminPanel';
-import StaticPageView from './pages/StaticPageView';
 import Tilawa from './pages/Tilawa';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AdminPanel": AdminPanel,
     "Assistant": Assistant,
     "Athkar": Athkar,
     "Bookmarks": Bookmarks,
@@ -92,10 +93,9 @@ export const PAGES = {
     "Ramadan": Ramadan,
     "Reciters": Reciters,
     "Rewards": Rewards,
+    "StaticPageView": StaticPageView,
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
-    "AdminPanel": AdminPanel,
-    "StaticPageView": StaticPageView,
     "Tilawa": Tilawa,
 }
 

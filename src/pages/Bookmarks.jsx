@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { BookMarked, Trash2, ExternalLink, RefreshCw } from 'lucide-react';
+import { BookMarked, Trash2, ExternalLink, RefreshCw, CloudUpload, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
@@ -12,6 +12,7 @@ import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function BookmarksPage() {
   const queryClient = useQueryClient();
+  const [isSavingToDrive, setIsSavingToDrive] = React.useState(false);
 
   const { data: bookmarks = [], isLoading, refetch } = useQuery({
     queryKey: ['bookmarks'],
@@ -47,6 +48,36 @@ export default function BookmarksPage() {
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
     },
   });
+
+  // حفظ الملاحظات في Google Drive
+  const saveNotesToDrive = async () => {
+    if (sortedBookmarks.length === 0) {
+      toast.error('لا توجد ملاحظات للحفظ');
+      return;
+    }
+
+    setIsSavingToDrive(true);
+    try {
+      const notesContent = sortedBookmarks.map(b => 
+        `📖 سورة ${b.surah_number} - آية ${b.verse_number}\n${b.note || 'بدون ملاحظة'}\n${b.tags?.length ? `الوسوم: ${b.tags.join(', ')}` : ''}\n`
+      ).join('\n---\n\n');
+
+      const response = await base44.functions.invoke('saveNotesToDrive', {
+        notes: notesContent,
+        fileName: `ملاحظاتي_القرآنية_${new Date().toLocaleDateString('ar-EG').replace(/\//g, '-')}`
+      });
+
+      if (response.data?.success) {
+        toast.success('تم حفظ الملاحظات في Google Drive ✓');
+      } else {
+        toast.error(response.data?.error || 'فشل الحفظ');
+      }
+    } catch (error) {
+      toast.error('حدث خطأ أثناء الحفظ');
+    } finally {
+      setIsSavingToDrive(false);
+    }
+  };
 
   return (
     <IslamicBackground variant="default">
@@ -85,7 +116,21 @@ export default function BookmarksPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-end gap-3 mb-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={saveNotesToDrive}
+                disabled={isSavingToDrive}
+                className="border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+              >
+                {isSavingToDrive ? (
+                  <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                ) : (
+                  <CloudUpload className="w-4 h-4 ml-2" />
+                )}
+                حفظ في Google Drive
+              </Button>
               <Button variant="outline" size="sm" onClick={() => refetch()} className="border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20">
                 <RefreshCw className="w-4 h-4 ml-2" />
                 تحديث
