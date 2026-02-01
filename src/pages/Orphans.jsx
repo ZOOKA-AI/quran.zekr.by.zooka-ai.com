@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, Users, Gift, Phone, Mail, CreditCard, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import DonationForm from '@/components/donation/DonationForm';
 
 export default function Orphans() {
   const donationMethods = [
@@ -53,7 +54,12 @@ export default function Orphans() {
           </CardContent>
         </Card>
 
-        {/* طرق التبرع */}
+        {/* نموذج التبرع بـ Stripe */}
+        <div className="mb-8">
+          <DonationForm />
+        </div>
+
+        {/* طرق التبرع الأخرى */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-emerald-800 mb-6 text-center">💝 طرق التبرع</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
