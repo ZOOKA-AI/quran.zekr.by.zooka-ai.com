@@ -268,7 +268,7 @@ export default function QuranPage() {
             </Sheet>
             
             <h1 className="text-2xl font-bold text-amber-100">
-              {greeting} {isAuthenticated && user?.full_name && `، ${user.full_name.split(' ')[0]}`}
+              {greeting}
             </h1>
             <div className="w-10"></div>
           </div>
