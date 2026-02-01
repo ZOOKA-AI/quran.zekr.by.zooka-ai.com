@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -31,12 +31,20 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /* Emerald theme colors for Quran app */
+    --emerald-50: #ecfdf5;
+    --emerald-600: #059669;
+    --emerald-700: #047857;
+    --emerald-800: #065f46;
+    --amber-300: #fcd34d;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    font-family: 'Cairo', sans-serif;
   }
   body {
     @apply bg-background text-foreground;
@@ -52,4 +60,19 @@
 @font-face {
   font-family: 'Noto Naskh Arabic';
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-display: swap;
+}
+
+/* Arabic Quran text styling */
+.font-arabic {
+  font-family: 'Amiri', serif;
+  line-height: 2.5;
+}
+
+.font-urdu {
+  font-family: 'Noto Nastaliq Urdu', serif;
 }
