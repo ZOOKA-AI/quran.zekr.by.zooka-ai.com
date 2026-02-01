@@ -162,7 +162,7 @@ export function PlayerProvider({ children }) {
     if (offlineTrack?.audio) {
       audioRef.current.src = URL.createObjectURL(offlineTrack.audio);
     } else {
-      audioRef.current.src = track.url;
+      audioRef.current.src = track.url || track.audioUrl;
     }
 
     try {
