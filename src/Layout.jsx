@@ -6,10 +6,11 @@ import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
+import GlobalAudioPlayer from '@/components/player/GlobalAudioPlayer';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
-    { name: 'الرئيسية', path: 'Quran', icon: Home },
+    { name: 'الرئيسية', path: 'Home', icon: Home },
     { name: 'التلاوة', path: 'Tilawa', icon: Volume2 },
     { name: 'الخطوط', path: 'Calligraphy', icon: Sparkles },
     { name: 'المقرئين', path: 'Reciters', icon: Mic },
@@ -96,7 +97,17 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       {/* Main Content */}
-      <main>{children}</main>
+      <main className="pb-24">{children}</main>
+
+      {/* Global Audio Player */}
+      <GlobalAudioPlayer 
+        currentSurah={1}
+        currentVerse={1}
+        isPlaying={false}
+        onPlayPause={() => {}}
+        onNext={() => {}}
+        onPrevious={() => {}}
+      />
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
