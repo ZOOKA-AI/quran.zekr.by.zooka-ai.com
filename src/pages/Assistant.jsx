@@ -4,7 +4,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2, Volume2, VolumeX } from 'lucide-react';
+import { Send, Mic, MicOff, MessageSquare, Sparkles, Loader2, Volume2, VolumeX, Menu, X, Settings } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { toast } from 'sonner';
 import MessageBubble from '../components/assistant/MessageBubble';
 
@@ -16,6 +23,7 @@ export default function AssistantPage() {
   const [isSending, setIsSending] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -214,13 +222,120 @@ export default function AssistantPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-800 text-white">
         <div className="max-w-4xl mx-auto px-6 py-12">
+          <div className="flex items-center justify-between mb-6">
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                  <Menu className="w-6 h-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    إعدادات المساعد
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="mt-8 space-y-6">
+                  {/* Auto-speak toggle */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <Volume2 className="w-5 h-5 text-emerald-600" />
+                      إعدادات الصوت
+                    </h3>
+                    <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-lg">
+                      <span className="text-sm text-gray-700">قراءة الردود تلقائياً</span>
+                      <button
+                        onClick={() => setAutoSpeak(!autoSpeak)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          autoSpeak ? 'bg-emerald-600' : 'bg-gray-300'
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            autoSpeak ? 'translate-x-6' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Voice Recognition */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <Mic className="w-5 h-5 text-emerald-600" />
+                      التحكم الصوتي
+                    </h3>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start ${isListening ? 'bg-red-100 border-red-400 text-red-700 animate-pulse' : ''}`}
+                      onClick={() => {
+                        startVoiceRecognition();
+                        setSidebarOpen(false);
+                      }}
+                      disabled={isListening || isSending}
+                    >
+                      {isListening ? <MicOff className="w-5 h-5 ml-2 animate-pulse" /> : <Mic className="w-5 h-5 ml-2" />}
+                      {isListening ? 'جاري الاستماع...' : 'ابدأ التحدث'}
+                    </Button>
+                    {isSpeaking && (
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start bg-amber-50 border-amber-300 text-amber-600"
+                        onClick={() => {
+                          stopSpeaking();
+                          setSidebarOpen(false);
+                        }}
+                      >
+                        <VolumeX className="w-5 h-5 ml-2" />
+                        إيقاف القراءة
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Suggested Questions */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                      <MessageSquare className="w-5 h-5 text-emerald-600" />
+                      أسئلة مقترحة
+                    </h3>
+                    <div className="space-y-2">
+                      {suggestedQuestions.map((question, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setInputMessage(question);
+                            setSidebarOpen(false);
+                          }}
+                          className="w-full p-3 bg-gray-50 hover:bg-emerald-50 rounded-lg text-right text-sm text-gray-700 transition-colors border border-gray-200 hover:border-emerald-300"
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* WhatsApp */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-gray-800">💬 واتساب</h3>
+                    <a href={base44.agents.getWhatsAppConnectURL('quran_assistant')} target="_blank" rel="noopener noreferrer">
+                      <Button className="w-full bg-green-600 hover:bg-green-700">
+                        اتصل عبر واتساب
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <h1 className="text-2xl font-bold">المساعد القرآني</h1>
+            <div className="w-10"></div>
+          </div>
           <div className="text-center">
             <div className="mb-4 flex justify-center">
               <div className="p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
                 <Sparkles className="w-12 h-12 text-amber-300" />
               </div>
             </div>
-            <h1 className="text-4xl font-bold mb-2">المساعد القرآني الذكي</h1>
             <p className="text-emerald-100">اسأل أي سؤال عن القرآن الكريم وسأجيبك بإذن الله</p>
           </div>
         </div>
@@ -272,50 +387,7 @@ export default function AssistantPage() {
 
           {/* Input Area */}
           <div className="border-t-2 border-emerald-100 p-4 bg-gray-50">
-            {/* Auto-speak toggle */}
-            <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
-              <div className="flex items-center gap-2">
-                <Volume2 className="w-4 h-4 text-gray-600" />
-                <span className="text-sm text-gray-700">قراءة الردود تلقائياً</span>
-              </div>
-              <button
-                onClick={() => setAutoSpeak(!autoSpeak)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  autoSpeak ? 'bg-emerald-600' : 'bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    autoSpeak ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
-            </div>
-
             <div className="flex gap-3">
-              <Button
-                variant="outline"
-                size="icon"
-                className={`flex-shrink-0 ${isListening ? 'bg-red-100 border-red-400 text-red-700 animate-pulse' : 'hover:bg-emerald-50 hover:border-emerald-300'}`}
-                onClick={startVoiceRecognition}
-                disabled={isListening || isSending}
-                title={isListening ? '🎤 جاري الاستماع...' : '🎤 اضغط للتحدث'}
-              >
-                {isListening ? <MicOff className="w-5 h-5 animate-pulse" /> : <Mic className="w-5 h-5" />}
-              </Button>
-
-              {isSpeaking && (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="flex-shrink-0 bg-amber-50 border-amber-300 text-amber-600 hover:bg-amber-100"
-                  onClick={stopSpeaking}
-                  title="إيقاف القراءة"
-                >
-                  <VolumeX className="w-5 h-5" />
-                </Button>
-              )}
-              
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
@@ -334,25 +406,12 @@ export default function AssistantPage() {
               </Button>
             </div>
             <p className="text-xs text-gray-500 mt-2 text-center">
-              {isListening && '🎤 جاري الاستماع...'}
-              {isSpeaking && '🔊 جاري القراءة...'}
-              {!isListening && !isSpeaking && 'اضغط على المايكروفون للتحدث أو اكتب سؤالك'}
+              اضغط على القائمة الجانبية للوصول لجميع الميزات 👆
             </p>
           </div>
         </Card>
 
-        {/* WhatsApp Connection */}
-        <div className="mt-6 text-center">
-          <Card className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
-            <h3 className="font-bold text-gray-800 mb-2">💬 استخدم المساعد عبر واتساب</h3>
-            <p className="text-sm text-gray-600 mb-4">تحدث مع المساعد القرآني في أي وقت عبر واتساب</p>
-            <a href={base44.agents.getWhatsAppConnectURL('quran_assistant')} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-green-600 hover:bg-green-700">
-                اتصل عبر واتساب
-              </Button>
-            </a>
-          </Card>
-        </div>
+
       </div>
     </div>
   );
