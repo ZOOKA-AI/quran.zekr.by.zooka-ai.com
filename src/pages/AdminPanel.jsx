@@ -273,6 +273,21 @@ export default function AdminPanel() {
             </div>
           </TabsContent>
 
+          {/* Advanced Stats Tab */}
+          <TabsContent value="advanced">
+            <AdvancedStats />
+          </TabsContent>
+
+          {/* CMS Tab */}
+          <TabsContent value="cms">
+            <CMSManager />
+          </TabsContent>
+
+          {/* Notifications Tab */}
+          <TabsContent value="notifications">
+            <NotificationSender />
+          </TabsContent>
+
           {/* Users Tab */}
           <TabsContent value="users">
             <Card className="bg-slate-800/50 border-slate-700">
