@@ -7,12 +7,14 @@
   NODE_VERSION = "18"
 
 # Redirect /sitemap.xml to the serverless function
+# NOTE: This must come before the SPA fallback to take precedence
 [[redirects]]
   from = "/sitemap.xml"
   to = "/.netlify/functions/sitemap.xml"
   status = 200
 
 # SPA fallback - redirect all other routes to index.html
+# This catches all unmatched routes and serves the React SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"
