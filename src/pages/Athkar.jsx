@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sun, Moon, Bed, RefreshCw, Check, Volume2, VolumeX, Share2, Copy, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 const CATEGORY_MAP = {
   'morning': 'أذكار الصباح',
@@ -302,6 +303,11 @@ export default function Athkar() {
           ))}
         </Tabs>
         )}
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
+          <h2 className="text-2xl font-bold text-cyan-200 mb-6">📺 قنوات الذكر والدعاء</h2>
+          <FeaturedChannels variant="horizontal" limit={6} />
+        </motion.div>
       </div>
     </div>
   );

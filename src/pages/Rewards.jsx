@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Trophy, Star, Award, Crown, Target, TrendingUp, Zap } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { motion } from 'framer-motion';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 const BADGES = [
   { name: 'القارئ المبتدئ', icon: '📖', points: 100, description: 'أول خطوة في رحلة القرآن' },
@@ -222,10 +223,15 @@ export default function RewardsPage() {
                   </motion.div>
                 );
               })}
-            </div>
-          </Card>
-        </motion.div>
-      </div>
-    </div>
-  );
-}
+              </div>
+              </Card>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }} className="mt-8">
+              <h2 className="text-2xl font-bold text-amber-200 mb-6">📺 قنوات تحفيزية إسلامية</h2>
+              <FeaturedChannels variant="horizontal" limit={6} />
+              </motion.div>
+              </div>
+              </div>
+              );
+              }

@@ -11,6 +11,7 @@ import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import AudioManager from '@/components/audio/AudioManager';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return '0:00';
@@ -347,6 +348,11 @@ export default function Ibtihaalat() {
           )}
         </>
         )}
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-12">
+          <h2 className="text-2xl font-bold text-amber-200 mb-6">📺 قنوات الابتهالات والمدائح</h2>
+          <FeaturedChannels variant="horizontal" limit={6} />
+        </motion.div>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import AudioManager from '@/components/audio/AudioManager';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { usePlayer } from '@/components/player/ClassicAudioPlayer';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة' }, { number: 2, name: 'البقرة' }, { number: 3, name: 'آل عمران' },
@@ -333,13 +334,18 @@ export default function Tilawa() {
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-center mt-12">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-center mt-12 mb-12">
             <Link to={createPageUrl('Reciters')}>
               <Button variant="outline" size="lg" className="border-purple-500/50 text-purple-200 hover:bg-purple-500/20 hover:border-purple-400">
                 <Mic className="w-5 h-5 ml-2" />
                 عرض جميع المقرئين
               </Button>
             </Link>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <h2 className="text-2xl font-bold text-purple-200 mb-6">📺 القنوات الإسلامية</h2>
+            <FeaturedChannels variant="horizontal" limit={6} />
           </motion.div>
         </>
         )}

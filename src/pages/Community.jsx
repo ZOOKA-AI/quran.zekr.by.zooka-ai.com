@@ -9,6 +9,7 @@ import { Heart, MessageCircle, Share2, Send, Sparkles, Users, TrendingUp } from 
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/components/AuthProvider';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 export default function CommunityPage() {
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
@@ -235,6 +236,11 @@ export default function CommunityPage() {
             })
           )}
         </div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
+          <h2 className="text-2xl font-bold text-pink-200 mb-6">📺 قنوات إسلامية ملهمة</h2>
+          <FeaturedChannels variant="horizontal" limit={6} />
+        </motion.div>
       </div>
     </div>
   );

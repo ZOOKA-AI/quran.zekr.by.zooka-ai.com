@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/components/AuthProvider';
 import { motion } from 'framer-motion';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 
 export default function Library() {
   const { user, isAuthenticated } = useAuth();
@@ -146,6 +147,11 @@ export default function Library() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-12">
+          <h2 className="text-2xl font-bold text-rose-200 mb-6">📺 قنوات قرآنية مميزة</h2>
+          <FeaturedChannels variant="horizontal" limit={6} />
+        </motion.div>
       </div>
     </div>
   );
