@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, BookMarked, Settings, Mail, Calendar, Edit2, Save, X } from 'lucide-react';
+import { User, BookMarked, Settings, Mail, Calendar, Edit2, Save, X, RefreshCw, Cloud } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
@@ -16,6 +16,7 @@ import IslamicBackground from '@/components/layout/IslamicBackground';
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: user, isLoading: userLoading } = useQuery({
@@ -51,6 +52,22 @@ export default function ProfilePage() {
 
   const handleSave = () => {
     updateUserMutation.mutate({ full_name: editedName });
+  };
+
+  const handleSalesforceSync = async () => {
+    setIsSyncing(true);
+    try {
+      const response = await base44.functions.invoke('syncToSalesforce', {});
+      if (response.data.success) {
+        toast.success('تمت المزامنة مع Salesforce بنجاح! ✓');
+      } else {
+        toast.error('فشلت المزامنة - تحقق من الإعدادات');
+      }
+    } catch (error) {
+      toast.error('خطأ في المزامنة مع Salesforce');
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   if (userLoading) {
@@ -277,6 +294,33 @@ export default function ProfilePage() {
                     <p className="text-sm text-amber-200">
                       إعدادات إضافية ستكون متاحة قريباً بإذن الله
                     </p>
+                  </div>
+
+                  <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <h3 className="font-bold text-blue-300 mb-3 flex items-center gap-2">
+                      <Cloud className="w-5 h-5" />
+                      مزامنة Salesforce CRM
+                    </h3>
+                    <p className="text-sm text-blue-200 mb-4">
+                      مزامنة تقدمك القرآني ونشاطاتك مع نظام Salesforce CRM
+                    </p>
+                    <Button
+                      onClick={handleSalesforceSync}
+                      disabled={isSyncing}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isSyncing ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 ml-2 animate-spin" />
+                          جاري المزامنة...
+                        </>
+                      ) : (
+                        <>
+                          <Cloud className="w-4 h-4 ml-2" />
+                          مزامنة الآن
+                        </>
+                      )}
+                    </Button>
                   </div>
 
                   <div className="pt-4 border-t border-slate-700">

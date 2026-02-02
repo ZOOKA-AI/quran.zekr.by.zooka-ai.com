@@ -53,6 +53,7 @@ import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
 import Community from './pages/Community';
+import DonationSuccess from './pages/DonationSuccess';
 import Ibtihaalat from './pages/Ibtihaalat';
 import Library from './pages/Library';
 import Messages from './pages/Messages';
@@ -70,7 +71,6 @@ import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
-import DonationSuccess from './pages/DonationSuccess';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +81,7 @@ export const PAGES = {
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
     "Community": Community,
+    "DonationSuccess": DonationSuccess,
     "Ibtihaalat": Ibtihaalat,
     "Library": Library,
     "Messages": Messages,
@@ -98,7 +99,6 @@ export const PAGES = {
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
-    "DonationSuccess": DonationSuccess,
 }
 
 export const pagesConfig = {
