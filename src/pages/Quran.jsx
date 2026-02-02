@@ -28,6 +28,9 @@ import DailyContent from '../components/daily/DailyContent';
 import AppLogo from '../components/brand/AppLogo';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
+import DedicationCard from '../components/quran/DedicationCard';
+import DailyVerseCard from '../components/quran/DailyVerseCard';
+import AppFeaturesBanner from '../components/quran/AppFeaturesBanner';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
@@ -276,89 +279,31 @@ export default function QuranPage() {
           </div>
           
           <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
-                <AppLogo size="xl" showTagline={true} />
-              </div>
+            <div className="mb-6">
+              <AppFeaturesBanner />
             </div>
-            <p className="text-3xl font-arabic text-amber-200/90 mb-2">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-            <p className="text-indigo-200 text-lg mb-6">اقرأ واستمع إلى كتاب الله</p>
-            
-            {/* شرح التطبيق */}
-            <Card className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 backdrop-blur-sm border border-emerald-500/30 p-6 max-w-4xl mx-auto text-right">
-              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">🌟 مميزات التطبيق</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">📖</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">القرآن الكريم كاملاً</p>
-                      <p className="text-indigo-200/80">114 سورة مع التفسير والترجمة</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎧</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">تلاوات بأصوات مشاهير القراء</p>
-                      <p className="text-indigo-200/80">الحصري، المنشاوي، العفاسي وغيرهم</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">📻</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">إذاعات القرآن الكريم</p>
-                      <p className="text-indigo-200/80">بث مباشر على مدار الساعة</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🤲</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">الأذكار والأدعية</p>
-                      <p className="text-indigo-200/80">أذكار الصباح والمساء والنوم</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎵</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">الابتهالات والتواشيح</p>
-                      <p className="text-indigo-200/80">نخبة من أجمل الابتهالات الدينية</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🕌</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">أصوات المؤذنين</p>
-                      <p className="text-indigo-200/80">أجمل أصوات الأذان من الحرمين</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🌙</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">محتوى رمضان</p>
-                      <p className="text-indigo-200/80">أدعية وبرامج خاصة بالشهر الكريم</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">💝</span>
-                    <div>
-                      <p className="font-bold text-emerald-300">كفالة الأيتام</p>
-                      <p className="text-indigo-200/80">صفحة خاصة للتبرع والصدقة</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-emerald-500/30 text-center">
-                <p className="text-amber-200 font-bold">🤲 صدقة جارية لوجه الله تعالى - مجاني بالكامل</p>
-                <p className="text-indigo-300/80 text-xs mt-2">من إنتاج Royal Haroon Cleaning FZ-LLC 🇦🇪</p>
-              </div>
-            </Card>
+            <h1 className="text-5xl md:text-6xl font-bold mb-3 text-white drop-shadow-lg">القرآن الكريم</h1>
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 max-w-2xl mx-auto shadow-lg">
+              <p className="text-2xl text-gray-900 mb-2 font-arabic font-bold">
+                ﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾
+              </p>
+              <p className="text-gray-800 text-lg font-bold">المصحف الإلكتروني 🕌</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* بطاقة الصدقة الجارية */}
+        <div className="mb-6">
+          <DedicationCard />
+        </div>
+
+        {/* آية اليوم */}
+        <div className="mb-6">
+          <DailyVerseCard />
+        </div>
+
         {/* مواقيت الصلاة والطقس */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-amber-100 mb-6">🕌 مواقيت الصلاة والطقس</h2>
