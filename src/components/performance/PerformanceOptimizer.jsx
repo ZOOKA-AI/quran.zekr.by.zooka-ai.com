@@ -19,8 +19,15 @@ export default function PerformanceOptimizer({ children }) {
   useEffect(() => {
     // تنظيف الذاكرة المؤقتة كل ساعة
     const cleanup = setInterval(() => {
-      cacheUtils.clear();
-      loggerUtils.info('Cache cleared');
+      if ('localStorage' in window) {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('cache_')) {
+            localStorage.removeItem(key);
+          }
+        });
+        console.log('[CACHE] Cleared old cache entries');
+      }
     }, 60 * 60 * 1000);
 
     return () => clearInterval(cleanup);
