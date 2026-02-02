@@ -280,20 +280,20 @@ export default function RecitersPage() {
                      </div>
 
                      <ShareButton
-                       entityType="Reciter"
-                       entityId={reciter.id}
-                       title={reciter.name_arabic}
-                       imageUrl={reciter.image_url}
-                       variant="outline"
-                       size="sm"
-                     />
-                    </div>
-                    </Card>
-                    </motion.div>
-            );
-          })}
-        </div>
-        )}
+                        entityType="Reciter"
+                        entityId={reciter.id}
+                        title={reciter.name_arabic}
+                        imageUrl={reciter.image_url}
+                        variant="outline"
+                        size="sm"
+                      />
+                     </div>
+                     </Card>
+                     </motion.div>
+                     );
+                     })}
+                     </div>
+                     )}
 
         {!isLoading && filteredReciters.length === 0 && (
           <div className="text-center py-16">
