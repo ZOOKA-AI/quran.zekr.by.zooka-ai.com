@@ -1,6 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
-import { performanceUtils, cacheUtils, loggerUtils } from '@/utils';
+import React, { useEffect } from 'react';
 
 export default function PerformanceOptimizer({ children }) {
   useEffect(() => {
