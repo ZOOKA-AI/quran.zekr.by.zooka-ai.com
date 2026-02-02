@@ -180,23 +180,33 @@ export default function SurahView() {
       {/* الرأس */}
       <div className="relative text-white pt-8">
         <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <Link to={createPageUrl('Quran')}>
-              <Button variant="ghost" className="text-amber-200 hover:bg-white/10 border border-amber-500/20">
-                <ArrowRight className="w-5 h-5 ml-2" />
-                العودة للقائمة
-              </Button>
-            </Link>
-            <Button
-              size="icon"
-              className="rounded-full bg-amber-600 hover:bg-amber-700"
-              onClick={runOptimization}
-              disabled={isOptimizing}
-              title="تحسين الأداء (Ctrl+Space)"
-            >
-              <Zap className={`w-5 h-5 ${isOptimizing ? 'animate-spin' : ''}`} />
-            </Button>
-          </div>
+          <div className="flex items-center justify-between mb-6 gap-3">
+             <Link to={createPageUrl('Quran')}>
+               <Button variant="ghost" className="text-amber-200 hover:bg-white/10 border border-amber-500/20">
+                 <ArrowRight className="w-5 h-5 ml-2" />
+                 العودة للقائمة
+               </Button>
+             </Link>
+             <div className="flex gap-2">
+               <ShareButton
+                 entityType="Surah"
+                 entityId={`surah-${surahNumber}`}
+                 title={`سورة رقم ${surahNumber}`}
+                 variant="outline"
+                 size="icon"
+                 showLabel={false}
+               />
+               <Button
+                 size="icon"
+                 className="rounded-full bg-amber-600 hover:bg-amber-700"
+                 onClick={runOptimization}
+                 disabled={isOptimizing}
+                 title="تحسين الأداء (Ctrl+Space)"
+               >
+                 <Zap className={`w-5 h-5 ${isOptimizing ? 'animate-spin' : ''}`} />
+               </Button>
+             </div>
+           </div>
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-3 text-amber-100">سورة رقم {surahNumber}</h1>
             <p className="text-xl text-indigo-200 font-arabic">﴿ اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ ﴾</p>
