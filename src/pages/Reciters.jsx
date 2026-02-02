@@ -169,8 +169,13 @@ export default function RecitersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredReciters.map(reciter => {
             return (
-              <Card 
+              <motion.div
                 key={reciter.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+              <Card 
                 className="bg-slate-900/60 backdrop-blur-xl border-amber-500/20 hover:border-amber-400/40 transition-all hover:-translate-y-2 hover:shadow-2xl"
               >
                 <div className="h-56 bg-gradient-to-br from-amber-900/40 to-emerald-900/30 relative overflow-hidden group">
