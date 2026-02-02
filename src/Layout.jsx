@@ -13,6 +13,7 @@ import GlobalQuranPlayer from '@/components/player/GlobalQuranPlayer';
 import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
 import { Button } from '@/components/ui/button';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
