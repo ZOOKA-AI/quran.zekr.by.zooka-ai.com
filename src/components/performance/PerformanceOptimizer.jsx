@@ -1,50 +1,41 @@
-import React, { useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
-import { performanceUtils, cacheUtils, loggerUtils } from '@/utils';
+import React, { useEffect } from 'react';
 
 export default function PerformanceOptimizer({ children }) {
   useEffect(() => {
     // مراقبة الأداء
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (entry.duration > 3000) {
-          loggerUtils.warn('Slow operation detected', {
-            name: entry.name,
-            duration: entry.duration
-          });
+    if ('PerformanceObserver' in window) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.duration > 3000) {
+            console.warn('[PERF] Slow operation:', entry.name, `${entry.duration.toFixed(2)}ms`);
+          }
         }
+      });
+
+      try {
+        observer.observe({ entryTypes: ['measure', 'navigation'] });
+        return () => observer.disconnect();
+      } catch (e) {
+        console.warn('PerformanceObserver not fully supported');
       }
-    });
-
-    observer.observe({ entryTypes: ['measure', 'navigation'] });
-
-    return () => observer.disconnect();
+    }
   }, []);
 
   useEffect(() => {
-    // تنظيف الذاكرة المؤقتة كل ساعة
+    // تنظيف الذاكرة كل ساعة
     const cleanup = setInterval(() => {
-      cacheUtils.clear();
-      loggerUtils.info('Cache cleared');
+      if ('localStorage' in window) {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('cache_')) {
+            localStorage.removeItem(key);
+          }
+        });
+        console.log('[CACHE] Cleared old cache entries');
+      }
     }, 60 * 60 * 1000);
 
     return () => clearInterval(cleanup);
-  }, []);
-
-  useEffect(() => {
-    // تقرير الأداء
-    const reportWebVitals = async () => {
-      if ('web-vital' in window) {
-        const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
-        getCLS(metric => loggerUtils.info('CLS', metric));
-        getFID(metric => loggerUtils.info('FID', metric));
-        getFCP(metric => loggerUtils.info('FCP', metric));
-        getLCP(metric => loggerUtils.info('LCP', metric));
-        getTTFB(metric => loggerUtils.info('TTFB', metric));
-      }
-    };
-
-    reportWebVitals();
   }, []);
 
   return <>{children}</>;
