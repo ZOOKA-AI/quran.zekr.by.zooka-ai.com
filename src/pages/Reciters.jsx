@@ -288,7 +288,8 @@ export default function RecitersPage() {
                       size="sm"
                     />
                   </div>
-                </Card>
+                </div>
+              </Card>
               </motion.div>
             );
           })}
