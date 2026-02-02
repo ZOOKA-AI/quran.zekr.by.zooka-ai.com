@@ -22,6 +22,8 @@ import QuickNavigation from '../components/home/QuickNavigation';
 import FeaturedChannels from '@/components/channels/FeaturedChannels';
 import FeaturedSurahs from '../components/home/FeaturedSurahs';
 import AppSettingsPanel from '../components/settings/AppSettingsPanel';
+import AdvancedSettingsPanel from '../components/settings/AdvancedSettingsPanel';
+import PerformanceMonitor from '../components/settings/PerformanceMonitor';
 import QuranStats from '../components/quran/QuranStats';
 
 const SURAHS = [
@@ -381,8 +383,19 @@ export default function QuranPage() {
             </TabsContent>
 
             {/* تبويب الإعدادات */}
-            <TabsContent value="settings" className="mt-8">
+            <TabsContent value="settings" className="mt-8 space-y-8">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <h2 className="text-2xl font-bold text-indigo-100 mb-6">مراقبة الأداء</h2>
+                <PerformanceMonitor />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                <h2 className="text-2xl font-bold text-indigo-100 mb-6">الإعدادات المتقدمة</h2>
+                <AdvancedSettingsPanel />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                <h2 className="text-2xl font-bold text-indigo-100 mb-6">إعدادات التطبيق</h2>
                 <AppSettingsPanel />
               </motion.div>
             </TabsContent>
