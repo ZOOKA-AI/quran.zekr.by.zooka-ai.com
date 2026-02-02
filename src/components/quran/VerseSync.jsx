@@ -6,8 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { ScrollText, ChevronUp, ChevronDown, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TajweedText from './TajweedText';
 
-const VerseSync = ({ surahNumber, currentTime, isPlaying, onVerseClick }) => {
+const VerseSync = ({ surahNumber, currentTime, isPlaying, onVerseClick, tajweedEnabled = true }) => {
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
   const [autoScroll, setAutoScroll] = useState(true);
   const currentVerseRef = useRef(null);
@@ -116,7 +117,7 @@ const VerseSync = ({ surahNumber, currentTime, isPlaying, onVerseClick }) => {
             >
               <p className="text-right text-lg font-arabic leading-loose text-gray-600 p-3 bg-gray-50 rounded-lg">
                 <span className="text-emerald-600 text-sm ml-2">﴿{prevVerse.verse_number}﴾</span>
-                {prevVerse.arabic_text}
+                <TajweedText text={prevVerse.arabic_text} enabled={tajweedEnabled} />
               </p>
             </motion.div>
           )}
@@ -144,7 +145,10 @@ const VerseSync = ({ surahNumber, currentTime, isPlaying, onVerseClick }) => {
               </Badge>
             </div>
             <p className="text-right text-2xl md:text-3xl font-arabic leading-loose text-gray-900">
-              {currentVerse?.arabic_text || 'جاري التحميل...'}
+              <TajweedText 
+                text={currentVerse?.arabic_text || 'جاري التحميل...'} 
+                enabled={tajweedEnabled}
+              />
               <span className="text-emerald-600 text-lg mr-2">﴿{currentVerse?.verse_number}﴾</span>
             </p>
             {currentVerse?.transliteration && (
@@ -172,7 +176,7 @@ const VerseSync = ({ surahNumber, currentTime, isPlaying, onVerseClick }) => {
             >
               <p className="text-right text-lg font-arabic leading-loose text-gray-600 p-3 bg-gray-50 rounded-lg">
                 <span className="text-emerald-600 text-sm ml-2">﴿{nextVerse.verse_number}﴾</span>
-                {nextVerse.arabic_text}
+                <TajweedText text={nextVerse.arabic_text} enabled={tajweedEnabled} />
               </p>
             </motion.div>
           )}
