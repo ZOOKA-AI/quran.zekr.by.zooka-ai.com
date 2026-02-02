@@ -13,10 +13,14 @@ import {
 } from '@/components/ui/dialog';
 
 const TAFSIR_EDITIONS = [
-  { id: 'ar.muyassar', name: 'التفسير الميسر', language: 'ar' },
-  { id: 'ar.jalalayn', name: 'تفسير الجلالين', language: 'ar' },
-  { id: 'en.sahih', name: 'Sahih International', language: 'en' },
-  { id: 'en.pickthall', name: 'Pickthall', language: 'en' },
+  { id: 'ar.muyassar', name: 'التفسير الميسر', language: 'ar', color: 'emerald' },
+  { id: 'ar.jalalayn', name: 'تفسير الجلالين', language: 'ar', color: 'amber' },
+  { id: 'ar.kathir', name: 'تفسير ابن كثير', language: 'ar', color: 'blue' },
+  { id: 'ar.tabari', name: 'تفسير الطبري', language: 'ar', color: 'purple' },
+  { id: 'ar.saadi', name: 'تفسير السعدي', language: 'ar', color: 'rose' },
+  { id: 'ar.qurtubi', name: 'تفسير القرطبي', language: 'ar', color: 'orange' },
+  { id: 'ar.baghawi', name: 'تفسير البغوي', language: 'ar', color: 'teal' },
+  { id: 'en.sahih', name: 'Sahih International', language: 'en', color: 'indigo' },
 ];
 
 export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose }) {
@@ -127,17 +131,27 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
 
           {/* Tafsir Selection */}
           <Tabs value={selectedEdition} onValueChange={setSelectedEdition} dir="rtl">
-            <TabsList className="grid grid-cols-4 bg-slate-800/50">
-              {TAFSIR_EDITIONS.map(edition => (
-                <TabsTrigger
-                  key={edition.id}
-                  value={edition.id}
-                  className="text-xs data-[state=active]:bg-amber-600 data-[state=active]:text-white"
-                >
-                  {edition.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="mb-4">
+              <p className="text-amber-200 text-sm mb-3">اختر التفسير:</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {TAFSIR_EDITIONS.map(edition => (
+                  <Button
+                    key={edition.id}
+                    variant={selectedEdition === edition.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedEdition(edition.id)}
+                    className={`text-xs ${
+                      selectedEdition === edition.id 
+                        ? `bg-${edition.color}-600 hover:bg-${edition.color}-700 text-white` 
+                        : `border-${edition.color}-500/50 text-${edition.color}-300 hover:bg-${edition.color}-900/30`
+                    }`}
+                  >
+                    {edition.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <TabsList className="hidden">
 
             {TAFSIR_EDITIONS.map(edition => (
               <TabsContent key={edition.id} value={edition.id} className="mt-4">

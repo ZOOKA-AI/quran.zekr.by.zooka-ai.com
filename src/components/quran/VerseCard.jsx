@@ -11,6 +11,7 @@ import RelatedVersesDialog from './RelatedVersesDialog';
 import CompareTafsirDialog from './CompareTafsirDialog';
 import VerseAudioPlayer from './VerseAudioPlayer';
 import TafsirViewer from './TafsirViewer';
+import TafsirSelector from './TafsirSelector';
 
 const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [copied, setCopied] = useState(false);
@@ -200,10 +201,16 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
 
         {/* Tabs for Translations and Tafsir */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 mb-4">
+          <TabsList className="grid w-full grid-cols-5 mb-4">
             <TabsTrigger value="arabic">عربي</TabsTrigger>
             <TabsTrigger value="translations">الترجمات</TabsTrigger>
-            <TabsTrigger value="tafsir">التفسير</TabsTrigger>
+            <TabsTrigger value="tafsir" className="relative">
+              التفسير
+              {(verse.tafsir_saadi || verse.tafsir_kathir || verse.tafsir_tabari) && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full"></span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="all-tafsir">كل التفاسير</TabsTrigger>
             <TabsTrigger value="info">معلومات</TabsTrigger>
           </TabsList>
 
@@ -243,17 +250,59 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
 
           <TabsContent value="tafsir" className="space-y-4">
             {verse.tafsir_saadi && (
-              <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
-                <p className="text-sm font-semibold text-amber-800 mb-2">تفسير السعدي</p>
-                <p className="text-gray-700 leading-relaxed">{verse.tafsir_saadi}</p>
+              <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg border border-amber-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center">
+                    <BookMarked className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-sm font-bold text-amber-800">تفسير السعدي</p>
+                </div>
+                <p className="text-gray-700 leading-loose text-right font-arabic">{verse.tafsir_saadi}</p>
               </div>
             )}
             {verse.tafsir_kathir && (
-              <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
-                <p className="text-sm font-semibold text-emerald-800 mb-2">تفسير ابن كثير</p>
-                <p className="text-gray-700 leading-relaxed">{verse.tafsir_kathir}</p>
+              <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                    <BookMarked className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-sm font-bold text-blue-800">تفسير ابن كثير</p>
+                </div>
+                <p className="text-gray-700 leading-loose text-right font-arabic">{verse.tafsir_kathir}</p>
               </div>
             )}
+            {verse.tafsir_tabari && (
+              <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg border border-purple-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+                    <BookMarked className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-sm font-bold text-purple-800">تفسير الطبري</p>
+                </div>
+                <p className="text-gray-700 leading-loose text-right font-arabic">{verse.tafsir_tabari}</p>
+              </div>
+            )}
+            {!verse.tafsir_saadi && !verse.tafsir_kathir && !verse.tafsir_tabari && (
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <BookMarked className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                <p className="text-gray-500 mb-4">لا يوجد تفسير محفوظ لهذه الآية</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowTafsirViewer(true)}
+                  className="border-indigo-300 text-indigo-600 hover:bg-indigo-50"
+                >
+                  جلب التفسير من الإنترنت
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="all-tafsir">
+            <TafsirSelector 
+              verse={verse} 
+              onSelectTafsir={() => setShowTafsirViewer(true)} 
+            />
           </TabsContent>
 
           <TabsContent value="info">
