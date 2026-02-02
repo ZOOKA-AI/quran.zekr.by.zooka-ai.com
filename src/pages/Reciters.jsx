@@ -99,8 +99,7 @@ export default function RecitersPage() {
             <p className="text-xl text-indigo-200 font-arabic">﴿ الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ ﴾</p>
             <p className="text-slate-300 mt-2">استكشف أشهر قراء القرآن الكريم</p>
           </div>
-        </div>
-      </div>
+          </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* قسم الشيخ الشعراوي */}
