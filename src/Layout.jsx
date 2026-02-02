@@ -12,6 +12,7 @@ import { GlobalQuranPlayerProvider } from '@/components/player/GlobalQuranPlayer
 import GlobalQuranPlayer from '@/components/player/GlobalQuranPlayer';
 import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
+import AutoRefreshButton from '@/components/controls/AutoRefreshButton';
 import { Button } from '@/components/ui/button';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -240,6 +241,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Floating Audio Control */}
       <FloatingAudioControl />
+
+      {/* Auto Refresh Button */}
+      <AutoRefreshButton />
 
       {/* Global Quran Player */}
       <GlobalQuranPlayer />
