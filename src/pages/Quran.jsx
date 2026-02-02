@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles } from 'lucide-react';
+import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -44,12 +46,21 @@ export default function QuranPage() {
   const [activeTab, setActiveTab] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const { data: dbSurahs = [] } = useQuery({
+    queryKey: ['surahs'],
+    queryFn: async () => {
+      return await base44.entities.Surah.list();
+    }
+  });
+
+  const allSurahs = dbSurahs.length > 0 ? dbSurahs : SURAHS;
+
   const filteredSurahs = searchQuery
-    ? SURAHS.filter(s => 
-        s.name.includes(searchQuery) || 
+    ? allSurahs.filter(s => 
+        (s.name || s.name_arabic || '').includes(searchQuery) || 
         s.number.toString().includes(searchQuery)
       )
-    : SURAHS;
+    : allSurahs;
 
   return (
     <div className="min-h-screen relative pb-32" dir="rtl">
@@ -155,57 +166,200 @@ export default function QuranPage() {
             </TabsContent>
 
             {/* تبويب السور */}
-            <TabsContent value="surahs" className="space-y-6 mt-8">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="relative max-w-2xl mx-auto mb-8">
-                  <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
-                  <Input
-                    placeholder="ابحث عن سورة برقمها أو اسمها..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pr-12 py-6 text-lg bg-slate-900/60 backdrop-blur-xl border-amber-500/30 text-white placeholder:text-white/50"
-                  />
-                </div>
-              </motion.div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredSurahs.map((surah, index) => (
-                  <motion.div
-                    key={surah.number}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.03 }}
-                  >
-                    <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
-                      <Card className="bg-slate-900/60 backdrop-blur-xl hover:bg-slate-800/70 transition-all cursor-pointer p-5 border-amber-500/20 group">
-                        <div className="flex items-center gap-4">
-                          <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-xl">
-                            {surah.number}
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-white font-bold text-lg mb-1">{surah.name}</p>
-                            <p className="text-emerald-300/80 text-sm">
-                              {surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}
-                            </p>
-                          </div>
-                          <Button
-                            size="icon"
-                            className="bg-amber-500 hover:bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                          >
-                            <Play className="w-5 h-5" />
-                          </Button>
-                        </div>
-                      </Card>
-                    </Link>
+            <TabsContent value="surahs" className="mt-8">
+              {!searchQuery ? (
+                <div className="space-y-12">
+                  {/* بدء الاستماع */}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                    <h2 className="text-2xl font-bold text-amber-100 mb-6">بدء الاستماع</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {allSurahs.slice(0, 4).map((surah, index) => (
+                        <motion.div
+                          key={surah.number}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                            <Card className="bg-slate-800/50 hover:bg-slate-700/50 border-slate-700/50 backdrop-blur-xl transition-all p-4 group cursor-pointer">
+                              <div className="flex items-center gap-4">
+                                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl shadow-xl">
+                                  {surah.number}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-white font-bold text-lg truncate mb-1">{surah.name}</p>
+                                  <p className="text-amber-300/80 text-sm">{surah.verses_count} آية</p>
+                                </div>
+                                <Button
+                                  size="icon"
+                                  className="bg-amber-500 hover:bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Play className="w-5 h-5" />
+                                </Button>
+                              </div>
+                            </Card>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
                   </motion.div>
-                ))}
-              </div>
 
-              {filteredSurahs.length === 0 && (
-                <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-amber-500/20">
-                  <BookOpen className="w-20 h-20 text-amber-400/50 mx-auto mb-4" />
-                  <p className="text-white text-lg">لم يتم العثور على نتائج</p>
-                </Card>
+                  {/* ابدأ مع تلك السور */}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-2xl font-bold text-amber-100">ابدأ مع تلك السور</h2>
+                      <Button variant="ghost" className="text-amber-300 hover:text-white">
+                        المزيد
+                        <ChevronLeft className="w-4 h-4 mr-2" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {[0, 1, 17, 35, 54, 66, 111, 112].map((index, idx) => {
+                        const surah = allSurahs[index];
+                        return surah ? (
+                          <motion.div
+                            key={surah.number}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.05 }}
+                          >
+                            <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                              <Card className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 hover:from-slate-700/60 hover:to-slate-800/60 border-slate-700/50 transition-all overflow-hidden group p-0">
+                                <div className="aspect-square bg-gradient-to-br from-amber-600 to-orange-700 flex flex-col items-center justify-center text-white p-4 relative overflow-hidden">
+                                  <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity" />
+                                  <div className="text-5xl font-bold mb-2 z-10">{surah.number}</div>
+                                  <div className="text-center z-10">
+                                    <p className="font-bold text-sm mb-1">{surah.name}</p>
+                                    <p className="text-xs opacity-80">{surah.verses_count} آية</p>
+                                  </div>
+                                </div>
+                              </Card>
+                            </Link>
+                          </motion.div>
+                        ) : null;
+                      })}
+                    </div>
+                  </motion.div>
+
+                  {/* توصيتنا لك اليوم */}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                    <h2 className="text-2xl font-bold text-amber-100 mb-6">توصيتنا لك اليوم</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {allSurahs.slice(0, 2).map((surah, index) => (
+                        <motion.div
+                          key={surah.number}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                            <Card className="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 hover:from-purple-800/60 hover:to-indigo-800/60 border-purple-500/20 backdrop-blur-xl transition-all overflow-hidden cursor-pointer">
+                              <div className="aspect-video bg-gradient-to-br from-purple-600 to-indigo-700 flex flex-col items-center justify-center p-6 relative overflow-hidden group">
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-white transition-opacity" />
+                                <div className="z-10 text-center">
+                                  <div className="text-6xl font-bold text-white mb-3">{surah.number}</div>
+                                  <p className="text-2xl font-bold text-white mb-2">{surah.name}</p>
+                                  <p className="text-amber-200">{surah.verses_count} آية</p>
+                                </div>
+                              </div>
+                            </Card>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* مكتبتك الصوتية */}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                    <h2 className="text-2xl font-bold text-amber-100 mb-6">مكتبتك الصوتية</h2>
+                    <div className="space-y-1 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-amber-500/30 scrollbar-track-slate-900/50">
+                      {allSurahs.map((surah, index) => (
+                        <motion.div
+                          key={surah.number}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: index * 0.01 }}
+                        >
+                          <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                            <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800/50 transition-all group cursor-pointer">
+                              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0">
+                                {surah.number}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white font-medium truncate">{surah.name}</p>
+                                <p className="text-amber-300/60 text-sm">{surah.verses_count} آية</p>
+                              </div>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="opacity-0 group-hover:opacity-100 transition-opacity text-amber-400 hover:text-amber-300"
+                              >
+                                <Play className="w-5 h-5" />
+                              </Button>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              ) : (
+                /* نتائج البحث */
+                <div>
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+                    <div className="relative mb-8">
+                      <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
+                      <Input
+                        placeholder="ابحث عن سورة برقمها أو اسمها..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoFocus
+                        className="pr-12 py-6 text-lg bg-slate-900/60 backdrop-blur-xl border-amber-500/30 text-white placeholder:text-white/50"
+                      />
+                    </div>
+                    <p className="text-amber-200 mb-6">نتائج البحث ({filteredSurahs.length})</p>
+                  </motion.div>
+
+                  {filteredSurahs.length > 0 ? (
+                    <div className="space-y-2">
+                      {filteredSurahs.map((surah, index) => (
+                        <motion.div
+                          key={surah.number}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                            <Card className="bg-slate-800/30 hover:bg-slate-700/50 border-slate-700/50 transition-all p-4 group cursor-pointer">
+                              <div className="flex items-center gap-4">
+                                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                                  {surah.number}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-white font-bold text-lg truncate mb-1">{surah.name}</p>
+                                  <p className="text-amber-300/80 text-sm">
+                                    {surah.verses_count} آية • {surah.revelation_type === 'مكية' ? 'مكية' : 'مدنية'}
+                                  </p>
+                                </div>
+                                <Button
+                                  size="icon"
+                                  className="bg-amber-500 hover:bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Play className="w-5 h-5" />
+                                </Button>
+                              </div>
+                            </Card>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-amber-500/20">
+                      <BookOpen className="w-20 h-20 text-amber-400/50 mx-auto mb-4" />
+                      <p className="text-white text-lg">لم يتم العثور على نتائج</p>
+                    </Card>
+                  )}
+                </div>
               )}
             </TabsContent>
 
