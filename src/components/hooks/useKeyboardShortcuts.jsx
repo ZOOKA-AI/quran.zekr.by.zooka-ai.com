@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { keyboardShortcuts } from '@/utils';
+import { keyboardShortcuts } from '@/components/utils/keyboardShortcuts';
 
 export function useKeyboardShortcuts() {
   useEffect(() => {
