@@ -38,10 +38,7 @@ export default function PerformanceOptimizer({ children }) {
     if ('PerformanceObserver' in window) {
       const perfObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          loggerUtils.info(`Performance: ${entry.name}`, {
-            duration: entry.duration,
-            startTime: entry.startTime
-          });
+          console.log('[PERF]', entry.name, `${entry.duration.toFixed(2)}ms`);
         }
       });
 
