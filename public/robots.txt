@@ -1,0 +1,6 @@
+# Robots.txt for Quran App
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://quran.zekr.by.zooka-ai.com/sitemap.xml
