@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus } from 'lucide-react';
+import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus, Zap } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
+import { useKeyboardShortcuts } from '@/components/hooks/useKeyboardShortcuts';
+import { performanceUtils, cacheUtils, loggerUtils } from '@/utils';
+import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -22,8 +26,6 @@ import QuickNavigation from '../components/home/QuickNavigation';
 import FeaturedChannels from '@/components/channels/FeaturedChannels';
 import FeaturedSurahs from '../components/home/FeaturedSurahs';
 import AppSettingsPanel from '../components/settings/AppSettingsPanel';
-import AdvancedSettingsPanel from '../components/settings/AdvancedSettingsPanel';
-import PerformanceMonitor from '../components/settings/PerformanceMonitor';
 import QuranStats from '../components/quran/QuranStats';
 
 const SURAHS = [
@@ -47,13 +49,38 @@ export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const shortcuts = useKeyboardShortcuts();
 
-  const { data: dbSurahs = [] } = useQuery({
-    queryKey: ['surahs'],
-    queryFn: async () => {
+  // استدعاء محسّن مع الذاكرة المؤقتة
+  const { data: dbSurahs = [], isLoading: surahsLoading } = useOptimizedQuery(
+    ['surahs-list'],
+    async () => {
       return await base44.entities.Surah.list();
+    },
+    { staleTime: 10 * 60 * 1000 }
+  );
+
+  // مراقبة الأداء
+  useEffect(() => {
+    loggerUtils.info('Quran page loaded', { surahs_count: dbSurahs.length });
+  }, [dbSurahs.length]);
+
+  // تحسين تلقائي
+  const runOptimization = async () => {
+    setIsOptimizing(true);
+    try {
+      const { result } = await performanceUtils.measureAsync(
+        () => base44.functions.invoke('dailySystemOptimization', {}),
+        'System optimization'
+      );
+      loggerUtils.info('Optimization completed', result);
+    } catch (error) {
+      loggerUtils.error('Optimization failed', error);
+    } finally {
+      setIsOptimizing(false);
     }
-  });
+  };
 
   const allSurahs = dbSurahs.length > 0 ? dbSurahs : SURAHS;
 
@@ -65,6 +92,7 @@ export default function QuranPage() {
     : allSurahs;
 
   return (
+    <PerformanceOptimizer>
     <div className="min-h-screen relative pb-32" dir="rtl">
       {/* خلفية روحانية */}
       <div className="fixed inset-0 z-0">
@@ -99,12 +127,22 @@ export default function QuranPage() {
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
                 <Input
-                  placeholder="ابحث عن سورة..."
+                  placeholder="ابحث عن سورة... (اضغط Ctrl+F)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  data-search
                   className="pr-12 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-400 focus:bg-slate-800"
                 />
               </div>
+              <Button 
+                size="icon" 
+                className="rounded-full bg-slate-800 hover:bg-slate-700"
+                onClick={runOptimization}
+                disabled={isOptimizing}
+                title="تحسين الأداء"
+              >
+                <Zap className={`w-5 h-5 ${isOptimizing ? 'animate-spin' : ''}`} />
+              </Button>
               <Button size="icon" className="rounded-full bg-slate-800 hover:bg-slate-700">
                 <Filter className="w-5 h-5" />
               </Button>
@@ -383,19 +421,8 @@ export default function QuranPage() {
             </TabsContent>
 
             {/* تبويب الإعدادات */}
-            <TabsContent value="settings" className="mt-8 space-y-8">
+            <TabsContent value="settings" className="mt-8">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <h2 className="text-2xl font-bold text-indigo-100 mb-6">مراقبة الأداء</h2>
-                <PerformanceMonitor />
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-                <h2 className="text-2xl font-bold text-indigo-100 mb-6">الإعدادات المتقدمة</h2>
-                <AdvancedSettingsPanel />
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                <h2 className="text-2xl font-bold text-indigo-100 mb-6">إعدادات التطبيق</h2>
                 <AppSettingsPanel />
               </motion.div>
             </TabsContent>
@@ -403,5 +430,6 @@ export default function QuranPage() {
         </div>
       </div>
     </div>
+    </PerformanceOptimizer>
   );
 }
