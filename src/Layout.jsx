@@ -8,6 +8,8 @@ import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import ClassicAudioPlayer, { PlayerProvider } from '@/components/player/ClassicAudioPlayer';
 import FloatingAudioControl from '@/components/controls/FloatingAudioControl';
+import { GlobalQuranPlayerProvider } from '@/components/player/GlobalQuranPlayerContext';
+import GlobalQuranPlayer from '@/components/player/GlobalQuranPlayer';
 import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
 import { Button } from '@/components/ui/button';
@@ -47,6 +49,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <AuthProvider>
+      <GlobalQuranPlayerProvider>
       <PlayerProvider>
       <div className="min-h-screen relative overflow-hidden" dir="rtl">
       {/* Spiritual Background */}
@@ -235,6 +238,9 @@ export default function Layout({ children, currentPageName }) {
       {/* Floating Audio Control */}
       <FloatingAudioControl />
 
+      {/* Global Quran Player */}
+      <GlobalQuranPlayer />
+
       {/* Footer */}
       <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
         <div className="max-w-7xl mx-auto px-6 py-12">
@@ -348,6 +354,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
       </div>
       </PlayerProvider>
+      </GlobalQuranPlayerProvider>
     </AuthProvider>
   );
 }
