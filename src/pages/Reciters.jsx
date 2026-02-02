@@ -258,21 +258,29 @@ export default function RecitersPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-500 text-sm">{reciter.birth_year || ''}</span>
-                      <div className="flex gap-2">
-                        {reciter.recitation_style && (
-                          <Badge variant="outline" className="border-amber-500/50 text-amber-300">
-                            {reciter.recitation_style}
-                          </Badge>
-                        )}
-                        {reciter.is_featured && (
-                          <Badge className="bg-amber-500 text-slate-900 hover:bg-amber-400">
-                            مميز
-                          </Badge>
-                        )}
-                      </div>
-                      </div>
-                    </div>
+                       <span className="text-slate-500 text-sm">{reciter.birth_year || ''}</span>
+                       <div className="flex gap-2">
+                         {reciter.recitation_style && (
+                           <Badge variant="outline" className="border-amber-500/50 text-amber-300">
+                             {reciter.recitation_style}
+                           </Badge>
+                         )}
+                         {reciter.is_featured && (
+                           <Badge className="bg-amber-500 text-slate-900 hover:bg-amber-400">
+                             مميز
+                           </Badge>
+                         )}
+                       </div>
+                     </div>
+
+                     <ShareButton
+                       entityType="Reciter"
+                       entityId={reciter.id}
+                       title={reciter.name_arabic}
+                       imageUrl={reciter.image_url}
+                       variant="outline"
+                       size="sm"
+                     />
                   </div>
                 </Card>
             );
