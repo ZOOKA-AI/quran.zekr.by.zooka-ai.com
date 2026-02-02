@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, Share2, Music, User, Search, Shuffle, Repeat, Download, Loader2 } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, Share2, Music, Search, Shuffle, Repeat, Loader2, AudioLines } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 import AudioManager from '@/components/audio/AudioManager';
 
 const formatTime = (seconds) => {
@@ -26,7 +27,6 @@ export default function Ibtihaalat() {
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMubtahil, setSelectedMubtahil] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [favorites, setFavorites] = useState([]);
   const [isRepeat, setIsRepeat] = useState(false);
@@ -34,30 +34,18 @@ export default function Ibtihaalat() {
   
   const audioRef = useRef(null);
 
-  // جلب المبتهلين من قاعدة البيانات
-  const { data: mubtahileen = [], isLoading: loadingMubtahileen } = useQuery({
-    queryKey: ['mubtahileen'],
-    queryFn: () => base44.entities.Mubtahil.list('-total_plays'),
-  });
-
-  // جلب الابتهالات من قاعدة البيانات
-  const { data: ibtihaalat = [], isLoading: loadingIbtihaalat } = useQuery({
+  const { data: ibtihaalat = [], isLoading } = useQuery({
     queryKey: ['ibtihaalat'],
     queryFn: () => base44.entities.Ibtihaal.list('-plays_count'),
   });
-
-  const isLoading = loadingMubtahileen || loadingIbtihaalat;
 
   useEffect(() => {
     const saved = localStorage.getItem('ibtihaalat_favorites');
     if (saved) setFavorites(JSON.parse(saved));
     
-    // الاستماع لتغييرات الصوت من المصادر الأخرى
     const unsubscribe = AudioManager.addListener((source, status) => {
       if (source !== 'ibtihaalat' && status === 'playing') {
-        if (audioRef.current) {
-          audioRef.current.pause();
-        }
+        audioRef.current?.pause();
         setIsPlaying(false);
       }
     });
@@ -72,35 +60,15 @@ export default function Ibtihaalat() {
   }, [volume, isMuted]);
 
   const playTrack = (track) => {
-    // إيقاف أي صوت آخر أولاً
     AudioManager.stopAll();
     
     if (currentTrack?.id === track.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
     } else {
-      // تسجيل الصوت في المدير المركزي
       AudioManager.register(audioRef.current, 'ibtihaalat');
-      
       setCurrentTrack(track);
       setIsPlaying(true);
-      
-      // تسجيل التحليلات
-      trackAnalytics('ibtihaal', track.id, track.title, 'play');
-    }
-  };
-
-  const trackAnalytics = async (contentType, contentId, contentName, action) => {
-    try {
-      await base44.entities.ContentAnalytics.create({
-        content_type: contentType,
-        content_id: String(contentId),
-        content_name: contentName,
-        action: action,
-        device_type: /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
-      });
-    } catch (e) {
-      // تجاهل الأخطاء
     }
   };
 
@@ -111,38 +79,6 @@ export default function Ibtihaalat() {
     }
   }, [currentTrack]);
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-      setDuration(audioRef.current.duration || 0);
-    }
-  };
-
-  const handleEnded = () => {
-    if (isRepeat) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play();
-    } else {
-      playNext();
-    }
-  };
-
-  const playNext = () => {
-    const filteredList = getFilteredList();
-    const currentIndex = filteredList.findIndex(t => t.id === currentTrack?.id);
-    if (currentIndex < filteredList.length - 1) {
-      playTrack(filteredList[isShuffle ? Math.floor(Math.random() * filteredList.length) : currentIndex + 1]);
-    }
-  };
-
-  const playPrev = () => {
-    const filteredList = getFilteredList();
-    const currentIndex = filteredList.findIndex(t => t.id === currentTrack?.id);
-    if (currentIndex > 0) {
-      playTrack(filteredList[currentIndex - 1]);
-    }
-  };
-
   const toggleFavorite = (trackId) => {
     const newFavorites = favorites.includes(trackId) 
       ? favorites.filter(id => id !== trackId)
@@ -152,31 +88,15 @@ export default function Ibtihaalat() {
     toast.success(favorites.includes(trackId) ? 'تم الإزالة من المفضلة' : 'تم الإضافة للمفضلة');
   };
 
-  const shareTrack = (track) => {
-    if (navigator.share) {
-      navigator.share({
-        title: track.title,
-        text: `استمع إلى ${track.title} - ${track.mubtahil}`,
-        url: window.location.href
-      });
-    } else {
-      navigator.clipboard.writeText(`${track.title} - ${track.mubtahil}`);
-      toast.success('تم نسخ اسم الابتهال');
-    }
-    trackAnalytics('ibtihaal', track.id, track.title, 'share');
-  };
-
   const getFilteredList = () => {
     return ibtihaalat.filter(track => {
       const matchSearch = track.title?.includes(searchQuery) || track.mubtahil_name?.includes(searchQuery);
-      const matchMubtahil = !selectedMubtahil || track.mubtahil_id === selectedMubtahil || track.mubtahil_name === selectedMubtahil;
       const matchCategory = selectedCategory === 'all' || track.category === selectedCategory;
-      return matchSearch && matchMubtahil && matchCategory;
+      return matchSearch && matchCategory;
     }).map(track => ({
       id: track.id,
       title: track.title,
       mubtahil: track.mubtahil_name,
-      mubtahilId: track.mubtahil_id,
       audio: track.audio_url,
       category: track.category,
       duration: track.duration || 300
@@ -184,276 +104,248 @@ export default function Ibtihaalat() {
   };
 
   const filteredTracks = getFilteredList();
-  // استخراج الفئات الفريدة
-  const uniqueCategories = [...new Set(ibtihaalat.map(t => t.category).filter(Boolean))];
-  const categories = ['all', ...uniqueCategories];
 
   return (
-    <div className="min-h-screen py-8 px-4" dir="rtl">
+    <div className="min-h-screen relative pb-24" dir="rtl">
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-950/90 via-amber-950/95 to-slate-950/98" />
+      </div>
+      
       <audio
         ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEnded}
-        onLoadedMetadata={handleTimeUpdate}
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime);
+            setDuration(audioRef.current.duration || 0);
+          }
+        }}
+        onEnded={() => {
+          if (isRepeat) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play();
+          } else {
+            const idx = filteredTracks.findIndex(t => t.id === currentTrack?.id);
+            if (idx < filteredTracks.length - 1) {
+              playTrack(filteredTracks[idx + 1]);
+            }
+          }
+        }}
       />
       
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-12">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <Music className="w-10 h-10 text-white" />
+            <AudioLines className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-amber-800 mb-2">الابتهالات والتواشيح</h1>
-          <p className="text-gray-600">أجمل ابتهالات المبتهلين المصريين الكبار</p>
-        </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">الابتهالات والتواشيح</h1>
+          <p className="text-amber-200 text-lg">أجمل الابتهالات الإسلامية بأصوات المبتهلين الكبار</p>
+        </motion.div>
 
-        {/* المشغل الحالي */}
         {currentTrack && (
-          <Card className="mb-8 bg-gradient-to-br from-amber-900 via-orange-900 to-red-900 text-white overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-32 h-32 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl flex items-center justify-center shadow-xl">
-                  <Music className="w-16 h-16 text-white/80" />
-                </div>
-                
-                <div className="flex-1 text-center md:text-right">
-                  <h2 className="text-2xl font-bold mb-2">{currentTrack.title}</h2>
-                  <p className="text-amber-200 text-lg">{currentTrack.mubtahil}</p>
-                  <Badge className="mt-2 bg-amber-600">{currentTrack.category}</Badge>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="text-white hover:bg-white/20"
-                    onClick={() => toggleFavorite(currentTrack.id)}
-                  >
-                    <Heart className={`w-6 h-6 ${favorites.includes(currentTrack.id) ? 'fill-red-500 text-red-500' : ''}`} />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="text-white hover:bg-white/20"
-                    onClick={() => shareTrack(currentTrack)}
-                  >
-                    <Share2 className="w-6 h-6" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* شريط التقدم */}
-              <div className="mt-6">
-                <Slider
-                  value={[currentTime]}
-                  max={duration || 100}
-                  step={1}
-                  onValueChange={(value) => {
-                    if (audioRef.current) {
-                      audioRef.current.currentTime = value[0];
-                    }
-                  }}
-                  className="cursor-pointer"
-                />
-                <div className="flex justify-between text-sm text-amber-200 mt-2">
-                  <span>{formatTime(currentTime)}</span>
-                  <span>{formatTime(duration)}</span>
-                </div>
-              </div>
-
-              {/* أزرار التحكم */}
-              <div className="flex items-center justify-center gap-4 mt-6">
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className={`text-white hover:bg-white/20 ${isShuffle ? 'bg-white/20' : ''}`}
-                  onClick={() => setIsShuffle(!isShuffle)}
-                >
-                  <Shuffle className="w-5 h-5" />
-                </Button>
-                
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={playPrev}>
-                  <SkipForward className="w-6 h-6" />
-                </Button>
-                
-                <Button 
-                  size="lg"
-                  className="w-16 h-16 rounded-full bg-white text-amber-900 hover:bg-amber-100"
-                  onClick={() => {
-                    if (isPlaying) {
-                      audioRef.current?.pause();
-                    } else {
-                      audioRef.current?.play();
-                    }
-                    setIsPlaying(!isPlaying);
-                  }}
-                >
-                  {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 mr-[-4px]" />}
-                </Button>
-                
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={playNext}>
-                  <SkipBack className="w-6 h-6" />
-                </Button>
-                
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className={`text-white hover:bg-white/20 ${isRepeat ? 'bg-white/20' : ''}`}
-                  onClick={() => setIsRepeat(!isRepeat)}
-                >
-                  <Repeat className="w-5 h-5" />
-                </Button>
-              </div>
-
-              {/* التحكم بالصوت */}
-              <div className="flex items-center justify-center gap-3 mt-4">
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="text-white hover:bg-white/20"
-                  onClick={() => setIsMuted(!isMuted)}
-                >
-                  {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                </Button>
-                <Slider
-                  value={[isMuted ? 0 : volume * 100]}
-                  max={100}
-                  step={1}
-                  onValueChange={(value) => {
-                    setVolume(value[0] / 100);
-                    setIsMuted(false);
-                  }}
-                  className="w-32"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-10 h-10 animate-spin text-amber-600" />
-          </div>
-        )}
-
-        {/* المبتهلين */}
-        {!isLoading && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-amber-800 mb-4">المبتهلين</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4">
-            <button
-              onClick={() => setSelectedMubtahil(null)}
-              className={`flex-shrink-0 flex flex-col items-center gap-2 p-3 rounded-xl transition-all ${
-                !selectedMubtahil ? 'bg-amber-100 ring-2 ring-amber-500' : 'bg-white hover:bg-gray-50'
-              }`}
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
-                <Music className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-sm font-bold">الكل</span>
-            </button>
-            
-            {mubtahileen.map((mubtahil) => (
-              <button
-                key={mubtahil.id}
-                onClick={() => setSelectedMubtahil(selectedMubtahil === mubtahil.name ? null : mubtahil.name)}
-                className={`flex-shrink-0 flex flex-col items-center gap-2 p-3 rounded-xl transition-all ${
-                  selectedMubtahil === mubtahil.name ? 'bg-amber-100 ring-2 ring-amber-500' : 'bg-white hover:bg-gray-50'
-                }`}
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-                  {mubtahil.image_url ? (
-                    <img src={mubtahil.image_url} alt={mubtahil.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-8 h-8 text-gray-500" />
-                  )}
-                </div>
-                <span className="text-xs font-bold text-center max-w-[80px] truncate">{mubtahil.name?.replace('الشيخ ', '')}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-        )}
-
-        {/* البحث والتصفية */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              placeholder="ابحث عن ابتهال أو مبتهل..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10"
-            />
-          </div>
-          
-          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full md:w-auto">
-            <TabsList className="grid grid-cols-4 w-full md:w-auto">
-              <TabsTrigger value="all">الكل</TabsTrigger>
-              <TabsTrigger value="ابتهالات">ابتهالات</TabsTrigger>
-              <TabsTrigger value="تواشيح">تواشيح</TabsTrigger>
-              <TabsTrigger value="مدائح نبوية">مدائح</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-
-        {/* قائمة الابتهالات */}
-        <div className="grid gap-3">
-          {filteredTracks.map((track, index) => (
-            <Card 
-              key={track.id}
-              className={`hover:shadow-lg transition-all cursor-pointer ${
-                currentTrack?.id === track.id ? 'ring-2 ring-amber-500 bg-amber-50' : 'bg-white'
-              }`}
-              onClick={() => playTrack(track)}
-            >
-              <CardContent className="p-4">
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                    currentTrack?.id === track.id && isPlaying 
-                      ? 'bg-gradient-to-br from-amber-500 to-orange-600' 
-                      : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  }`}>
-                    {currentTrack?.id === track.id && isPlaying ? (
-                      <Pause className="w-6 h-6 text-white" />
-                    ) : (
-                      <Play className="w-6 h-6 text-gray-600 mr-[-2px]" />
-                    )}
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+            <Card className="mb-8 bg-gradient-to-br from-amber-900/80 via-orange-900/80 to-amber-900/80 backdrop-blur-xl border-amber-500/30 shadow-2xl">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row items-center gap-6 mb-6">
+                  <div className="w-32 h-32 bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl flex items-center justify-center shadow-2xl">
+                    <Music className="w-16 h-16 text-white/90" />
                   </div>
                   
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 truncate">{track.title}</h3>
-                    <p className="text-sm text-gray-500">{track.mubtahil}</p>
+                  <div className="flex-1 text-center md:text-right">
+                    <h2 className="text-3xl font-bold text-white mb-2">{currentTrack.title}</h2>
+                    <p className="text-amber-200 text-xl">{currentTrack.mubtahil}</p>
+                    <Badge className="mt-3 bg-amber-600 text-white">{currentTrack.category}</Badge>
                   </div>
-                  
-                  <Badge variant="outline" className="hidden sm:flex">{track.category}</Badge>
-                  
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-400">{formatTime(track.duration)}</span>
+
+                  <div className="flex gap-3">
                     <Button 
                       variant="ghost" 
-                      size="icon"
-                      className="text-gray-400 hover:text-red-500"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(track.id);
-                      }}
+                      size="icon" 
+                      className="text-white hover:bg-white/20 w-12 h-12"
+                      onClick={() => toggleFavorite(currentTrack.id)}
                     >
-                      <Heart className={`w-5 h-5 ${favorites.includes(track.id) ? 'fill-red-500 text-red-500' : ''}`} />
+                      <Heart className={`w-6 h-6 ${favorites.includes(currentTrack.id) ? 'fill-red-500 text-red-500' : ''}`} />
                     </Button>
                   </div>
                 </div>
+
+                <div className="space-y-4">
+                  <Slider
+                    value={[currentTime]}
+                    max={duration || 100}
+                    step={1}
+                    onValueChange={(value) => {
+                      if (audioRef.current) audioRef.current.currentTime = value[0];
+                    }}
+                    className="cursor-pointer"
+                  />
+                  <div className="flex justify-between text-sm text-amber-200">
+                    <span>{formatTime(currentTime)}</span>
+                    <span>{formatTime(duration)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-center gap-6 mt-8">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className={`text-white hover:bg-white/20 w-12 h-12 ${isShuffle ? 'bg-white/20' : ''}`}
+                    onClick={() => setIsShuffle(!isShuffle)}
+                  >
+                    <Shuffle className="w-5 h-5" />
+                  </Button>
+                  
+                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 w-12 h-12">
+                    <SkipForward className="w-6 h-6" />
+                  </Button>
+                  
+                  <Button 
+                    size="lg"
+                    className="w-20 h-20 rounded-full bg-white text-amber-700 hover:bg-amber-100 shadow-2xl hover:scale-110 transition-transform"
+                    onClick={() => {
+                      if (isPlaying) audioRef.current?.pause();
+                      else audioRef.current?.play();
+                      setIsPlaying(!isPlaying);
+                    }}
+                  >
+                    {isPlaying ? <Pause className="w-9 h-9" /> : <Play className="w-9 h-9 mr-[-4px]" />}
+                  </Button>
+                  
+                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 w-12 h-12">
+                    <SkipBack className="w-6 h-6" />
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className={`text-white hover:bg-white/20 w-12 h-12 ${isRepeat ? 'bg-white/20' : ''}`}
+                    onClick={() => setIsRepeat(!isRepeat)}
+                  >
+                    <Repeat className="w-5 h-5" />
+                  </Button>
+                </div>
+
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="text-white hover:bg-white/20"
+                    onClick={() => setIsMuted(!isMuted)}
+                  >
+                    {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+                  </Button>
+                  <Slider
+                    value={[isMuted ? 0 : volume * 100]}
+                    max={100}
+                    step={1}
+                    onValueChange={(value) => {
+                      setVolume(value[0] / 100);
+                      setIsMuted(false);
+                    }}
+                    className="w-40"
+                  />
+                </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+          </motion.div>
+        )}
 
-        {filteredTracks.length === 0 && (
-          <div className="text-center py-12">
-            <Music className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">لا توجد نتائج</p>
+        {isLoading && (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-12 h-12 animate-spin text-amber-500" />
           </div>
+        )}
+
+        {!isLoading && (
+        <>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <div className="flex flex-col md:flex-row gap-4 mb-8">
+              <div className="relative flex-1">
+                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
+                <Input
+                  placeholder="ابحث عن ابتهال أو مبتهل..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pr-10 bg-slate-900/60 border-amber-500/30 text-white placeholder:text-slate-400"
+                />
+              </div>
+              
+              <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full md:w-auto">
+                <TabsList className="grid grid-cols-4 bg-slate-900/80 backdrop-blur-xl border border-amber-500/30">
+                  <TabsTrigger value="all" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">الكل</TabsTrigger>
+                  <TabsTrigger value="ابتهالات" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">ابتهالات</TabsTrigger>
+                  <TabsTrigger value="تواشيح" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">تواشيح</TabsTrigger>
+                  <TabsTrigger value="مدائح نبوية" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">مدائح</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </motion.div>
+
+          <div className="grid gap-4">
+            {filteredTracks.map((track, index) => (
+              <motion.div
+                key={track.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.03 }}
+              >
+                <Card 
+                  className={`cursor-pointer transition-all hover:shadow-2xl hover:-translate-y-1 ${
+                    currentTrack?.id === track.id 
+                      ? 'bg-gradient-to-r from-amber-900/80 to-orange-900/80 ring-4 ring-amber-400/50' 
+                      : 'bg-slate-900/60 border-amber-500/30'
+                  } backdrop-blur-xl`}
+                  onClick={() => playTrack(track)}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-lg ${
+                        currentTrack?.id === track.id && isPlaying 
+                          ? 'bg-gradient-to-br from-amber-500 to-orange-600' 
+                          : 'bg-gradient-to-br from-slate-700 to-slate-800'
+                      }`}>
+                        {currentTrack?.id === track.id && isPlaying ? (
+                          <Pause className="w-7 h-7 text-white" />
+                        ) : (
+                          <Play className="w-7 h-7 text-white mr-[-2px]" />
+                        )}
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg text-amber-100">{track.title}</h3>
+                        <p className="text-sm text-amber-300">{track.mubtahil}</p>
+                      </div>
+                      
+                      <Badge className="bg-amber-600/80 text-white hidden md:flex">{track.category}</Badge>
+                      
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-amber-300">{formatTime(track.duration)}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="text-amber-300 hover:text-red-400"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(track.id);
+                          }}
+                        >
+                          <Heart className={`w-6 h-6 ${favorites.includes(track.id) ? 'fill-red-500 text-red-500' : ''}`} />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {filteredTracks.length === 0 && (
+            <Card className="bg-slate-900/60 backdrop-blur-xl border-amber-500/30 p-16 text-center shadow-2xl">
+              <Music className="w-24 h-24 text-amber-400 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-amber-200 mb-3">لا توجد نتائج</h3>
+              <p className="text-slate-400 text-lg">جرب البحث بكلمات أخرى</p>
+            </Card>
+          )}
+        </>
         )}
       </div>
     </div>
