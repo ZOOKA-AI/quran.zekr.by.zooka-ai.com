@@ -92,6 +92,23 @@ export default function QuranPage() {
 
         <div className="max-w-7xl mx-auto px-4">
           {/* تبويبات رئيسية */}
+          <div className="sticky top-0 z-20 backdrop-blur-2xl bg-slate-950/80 border-b border-slate-800/50 -mx-4 px-4 py-4 mb-8">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
+                <Input
+                  placeholder="ابحث عن سورة..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pr-12 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-400 focus:bg-slate-800"
+                />
+              </div>
+              <Button size="icon" className="rounded-full bg-slate-800 hover:bg-slate-700">
+                <Filter className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
+
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
             <TabsList className="grid w-full grid-cols-3 max-w-xl mx-auto bg-slate-900/80 backdrop-blur-xl border border-amber-500/30">
               <TabsTrigger value="home" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">
@@ -100,7 +117,7 @@ export default function QuranPage() {
               </TabsTrigger>
               <TabsTrigger value="surahs" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
                 <BookOpen className="w-4 h-4 ml-2" />
-                السور
+                المكتبة
               </TabsTrigger>
               <TabsTrigger value="settings" className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
                 <SettingsIcon className="w-4 h-4 ml-2" />
