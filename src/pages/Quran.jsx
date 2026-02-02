@@ -140,6 +140,7 @@ export default function QuranPage() {
                   <Button
                     onClick={handleShare}
                     className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white font-bold px-8 py-4 text-xl shadow-xl border-2 border-amber-400"
+                    aria-label="مشاركة التطبيق"
                   >
                     <Share2 className="w-6 h-6 ml-2" />
                     شارك التطبيق واربح الأجر
@@ -147,6 +148,7 @@ export default function QuranPage() {
                   <Button
                     onClick={handleCopyLink}
                     className="bg-amber-400 hover:bg-amber-500 text-emerald-900 font-bold px-8 py-4 text-xl shadow-xl border-2 border-emerald-500"
+                    aria-label="نسخ رابط التطبيق"
                   >
                     <Copy className="w-6 h-6 ml-2" />
                     نسخ الرابط

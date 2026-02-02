@@ -1,0 +1,21 @@
+{
+  "name": "القرآن الكريم - Quran Zekr",
+  "short_name": "Quran Zekr",
+  "description": "تطبيق القرآن الكريم - اقرأ واستمع للقرآن الكريم مع مواقيت الصلاة والأذكار",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://base44.com/logo_v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["religion", "education", "lifestyle"],
+  "lang": "ar",
+  "dir": "rtl"
+}

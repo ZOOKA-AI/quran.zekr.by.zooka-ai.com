@@ -220,6 +220,7 @@ export default function PrayerTimesPage() {
                   onClick={fetchPrayerTimesByCity}
                   disabled={loading}
                   className="h-12 bg-blue-600 hover:bg-blue-700"
+                  aria-label="البحث عن مواقيت الصلاة"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -238,6 +239,7 @@ export default function PrayerTimesPage() {
                   onClick={getUserLocation}
                   disabled={loading}
                   className="h-12"
+                  aria-label="استخدام الموقع الجغرافي الحالي"
                 >
                   <MapPin className="w-4 h-4 ml-2" />
                   استخدام موقعي الحالي

@@ -163,6 +163,7 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
                 audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
               }
             }}
+            aria-label="الرجوع 10 ثوان"
           >
             <SkipBack className="w-5 h-5" />
           </Button>
@@ -171,6 +172,7 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
             size="icon"
             className="rounded-full w-16 h-16 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800"
             onClick={togglePlayPause}
+            aria-label={isPlaying ? "إيقاف مؤقت" : "تشغيل"}
           >
             {isPlaying ? <Pause className="w-7 h-7" /> : <Play className="w-7 h-7 mr-1" />}
           </Button>
@@ -184,6 +186,7 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
                 audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
               }
             }}
+            aria-label="التقديم 10 ثوان"
           >
             <SkipForward className="w-5 h-5" />
           </Button>
@@ -196,6 +199,7 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
             size="sm"
             onClick={toggleRepeatMode}
             className={getRepeatColor()}
+            aria-label={`وضع التكرار: ${repeatMode === 'none' ? 'بدون تكرار' : repeatMode === 'one' ? 'تكرار السورة' : 'تكرار مستمر'}`}
           >
             {getRepeatIcon()}
             <span className="mr-2">
@@ -208,7 +212,7 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
           <div className="flex items-center gap-2">
             <Gauge className="w-4 h-4 text-gray-600" />
             <Select value={playbackRate.toString()} onValueChange={(v) => setPlaybackRate(parseFloat(v))}>
-              <SelectTrigger className="w-32 h-9">
+              <SelectTrigger className="w-32 h-9" aria-label="سرعة التشغيل">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -231,9 +235,10 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
             step={1}
             onValueChange={(v) => setVolume(v[0])}
             className="flex-1"
+            aria-label="مستوى الصوت"
           />
           <span className="text-sm text-gray-600 w-12">{volume}%</span>
-          <Button variant="outline" size="icon" asChild>
+          <Button variant="outline" size="icon" asChild aria-label="تحميل الملف الصوتي">
             <a href={audioUrl} download>
               <Download className="w-4 h-4" />
             </a>

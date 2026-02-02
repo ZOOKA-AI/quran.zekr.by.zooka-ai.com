@@ -1,0 +1,10 @@
+# robots.txt for quran.zekr.by.zooka-ai.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://quran.zekr.by.zooka-ai.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
