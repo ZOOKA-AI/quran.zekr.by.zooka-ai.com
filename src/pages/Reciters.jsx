@@ -171,11 +171,34 @@ export default function RecitersPage() {
                 key={reciter.id}
                 className="bg-slate-900/60 backdrop-blur-xl border-amber-500/20 hover:border-amber-400/40 transition-all hover:-translate-y-2 hover:shadow-2xl"
               >
-                <div className="h-40 bg-gradient-to-br from-amber-600/30 to-emerald-600/20 flex items-center justify-center overflow-hidden">
+                <div className="h-56 bg-gradient-to-br from-amber-900/40 to-emerald-900/30 relative overflow-hidden group">
                   {reciter.image_url ? (
-                    <img src={reciter.image_url} alt={reciter.name_arabic} className="w-full h-full object-cover opacity-80" />
+                    <>
+                      <img 
+                        src={reciter.image_url} 
+                        alt={reciter.name_arabic} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-70" />
+                    </>
                   ) : (
-                    <Mic className="w-14 h-14 text-amber-400" />
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Mic className="w-16 h-16 text-amber-400/40" />
+                    </div>
+                  )}
+                  {reciter.social_media?.youtube && (
+                    <a 
+                      href={reciter.social_media.youtube} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="absolute bottom-3 left-3 bg-red-600/90 hover:bg-red-500 text-white px-3 py-2 rounded-lg flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity shadow-xl"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                      <span className="text-sm font-bold">يوتيوب</span>
+                    </a>
                   )}
                 </div>
                 <div className="p-6">
