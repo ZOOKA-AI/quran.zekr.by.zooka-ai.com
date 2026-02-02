@@ -54,7 +54,12 @@ const TAJWEED_RULES = [
   // Madd - prolongation markers (alef, waw, ya with sukun after fatha, damma, kasra)
   {
     name: 'madd',
-    // Alef after fatha, waw sakinah after damma, ya sakinah after kasra
+    // Madd (prolongation) patterns:
+    // - Fatha + Alef (مد بالألف)
+    // - Damma + Waw with optional sukun (مد بالواو)
+    // - Kasra + Ya with optional sukun (مد بالياء)
+    // - Maddah sign ٓ (علامة المد)
+    // - Superscript Alef ـٰ (ألف خنجرية)
     pattern: /([َ]ا|[ُ]وْ?|[ِ]يْ?|ٓ|ـٰ)/g,
     color: TAJWEED_COLORS.madd,
   },
@@ -65,7 +70,7 @@ const TAJWEED_RULES = [
  * Returns an array of segments with their respective colors
  */
 function parseTajweedText(text) {
-  if (!text) return [{ text: '', color: null }];
+  if (!text) return [];
 
   // Create a map of character positions to their Tajweed rules
   const colorMap = new Map();
@@ -77,7 +82,7 @@ function parseTajweedText(text) {
       const startIndex = match.index;
       const matchedText = match[0];
       for (let i = 0; i < matchedText.length; i++) {
-        // Only set color if not already set (first rule takes precedence)
+        // Only set color if not already set (rules earlier in TAJWEED_RULES array take precedence)
         if (!colorMap.has(startIndex + i)) {
           colorMap.set(startIndex + i, rule.color);
         }

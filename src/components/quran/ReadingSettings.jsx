@@ -54,7 +54,7 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
 
   useEffect(() => {
     onSettingsChange({ fontSize, fontFamily, lineHeight, darkMode, tajweedEnabled });
-  }, [fontSize, fontFamily, lineHeight, darkMode, tajweedEnabled]);
+  }, [fontSize, fontFamily, lineHeight, darkMode, tajweedEnabled, onSettingsChange]);
 
   const handleDownloadSurah = async (surahNum, surahName) => {
     setDownloading(surahNum);
