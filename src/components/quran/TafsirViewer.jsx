@@ -152,6 +152,10 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
               </div>
             </div>
             <TabsList className="hidden">
+              {TAFSIR_EDITIONS.map(edition => (
+                <TabsTrigger key={edition.id} value={edition.id}>{edition.name}</TabsTrigger>
+              ))}
+            </TabsList>
 
             {TAFSIR_EDITIONS.map(edition => (
               <TabsContent key={edition.id} value={edition.id} className="mt-4">
