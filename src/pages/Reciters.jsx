@@ -100,6 +100,7 @@ export default function RecitersPage() {
             <p className="text-slate-300 mt-2">استكشف أشهر قراء القرآن الكريم</p>
           </div>
           </div>
+        </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* قسم الشيخ الشعراوي */}
@@ -118,7 +119,8 @@ export default function RecitersPage() {
               </p>
             </div>
           </div>
-        </Card>
+          </div>
+          </Card>
 
         {/* مربع البحث */}
         <div className="relative max-w-2xl mx-auto mb-8">
