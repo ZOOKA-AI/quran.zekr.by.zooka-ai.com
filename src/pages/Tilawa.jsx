@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { usePlayer } from '@/components/player/ClassicAudioPlayer';
 import FeaturedChannels from '@/components/channels/FeaturedChannels';
+import VideoGrid from '@/components/videos/VideoGrid';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة' }, { number: 2, name: 'البقرة' }, { number: 3, name: 'آل عمران' },
