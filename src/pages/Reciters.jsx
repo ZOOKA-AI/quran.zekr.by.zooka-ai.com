@@ -21,6 +21,52 @@ export default function RecitersPage() {
     queryFn: () => base44.entities.Reciter.list('-popularity_score'),
   });
 
+  // جلب المراجع لكل المقرئين
+  const { data: references = [] } = useQuery({
+    queryKey: ['reciter-references'],
+    queryFn: () => base44.entities.Reference.filter({ entity_type: 'Reciter' }),
+  });
+
+  // صلاحيات بسيطة: إظهار الرفع للمشرف فقط
+  useEffect(() => {
+    (async () => {
+      try {
+        if (await base44.auth.isAuthenticated()) {
+          const me = await base44.auth.me();
+          setIsAdmin(me?.role === 'admin');
+        }
+      } catch (_) {}
+    })();
+  }, []);
+
+  const refsBySlug = references.reduce((acc, ref) => {
+    const slug = ref.entity_slug;
+    if (!slug) return acc;
+    acc[slug] = acc[slug] || [];
+    acc[slug].push(ref);
+    return acc;
+  }, {});
+
+  const handleImageUpload = async (reciter, file) => {
+    if (!file) return;
+    setUploadingId(reciter.id);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.entities.Reciter.update(reciter.id, { image_url: file_url });
+      await base44.entities.Reference.create({
+        entity_type: 'Reciter',
+        entity_slug: reciter.slug,
+        category: 'photo',
+        title: 'App upload',
+        url: file_url,
+        provider: 'app_storage',
+        license: 'uploaded-by-admin'
+      });
+    } finally {
+      setUploadingId(null);
+    }
+  };
+
   const filteredReciters = reciters.filter(reciter => {
     const matchesSearch = reciter.name_arabic?.includes(searchQuery) || 
                           reciter.bio?.includes(searchQuery) ||
