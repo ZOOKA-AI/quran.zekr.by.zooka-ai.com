@@ -42,7 +42,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
     { name: 'المساعد', path: 'Assistant', icon: Sparkles, color: 'text-indigo-600' },
     { name: 'المكتبة', path: 'Library', icon: Library, color: 'text-rose-600' },
-  ];
+    { name: 'المشاركات', path: 'ShareLibrary', icon: Share2, color: 'text-cyan-600' },
+    ];
 
   const handleLogout = async () => {
     await base44.auth.logout();
