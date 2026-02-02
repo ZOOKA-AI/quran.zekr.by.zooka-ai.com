@@ -6,6 +6,7 @@ import { Trophy, Star, Award, TrendingUp, Zap, Crown, Target } from 'lucide-reac
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
+import { motion } from 'framer-motion';
 
 const BADGES = [
   { name: 'القارئ المبتدئ', icon: '📖', points: 100, description: 'أول خطوة في رحلة القرآن' },
@@ -84,19 +85,22 @@ export default function RewardsPage() {
     <IslamicBackground variant="purple">
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* الرأس */}
-        <div className="text-center mb-12 pt-8">
-          <div className="mb-6">
-            <div className="inline-block p-5 bg-gradient-to-br from-amber-500/20 to-orange-600/10 rounded-3xl backdrop-blur-sm border border-amber-400/20">
-              <Trophy className="w-14 h-14 text-amber-300" />
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12 pt-8"
+        >
+          <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <Trophy className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-amber-100 mb-3">إنجازاتك القرآنية</h1>
-          <p className="text-xl text-indigo-200 font-arabic">﴿ وَسَارِعُوا إِلَىٰ مَغْفِرَةٍ مِّن رَّبِّكُمْ ﴾</p>
-          <p className="text-slate-300 mt-2">واصل الطريق واجمع النقاط والأوسمة 🌟</p>
-        </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">إنجازاتك القرآنية</h1>
+          <p className="text-xl text-amber-200 font-arabic">﴿ وَسَارِعُوا إِلَىٰ مَغْفِرَةٍ مِّن رَّبِّكُمْ ﴾</p>
+          <p className="text-slate-300 mt-2 text-lg">واصل الطريق واجمع النقاط والأوسمة 🌟</p>
+        </motion.div>
 
         {/* بطاقة المستوى الحالي */}
-        <Card className={`p-8 mb-8 bg-gradient-to-br ${currentLevel.color} text-white shadow-2xl border-0`}>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <Card className={`p-8 mb-8 bg-gradient-to-br ${currentLevel.color} text-white shadow-2xl border-0 hover:scale-[1.02] transition-transform`}>
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -128,29 +132,38 @@ export default function RewardsPage() {
             </div>
           )}
         </Card>
+        </motion.div>
 
         {/* شبكة الإحصائيات */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white border-0">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card className="p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white border-0 hover:scale-105 transition-transform shadow-xl">
             <Target className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.khatam_count || 0}</div>
             <div className="text-sm opacity-90">ختمة كاملة</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-0">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <Card className="p-6 bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-0 hover:scale-105 transition-transform shadow-xl">
             <TrendingUp className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.shares_count || 0}</div>
             <div className="text-sm opacity-90">مشاركة</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            <Card className="p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 hover:scale-105 transition-transform shadow-xl">
             <Zap className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{userPoints?.current_streak || 0}</div>
             <div className="text-sm opacity-90">يوم متتالي</div>
           </Card>
-          <Card className="p-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white border-0">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <Card className="p-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white border-0 hover:scale-105 transition-transform shadow-xl">
             <Star className="w-8 h-8 mb-3 opacity-80" />
             <div className="text-3xl font-bold mb-1">{Math.floor((userPoints?.listening_hours || 0))} ساعة</div>
             <div className="text-sm opacity-90">استماع</div>
           </Card>
+          </motion.div>
         </div>
 
         {/* الأوسمة */}

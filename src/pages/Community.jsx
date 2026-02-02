@@ -9,6 +9,7 @@ import { Heart, MessageCircle, Share2, Send, Sparkles, TrendingUp, Users } from 
 import { toast } from 'sonner';
 import { useAuth } from '@/components/AuthProvider';
 import IslamicBackground from '@/components/layout/IslamicBackground';
+import { motion } from 'framer-motion';
 
 export default function CommunityPage() {
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
@@ -86,24 +87,27 @@ export default function CommunityPage() {
     <IslamicBackground variant="purple">
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* الرأس */}
-        <div className="text-center mb-12 pt-8">
-          <div className="mb-6">
-            <div className="inline-block p-5 bg-gradient-to-br from-pink-500/20 to-purple-600/10 rounded-3xl backdrop-blur-sm border border-purple-400/20">
-              <Users className="w-14 h-14 text-pink-300" />
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12 pt-8"
+        >
+          <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <Users className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-amber-100 mb-3">مجتمع القرآن الكريم</h1>
-          <p className="text-xl text-indigo-200 font-arabic">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ ﴾</p>
-          <p className="text-slate-300 mt-2">شارك آية أو حديث وانشر الفائدة 🤲</p>
-        </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">مجتمع القرآن الكريم</h1>
+          <p className="text-xl text-pink-200 font-arabic">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ ﴾</p>
+          <p className="text-slate-300 mt-2 text-lg">شارك آياتك المفضلة وتأملاتك 🤲</p>
+        </motion.div>
 
         {/* إنشاء مشاركة */}
         {isAuthenticated && (
-          <Card className="p-6 mb-8 bg-slate-900/60 backdrop-blur-xl border border-purple-500/20">
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-200">
-              <TrendingUp className="w-5 h-5 text-pink-400" />
-              مشاركة جديدة
-            </h3>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Card className="p-6 mb-8 bg-slate-900/60 backdrop-blur-xl border-pink-500/30 hover:border-pink-400/50 transition-all shadow-xl">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-pink-200">
+                <Sparkles className="w-5 h-5 text-pink-400" />
+                مشاركة جديدة
+              </h3>
             <div className="space-y-4">
               <select
                 value={newShare.content_type}
@@ -134,29 +138,39 @@ export default function CommunityPage() {
               />
               <Button
                 onClick={handleSubmitShare}
-                className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
+                size="lg"
+                className="w-full bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white shadow-lg hover:shadow-xl transition-all"
                 disabled={createShareMutation.isPending}
               >
-                <Send className="w-4 h-4 ml-2" />
-                نشر المشاركة
+                <Send className="w-5 h-5 ml-2" />
+                <span className="font-bold">نشر المشاركة</span>
               </Button>
             </div>
           </Card>
+          </motion.div>
         )}
 
         {/* المشاركات */}
         <div className="space-y-6">
           {shares.length === 0 ? (
-            <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border border-purple-500/20">
-              <Sparkles className="w-16 h-16 mx-auto text-purple-400 mb-4" />
-              <p className="text-amber-100 text-lg mb-4">لا توجد مشاركات بعد</p>
-              <p className="text-slate-400">كن أول من يشارك آية أو حديث مع المجتمع!</p>
-            </Card>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-pink-500/30 shadow-xl">
+                <Sparkles className="w-20 h-20 mx-auto text-pink-400 mb-4" />
+                <h2 className="text-2xl font-bold text-pink-200 mb-3">لا توجد مشاركات بعد</h2>
+                <p className="text-slate-300 text-lg">كن أول من يشارك آية أو حديث مع المجتمع!</p>
+              </Card>
+            </motion.div>
           ) : (
-            shares.map((share) => {
+            shares.map((share, index) => {
               const shareComments = getShareComments(share.id);
               return (
-                <Card key={share.id} className="p-6 bg-slate-900/60 backdrop-blur-xl border border-purple-500/20 hover:border-purple-400/40 transition-all">
+                <motion.div
+                  key={share.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border-pink-500/30 hover:border-pink-400/60 transition-all hover:shadow-2xl">
                   <div className="flex items-start gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-pink-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                       {share.created_by?.charAt(0) || '؟'}
@@ -222,12 +236,17 @@ export default function CommunityPage() {
                         onKeyPress={(e) => e.key === 'Enter' && handleComment(share.id)}
                         className="bg-slate-800/50 border-purple-500/30 text-white placeholder:text-slate-500"
                       />
-                      <Button onClick={() => handleComment(share.id)} size="icon" className="bg-purple-600 hover:bg-purple-700">
+                      <Button 
+                        onClick={() => handleComment(share.id)} 
+                        size="icon" 
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg"
+                      >
                         <Send className="w-4 h-4" />
                       </Button>
                     </div>
                   )}
                 </Card>
+                </motion.div>
               );
             })
           )}
