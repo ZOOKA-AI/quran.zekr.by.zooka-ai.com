@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { audioUtils, performanceUtils } from '@/utils';
+import { audioUtils } from '@/components/utils/audioUtils';
+import { performanceUtils } from '@/components/utils/performanceUtils';
 
 export function useAudioOptimization() {
   const audioRef = useRef(null);

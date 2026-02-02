@@ -8,19 +8,25 @@ export const audioUtils = {
     return audioContext.createGain();
   },
 
-  setVolume(gainNode, volume) {
-    gainNode.gain.setValueAtTime(Math.max(0, Math.min(1, volume)), audioContext.currentTime);
+  async getAudioDuration(url) {
+    return new Promise((resolve) => {
+      const audio = new Audio();
+      audio.onloadedmetadata = () => resolve(audio.duration);
+      audio.onerror = () => resolve(0);
+      audio.src = url;
+    });
   },
 
-  normalizeAudio(audioContext, source) {
-    const analyser = audioContext.createAnalyser();
-    source.connect(analyser);
-    return analyser;
+  async preloadAudio(url) {
+    const audio = new Audio();
+    return new Promise((resolve, reject) => {
+      audio.onloadeddata = () => resolve(audio);
+      audio.onerror = reject;
+      audio.src = url;
+    });
   },
 
-  getAudioData(analyser) {
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(dataArray);
-    return dataArray;
+  getAudioUrl(reciterId, surahNumber) {
+    return `https://quran.api.example.com/audio/${reciterId}/${surahNumber}.mp3`;
   }
 };

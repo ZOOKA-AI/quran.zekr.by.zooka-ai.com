@@ -15,6 +15,16 @@ export const performanceUtils = {
     }
   },
 
+  async measureAsync(callback, label) {
+    const startMark = `${label}-start`;
+    const endMark = `${label}-end`;
+    this.mark(startMark);
+    const result = await callback();
+    this.mark(endMark);
+    this.measure(label, startMark, endMark);
+    return { result, duration: performance.getEntriesByName(label)[0]?.duration || 0 };
+  },
+
   getMetrics(name) {
     if (typeof performance !== 'undefined' && performance.getEntriesByName) {
       return performance.getEntriesByName(name);
