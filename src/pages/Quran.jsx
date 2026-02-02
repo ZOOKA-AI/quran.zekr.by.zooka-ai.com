@@ -1,424 +1,216 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Search, MessageSquare, Share2, Copy, Play, Menu, Filter, BookOpen, List } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-
-const FEATURED_SURAHS = [
-  { number: 1, name: 'الفاتحة', color: 'from-emerald-500 to-green-600' },
-  { number: 2, name: 'البقرة', color: 'from-blue-500 to-indigo-600' },
-  { number: 18, name: 'الكهف', color: 'from-purple-500 to-pink-600' },
-  { number: 36, name: 'يس', color: 'from-amber-500 to-orange-600' },
-  { number: 67, name: 'الملك', color: 'from-teal-500 to-cyan-600' },
-  { number: 55, name: 'الرحمن', color: 'from-rose-500 to-red-600' },
-];
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import SurahCard from '../components/quran/SurahCard';
-import { useAuth } from '@/components/AuthProvider';
-import DailyContent from '../components/daily/DailyContent';
-import AppLogo from '../components/brand/AppLogo';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
+import DailyContent from '../components/daily/DailyContent';
 import DedicationCard from '../components/quran/DedicationCard';
 import DailyVerseCard from '../components/quran/DailyVerseCard';
 import AppFeaturesBanner from '../components/quran/AppFeaturesBanner';
 import ExternalResourcesWidget from '../components/quran/ExternalResourcesWidget';
+import QuickNavigation from '../components/home/QuickNavigation';
+import FeaturedSurahs from '../components/home/FeaturedSurahs';
+import AppSettingsPanel from '../components/settings/AppSettingsPanel';
+import QuranStats from '../components/quran/QuranStats';
 
 const SURAHS = [
-  { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
-  { number: 2, name: 'البقرة', arabic_name: 'ٱلْبَقَرَة', transliteration: 'Al-Baqarah', verses_count: 286, revelation_place: 'Madinah', juz_start: 1 },
-  { number: 3, name: 'آل عمران', arabic_name: 'آل عِمْرَان', transliteration: 'Ali \'Imran', verses_count: 200, revelation_place: 'Madinah', juz_start: 3 },
-  { number: 4, name: 'النساء', arabic_name: 'ٱلنِّسَاء', transliteration: 'An-Nisa', verses_count: 176, revelation_place: 'Madinah', juz_start: 4 },
-  { number: 5, name: 'المائدة', arabic_name: 'ٱلْمَائِدَة', transliteration: 'Al-Ma\'idah', verses_count: 120, revelation_place: 'Madinah', juz_start: 6 },
-  { number: 6, name: 'الأنعام', arabic_name: 'ٱلْأَنْعَام', transliteration: 'Al-An\'am', verses_count: 165, revelation_place: 'Makkah', juz_start: 7 },
-  { number: 7, name: 'الأعراف', arabic_name: 'ٱلْأَعْرَاف', transliteration: 'Al-A\'raf', verses_count: 206, revelation_place: 'Makkah', juz_start: 8 },
-  { number: 8, name: 'الأنفال', arabic_name: 'ٱلْأَنْفَال', transliteration: 'Al-Anfal', verses_count: 75, revelation_place: 'Madinah', juz_start: 9 },
-  { number: 9, name: 'التوبة', arabic_name: 'ٱلتَّوْبَة', transliteration: 'At-Tawbah', verses_count: 129, revelation_place: 'Madinah', juz_start: 10 },
-  { number: 10, name: 'يونس', arabic_name: 'يُونُس', transliteration: 'Yunus', verses_count: 109, revelation_place: 'Makkah', juz_start: 11 },
-  { number: 11, name: 'هود', arabic_name: 'هُود', transliteration: 'Hud', verses_count: 123, revelation_place: 'Makkah', juz_start: 11 },
-  { number: 12, name: 'يوسف', arabic_name: 'يُوسُف', transliteration: 'Yusuf', verses_count: 111, revelation_place: 'Makkah', juz_start: 12 },
-  { number: 18, name: 'الكهف', arabic_name: 'ٱلْكَهْف', transliteration: 'Al-Kahf', verses_count: 110, revelation_place: 'Makkah', juz_start: 15 },
-  { number: 36, name: 'يس', arabic_name: 'يٓس', transliteration: 'Ya-Sin', verses_count: 83, revelation_place: 'Makkah', juz_start: 22 },
-  { number: 67, name: 'الملك', arabic_name: 'ٱلْمُلْك', transliteration: 'Al-Mulk', verses_count: 30, revelation_place: 'Makkah', juz_start: 29 },
-  { number: 112, name: 'الإخلاص', arabic_name: 'ٱلْإِخْلَاص', transliteration: 'Al-Ikhlas', verses_count: 4, revelation_place: 'Makkah', juz_start: 30 },
-  { number: 113, name: 'الفلق', arabic_name: 'ٱلْفَلَق', transliteration: 'Al-Falaq', verses_count: 5, revelation_place: 'Makkah', juz_start: 30 },
-  { number: 114, name: 'الناس', arabic_name: 'ٱلنَّاس', transliteration: 'An-Nas', verses_count: 6, revelation_place: 'Makkah', juz_start: 30 }
+  { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', verses_count: 7, revelation_place: 'Makkah' },
+  { number: 2, name: 'البقرة', arabic_name: 'ٱلْبَقَرَة', verses_count: 286, revelation_place: 'Madinah' },
+  { number: 3, name: 'آل عمران', arabic_name: 'آل عِمْرَان', verses_count: 200, revelation_place: 'Madinah' },
+  { number: 4, name: 'النساء', arabic_name: 'ٱلنِّسَاء', verses_count: 176, revelation_place: 'Madinah' },
+  { number: 5, name: 'المائدة', arabic_name: 'ٱلْمَائِدَة', verses_count: 120, revelation_place: 'Madinah' },
+  { number: 6, name: 'الأنعام', arabic_name: 'ٱلْأَنْعَام', verses_count: 165, revelation_place: 'Makkah' },
+  { number: 7, name: 'الأعراف', arabic_name: 'ٱلْأَعْرَاف', verses_count: 206, revelation_place: 'Makkah' },
+  { number: 18, name: 'الكهف', arabic_name: 'ٱلْكَهْف', verses_count: 110, revelation_place: 'Makkah' },
+  { number: 36, name: 'يس', arabic_name: 'يٓس', verses_count: 83, revelation_place: 'Makkah' },
+  { number: 55, name: 'الرحمن', arabic_name: 'ٱلرَّحْمَٰن', verses_count: 78, revelation_place: 'Madinah' },
+  { number: 67, name: 'الملك', arabic_name: 'ٱلْمُلْك', verses_count: 30, revelation_place: 'Makkah' },
+  { number: 112, name: 'الإخلاص', arabic_name: 'ٱلْإِخْلَاص', verses_count: 4, revelation_place: 'Makkah' },
+  { number: 113, name: 'الفلق', arabic_name: 'ٱلْفَلَق', verses_count: 5, revelation_place: 'Makkah' },
+  { number: 114, name: 'الناس', arabic_name: 'ٱلنَّاس', verses_count: 6, revelation_place: 'Makkah' }
 ];
 
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [greeting, setGreeting] = useState('');
+  const [activeTab, setActiveTab] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('صباح الخير');
-    else if (hour < 18) setGreeting('مساء الخير');
-    else setGreeting('مساء الخير');
-  }, []);
-
-  const handleShare = () => {
-    const appUrl = window.location.origin;
-    const shareText = '🕌 تطبيق القرآن الكريم - مجاني بالكامل لوجه الله تعالى\n\nصدقة جارية - شارك الأجر معنا 🤲\n\n' + appUrl;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'تطبيق القرآن الكريم',
-        text: shareText,
-      });
-    } else {
-      navigator.clipboard.writeText(shareText);
-      toast.success('تم نسخ الرابط! شاركه مع من تحب لتنال الأجر 🌟');
-    }
-  };
-
-  const handleCopyLink = () => {
-    const appUrl = window.location.origin;
-    navigator.clipboard.writeText(appUrl);
-    toast.success('تم نسخ رابط التطبيق! 📋');
-  };
-
-  // Memoized filtering للأداء العالي
-  const filteredSurahs = useMemo(() => {
-    if (!searchQuery) return SURAHS;
-    
-    const query = searchQuery.toLowerCase();
-    return SURAHS.filter(surah => 
-      surah.name.includes(searchQuery) || 
-      surah.transliteration.toLowerCase().includes(query) ||
-      surah.number.toString().includes(searchQuery)
-    );
-  }, [searchQuery]);
+  const filteredSurahs = searchQuery
+    ? SURAHS.filter(s => 
+        s.name.includes(searchQuery) || 
+        s.number.toString().includes(searchQuery)
+      )
+    : SURAHS;
 
   return (
-    <div className="min-h-screen relative" dir="rtl">
-      {/* خلفية روحانية إسلامية */}
+    <div className="min-h-screen relative pb-32" dir="rtl">
+      {/* خلفية روحانية */}
       <div className="fixed inset-0 z-0">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
             backgroundImage: 'url(https://images.unsplash.com/photo-1564769625905-50e93615e769?w=1920&q=80)',
-            filter: 'brightness(0.3)'
+            filter: 'brightness(0.25)'
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98" />
-        {/* نجوم متلألئة */}
-        <div className="absolute inset-0 opacity-30" style={{
-          backgroundImage: 'radial-gradient(2px 2px at 20px 30px, white, transparent), radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent), radial-gradient(1px 1px at 90px 40px, white, transparent), radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent)',
-          backgroundSize: '200px 200px'
-        }} />
       </div>
       
       <div className="relative z-10">
-      {/* الرأس */}
-      <div className="relative text-white shadow-xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/10 via-transparent to-indigo-600/10" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-amber-200 hover:bg-white/10">
-                  <Menu className="w-6 h-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80 overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle className="flex items-center gap-2 text-xl">
-                    <Filter className="w-6 h-6 text-emerald-600" />
-                    القائمة الرئيسية
-                  </SheetTitle>
-                </SheetHeader>
-                
-                <div className="mt-8 space-y-6">
-                  {/* Search Section */}
-                  <div className="space-y-3">
-                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                      <Search className="w-5 h-5 text-emerald-600" />
-                      البحث
-                    </h3>
-                    <div className="relative">
-                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <Input
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="ابحث عن سورة..."
-                        className="pr-10"
-                      />
-                    </div>
-                  </div>
+        {/* الرأس */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center py-12 px-4"
+        >
+          <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <BookOpen className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">القرآن الكريم</h1>
+          <p className="text-xl text-amber-200 font-arabic">﴿ إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ ﴾</p>
+        </motion.div>
 
-                  {/* Quick Links */}
-                  <div className="space-y-3">
-                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-emerald-600" />
-                      روابط سريعة
-                    </h3>
-                    <div className="space-y-2">
-                      <Link to={createPageUrl('Tilawa')} onClick={() => setSidebarOpen(false)}>
-                        <Button variant="outline" className="w-full justify-start">
-                          🎧 التلاوات
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl('Library')} onClick={() => setSidebarOpen(false)}>
-                        <Button variant="outline" className="w-full justify-start">
-                          📚 مكتبتي
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl('Calligraphy')} onClick={() => setSidebarOpen(false)}>
-                        <Button variant="outline" className="w-full justify-start">
-                          ✨ الخطوط
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl('Assistant')} onClick={() => setSidebarOpen(false)}>
-                        <Button variant="outline" className="w-full justify-start">
-                          🤖 المساعد الذكي
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl('Reciters')} onClick={() => setSidebarOpen(false)}>
-                        <Button variant="outline" className="w-full justify-start">
-                          🎤 المقرئين
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
+        <div className="max-w-7xl mx-auto px-4">
+          {/* تبويبات رئيسية */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+            <TabsList className="grid w-full grid-cols-3 max-w-xl mx-auto bg-slate-900/80 backdrop-blur-xl border border-amber-500/30">
+              <TabsTrigger value="home" className="data-[state=active]:bg-amber-500 data-[state=active]:text-white">
+                <Home className="w-4 h-4 ml-2" />
+                الرئيسية
+              </TabsTrigger>
+              <TabsTrigger value="surahs" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
+                <BookOpen className="w-4 h-4 ml-2" />
+                السور
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
+                <SettingsIcon className="w-4 h-4 ml-2" />
+                الإعدادات
+              </TabsTrigger>
+            </TabsList>
 
-                  {/* Featured Surahs */}
-                  <div className="space-y-3">
-                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                      <List className="w-5 h-5 text-emerald-600" />
-                      سور مميزة
-                    </h3>
-                    <div className="space-y-2">
-                      {FEATURED_SURAHS.map(surah => (
-                        <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)} onClick={() => setSidebarOpen(false)}>
-                          <div className={`p-3 bg-gradient-to-br ${surah.color} rounded-lg text-white hover:opacity-90 transition-opacity cursor-pointer`}>
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-black/20 rounded flex items-center justify-center text-sm font-bold">
-                                {surah.number}
-                              </div>
-                              <span className="font-bold">{surah.name}</span>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+            {/* تبويب الرئيسية */}
+            <TabsContent value="home" className="space-y-8 mt-8">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <DedicationCard />
+              </motion.div>
 
-                  {/* Share Actions */}
-                  <div className="space-y-3">
-                    <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                      <Share2 className="w-5 h-5 text-emerald-600" />
-                      مشاركة التطبيق
-                    </h3>
-                    <div className="space-y-2">
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start bg-emerald-50 hover:bg-emerald-100 border-emerald-300"
-                        onClick={() => {
-                          handleShare();
-                          setSidebarOpen(false);
-                        }}
-                      >
-                        <Share2 className="w-4 h-4 ml-2" />
-                        مشاركة التطبيق
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start bg-amber-50 hover:bg-amber-100 border-amber-300"
-                        onClick={() => {
-                          handleCopyLink();
-                          setSidebarOpen(false);
-                        }}
-                      >
-                        <Copy className="w-4 h-4 ml-2" />
-                        نسخ الرابط
-                      </Button>
-                    </div>
-                  </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                <DailyVerseCard />
+              </motion.div>
 
-                  {/* Statistics */}
-                  <div className="space-y-3">
-                    <h3 className="font-bold text-gray-800">📊 إحصائيات</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-emerald-700">114</div>
-                        <div className="text-xs text-emerald-600">سورة</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-amber-100 to-amber-50 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-amber-700">30</div>
-                        <div className="text-xs text-amber-600">جزء</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-blue-100 to-blue-50 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-blue-700">6236</div>
-                        <div className="text-xs text-blue-600">آية</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-purple-100 to-purple-50 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-purple-700">10</div>
-                        <div className="text-xs text-purple-600">مقرئ</div>
-                      </div>
-                    </div>
-                  </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  التنقل السريع
+                </h2>
+                <QuickNavigation />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
+                  <Star className="w-6 h-6" />
+                  السور المميزة
+                </h2>
+                <FeaturedSurahs />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4">إحصائيات القرآن الكريم</h2>
+                <QuranStats />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4">🕌 مواقيت الصلاة والطقس</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div className="lg:col-span-2"><PrayerTimesWidget /></div>
+                  <div><WeatherWidget /></div>
                 </div>
-              </SheetContent>
-            </Sheet>
-            
-            <h1 className="text-2xl font-bold text-amber-100">
-              {greeting}
-            </h1>
-            <div className="w-10"></div>
-          </div>
-          
-          <div className="text-center">
-            <div className="mb-6">
-              <AppFeaturesBanner />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-3 text-white drop-shadow-lg">القرآن الكريم</h1>
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 max-w-2xl mx-auto shadow-lg">
-              <p className="text-2xl text-gray-900 mb-2 font-arabic font-bold">
-                ﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾
-              </p>
-              <p className="text-gray-800 text-lg font-bold">المصحف الإلكتروني 🕌</p>
-            </div>
-          </div>
-        </div>
-      </div>
+              </motion.div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* بطاقة الصدقة الجارية */}
-        <div className="mb-6">
-          <DedicationCard />
-        </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+                <ExternalResourcesWidget />
+              </motion.div>
 
-        {/* آية اليوم */}
-        <div className="mb-6">
-          <DailyVerseCard />
-        </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+                <AppFeaturesBanner />
+              </motion.div>
 
-        {/* مواقيت الصلاة والطقس */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-amber-100 mb-6">🕌 مواقيت الصلاة والطقس</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <PrayerTimesWidget />
-            </div>
-            <div>
-              <WeatherWidget />
-            </div>
-          </div>
-        </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
+                <DailyContent />
+              </motion.div>
+            </TabsContent>
 
-        {/* روابط مفيدة */}
-        <div className="mb-12">
-          <ExternalResourcesWidget />
-        </div>
+            {/* تبويب السور */}
+            <TabsContent value="surahs" className="space-y-6 mt-8">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="relative max-w-2xl mx-auto mb-8">
+                  <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
+                  <Input
+                    placeholder="ابحث عن سورة برقمها أو اسمها..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pr-12 py-6 text-lg bg-slate-900/60 backdrop-blur-xl border-amber-500/30 text-white placeholder:text-white/50"
+                  />
+                </div>
+              </motion.div>
 
-        {/* قسم محتوى اليوم */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-amber-100 mb-6">✨ محتوى اليوم</h2>
-          <DailyContent />
-        </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredSurahs.map((surah, index) => (
+                  <motion.div
+                    key={surah.number}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                  >
+                    <Link to={createPageUrl(`SurahView?surah=${surah.number}`)}>
+                      <Card className="bg-slate-900/60 backdrop-blur-xl hover:bg-slate-800/70 transition-all cursor-pointer p-5 border-amber-500/20 group">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-xl">
+                            {surah.number}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-white font-bold text-lg mb-1">{surah.name}</p>
+                            <p className="text-emerald-300/80 text-sm">
+                              {surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}
+                            </p>
+                          </div>
+                          <Button
+                            size="icon"
+                            className="bg-amber-500 hover:bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                          >
+                            <Play className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      </Card>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
 
-        {/* السور المميزة */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-amber-100 mb-6">السور المميزة</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-            {FEATURED_SURAHS.slice(0, 6).map(surah => (
-              <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
-                <Card className={`bg-gradient-to-br ${surah.color} hover:scale-105 transition-all cursor-pointer group overflow-hidden h-24`}>
-                  <div className="p-4 h-full flex items-center gap-4 relative">
-                    <div className="w-16 h-16 bg-black/20 rounded-lg flex items-center justify-center text-white text-2xl font-bold">
-                      {surah.number}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-white font-bold text-lg">{surah.name}</p>
-                    </div>
-                    <Button
-                      size="icon"
-                      className="bg-emerald-500 hover:bg-emerald-400 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity absolute left-4"
-                    >
-                      <Play className="w-5 h-5" />
-                    </Button>
-                  </div>
+              {filteredSurahs.length === 0 && (
+                <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-amber-500/20">
+                  <BookOpen className="w-20 h-20 text-amber-400/50 mx-auto mb-4" />
+                  <p className="text-white text-lg">لم يتم العثور على نتائج</p>
                 </Card>
-              </Link>
-            ))}
-          </div>
+              )}
+            </TabsContent>
+
+            {/* تبويب الإعدادات */}
+            <TabsContent value="settings" className="mt-8">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <AppSettingsPanel />
+              </motion.div>
+            </TabsContent>
+          </Tabs>
         </div>
-
-
-
-        {/* تصفح حسب القسم */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-amber-100 mb-6">الأقسام</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Link to={createPageUrl('Tilawa')}>
-              <Card className="bg-gradient-to-br from-purple-600 to-indigo-600 hover:scale-105 transition-all cursor-pointer p-6 h-40">
-                <h3 className="text-white font-bold text-xl">التلاوات 🎧</h3>
-              </Card>
-            </Link>
-            <Link to={createPageUrl('Library')}>
-              <Card className="bg-gradient-to-br from-pink-600 to-rose-600 hover:scale-105 transition-all cursor-pointer p-6 h-40">
-                <h3 className="text-white font-bold text-xl">مكتبتي 📚</h3>
-              </Card>
-            </Link>
-            <Link to={createPageUrl('Calligraphy')}>
-              <Card className="bg-gradient-to-br from-amber-600 to-orange-600 hover:scale-105 transition-all cursor-pointer p-6 h-40">
-                <h3 className="text-white font-bold text-xl">الخطوط ✨</h3>
-              </Card>
-            </Link>
-            <Link to={createPageUrl('Assistant')}>
-              <Card className="bg-gradient-to-br from-teal-600 to-cyan-600 hover:scale-105 transition-all cursor-pointer p-6 h-40">
-                <h3 className="text-white font-bold text-xl">المساعد 🤖</h3>
-              </Card>
-            </Link>
-          </div>
-        </div>
-
-        {/* جميع السور */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-amber-100 mb-6">سور القرآن الكريم</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredSurahs.map(surah => (
-              <Link key={surah.number} to={createPageUrl(`SurahView?surah=${surah.number}`)}>
-                <Card className="bg-slate-900/60 backdrop-blur-sm hover:bg-slate-800/70 transition-all cursor-pointer p-4 border-amber-900/30 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-amber-700 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
-                      {surah.number}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-amber-100 font-bold">{surah.name}</p>
-                      <p className="text-indigo-300/70 text-sm">{surah.verses_count} آية • {surah.revelation_place === 'Makkah' ? 'مكية' : 'مدنية'}</p>
-                    </div>
-                    <Button
-                      size="icon"
-                      className="bg-amber-600 hover:bg-amber-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Play className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
-
-          {filteredSurahs.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-indigo-300 text-xl">لم يتم العثور على نتائج</p>
-            </div>
-          )}
-        </div>
-      </div>
       </div>
     </div>
   );
