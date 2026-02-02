@@ -5,12 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Send, Sparkles, Users, TrendingUp } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Send, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/components/AuthProvider';
-import FeaturedChannels from '@/components/channels/FeaturedChannels';
-import VideoGrid from '@/components/videos/VideoGrid';
+import CommunityHero from '@/components/community/CommunityHero';
+import CommunityStats from '@/components/community/CommunityStats';
+import SharedContentCard from '@/components/community/SharedContentCard';
+import InspirationalVideos from '@/components/community/InspirationalVideos';
+import TrendingTopics from '@/components/community/TrendingTopics';
 
 export default function CommunityPage() {
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
@@ -87,15 +91,9 @@ export default function CommunityPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-pink-950/90 via-purple-950/95 to-slate-950/98" />
       </div>
       
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <Users className="w-10 h-10 text-white" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">مجتمع القرآن</h1>
-          <p className="text-xl text-pink-200 font-arabic">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ ﴾</p>
-          <p className="text-slate-300 mt-2">شارك آية أو حديث وانشر الفائدة 🤲</p>
-        </motion.div>
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
+        <CommunityHero />
+        <CommunityStats />
 
         {isAuthenticated && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -145,107 +143,40 @@ export default function CommunityPage() {
           </motion.div>
         )}
 
-        <div className="space-y-6">
-          {shares.length === 0 ? (
-            <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-pink-500/30">
-              <Sparkles className="w-20 h-20 mx-auto text-pink-400 mb-4" />
-              <p className="text-pink-200 text-xl mb-4">لا توجد مشاركات بعد</p>
-              <p className="text-slate-400">كن أول من يشارك آية أو حديث مع المجتمع!</p>
-            </Card>
-          ) : (
-            shares.map((share, index) => {
-              const shareComments = getShareComments(share.id);
-              return (
-                <motion.div
-                  key={share.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="p-6 bg-slate-900/60 backdrop-blur-xl border-pink-500/30 hover:border-pink-400/50 transition-all hover:shadow-2xl">
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-pink-600 to-rose-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                        {share.created_by?.charAt(0) || '؟'}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-pink-200">{share.created_by || 'مستخدم'}</p>
-                        <p className="text-sm text-slate-400">{new Date(share.created_date).toLocaleDateString('ar')}</p>
-                      </div>
-                      <Badge className="bg-pink-600/80 text-white">
-                        {share.content_type === 'verse' ? 'آية' : share.content_type === 'hadith' ? 'حديث' : 'حكمة'}
-                      </Badge>
-                    </div>
+        {/* Recent Shares Section */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-white mb-2">المشاركات الحديثة</h2>
+          <p className="text-slate-400 mb-8">أحدث آيات وأحاديث مشاركة من المجتمع</p>
 
-                    <div className="mb-4 p-6 bg-gradient-to-br from-amber-500/10 to-pink-500/10 rounded-xl border border-amber-500/20">
-                      <p className="text-2xl font-arabic leading-loose text-amber-100 mb-3">{share.arabic_text}</p>
-                      {share.translation && (
-                        <p className="text-slate-300 border-t border-amber-500/20 pt-3">{share.translation}</p>
-                      )}
-                      {share.source && (
-                        <p className="text-sm text-amber-400 font-bold mt-2">📖 {share.source}</p>
-                      )}
-                    </div>
+          <div className="space-y-6">
+            {shares.length === 0 ? (
+              <Card className="p-12 text-center bg-slate-900/60 backdrop-blur-xl border-pink-500/30">
+                <Sparkles className="w-20 h-20 mx-auto text-pink-400 mb-4" />
+                <p className="text-pink-200 text-xl mb-4">لا توجد مشاركات بعد</p>
+                <p className="text-slate-400">كن أول من يشارك آية أو حديث مع المجتمع!</p>
+              </Card>
+            ) : (
+              shares.map((share, index) => {
+                const shareComments = getShareComments(share.id);
+                return (
+                  <SharedContentCard
+                    key={share.id}
+                    share={share}
+                    comments={shareComments}
+                    onComment={handleComment}
+                    isAuthenticated={isAuthenticated}
+                  />
+                );
+              })
+            )}
+          </div>
+        </section>
 
-                    <div className="flex items-center gap-6 mb-4 pb-4 border-b border-slate-700">
-                      <button className="flex items-center gap-2 text-slate-400 hover:text-pink-400 transition-colors">
-                        <Heart className="w-5 h-5" />
-                        <span className="text-sm font-bold">{share.likes_count || 0}</span>
-                      </button>
-                      <button className="flex items-center gap-2 text-slate-400 hover:text-purple-400 transition-colors">
-                        <MessageCircle className="w-5 h-5" />
-                        <span className="text-sm font-bold">{shareComments.length}</span>
-                      </button>
-                      <button className="flex items-center gap-2 text-slate-400 hover:text-amber-400 transition-colors">
-                        <Share2 className="w-5 h-5" />
-                        <span className="text-sm font-bold">{share.shares_count || 0}</span>
-                      </button>
-                    </div>
+        {/* Trending Topics */}
+        <TrendingTopics />
 
-                    {shareComments.length > 0 && (
-                      <div className="space-y-3 mb-4">
-                        {shareComments.map((comment) => (
-                          <div key={comment.id} className="flex gap-3 p-3 bg-slate-800/60 rounded-lg">
-                            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                              {comment.created_by?.charAt(0) || '؟'}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-bold text-sm text-pink-200">{comment.created_by || 'مستخدم'}</p>
-                              <p className="text-slate-300">{comment.content}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {isAuthenticated && (
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="اكتب تعليقك..."
-                          value={commentText[share.id] || ''}
-                          onChange={(e) => setCommentText({ ...commentText, [share.id]: e.target.value })}
-                          onKeyPress={(e) => e.key === 'Enter' && handleComment(share.id)}
-                          className="bg-slate-800/60 border-pink-500/30 text-white placeholder:text-slate-400"
-                        />
-                        <Button onClick={() => handleComment(share.id)} size="icon" className="bg-gradient-to-br from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 shadow-lg">
-                          <Send className="w-5 h-5" />
-                        </Button>
-                      </div>
-                    )}
-                  </Card>
-                </motion.div>
-              );
-            })
-          )}
-        </div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
-          <h2 className="text-2xl font-bold text-pink-200 mb-6">📺 قنوات إسلامية ملهمة</h2>
-          <FeaturedChannels variant="horizontal" limit={6} />
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="mt-12">
-          <VideoGrid pageName="Community" limit={6} />
-        </motion.div>
+        {/* Inspirational Videos */}
+        <InspirationalVideos />
       </div>
     </div>
   );
