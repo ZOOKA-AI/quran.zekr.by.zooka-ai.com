@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Mic, BookOpen, Star, Users, Sparkles, Loader2 } from 'lucide-react';
+import { Search, Mic, BookOpen, Star, Users, Sparkles, Loader2, ExternalLink, Upload, ImagePlus, Link as LinkIcon } from 'lucide-react';
 import IslamicBackground from '@/components/layout/IslamicBackground';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 export default function RecitersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [uploadingId, setUploadingId] = useState(null);
 
   // جلب المقرئين من قاعدة البيانات
   const { data: reciters = [], isLoading } = useQuery({
@@ -137,7 +140,56 @@ export default function RecitersPage() {
                   <p className="text-slate-400 leading-relaxed mb-4 text-sm line-clamp-3">
                     {reciter.bio}
                   </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-700">
+                  <div className="space-y-4 pt-4 border-t border-slate-700">
+                    {/* مصادر ومراجع */}
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-slate-400">
+                        {reciter.slug && refsBySlug[reciter.slug]?.length ? (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button size="sm" variant="outline" className="h-8 px-3 text-amber-300 border-amber-500/40 bg-slate-900/40">
+                                <LinkIcon className="w-3.5 h-3.5 ml-2" /> مراجع
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-64">
+                              {refsBySlug[reciter.slug].map((r) => (
+                                <DropdownMenuItem key={r.id} asChild>
+                                  <a href={r.url} target="_blank" rel="noreferrer" className="flex items-center justify-between">
+                                    <span className="truncate">{r.title || r.provider || r.url}</span>
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                  </a>
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        ) : (
+                          <span className="text-slate-500">لا مراجع بعد</span>
+                        )}
+                      </div>
+
+                      {isAdmin && (
+                        <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-amber-200">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleImageUpload(reciter, e.target.files?.[0])}
+                          />
+                          <Button size="sm" variant="outline" disabled={uploadingId===reciter.id} className="h-8 px-3 bg-slate-900/40 border-amber-500/40">
+                            {uploadingId===reciter.id ? (
+                              <Loader2 className="w-3.5 h-3.5 ml-2 animate-spin" />
+                            ) : (
+                              <ImagePlus className="w-3.5 h-3.5 ml-2" />
+                            )}
+                            تحديث الصورة
+                          </Button>
+                        </label>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-sm">{reciter.birth_year || ''}</span>
+                      <div className="flex gap-2">
                     <span className="text-slate-500 text-sm">{reciter.birth_year || ''}</span>
                     <div className="flex gap-2">
                       {reciter.recitation_style && (
