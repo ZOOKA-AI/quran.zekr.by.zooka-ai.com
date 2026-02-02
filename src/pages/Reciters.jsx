@@ -295,13 +295,6 @@ export default function RecitersPage() {
             <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
           </div>
         )}
-
-        {!isLoading && filteredReciters.length === 0 && (
-          <div className="text-center py-16">
-            <Mic className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-            <p className="text-slate-400 text-xl">لم يتم العثور على نتائج</p>
-          </div>
-        )}
       </div>
     </IslamicBackground>
   );
