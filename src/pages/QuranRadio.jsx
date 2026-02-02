@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Radio, Play, Pause, Volume2, VolumeX, Heart, Search, Globe, Wifi, Signal, Loader2 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Radio, Play, Pause, Volume2, VolumeX, Heart, Search, Signal, Loader2, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import AudioManager from '@/components/audio/AudioManager';
+import { useGlobalQuranPlayer } from '@/components/player/GlobalQuranPlayerContext';
 
 // الأعلام حسب البلد
 const COUNTRY_FLAGS = {
@@ -22,19 +24,58 @@ const COUNTRY_FLAGS = {
 };
 
 export default function QuranRadio() {
+  const queryClient = useQueryClient();
+  const { stop: stopQuranPlayer } = useGlobalQuranPlayer();
   const [currentStation, setCurrentStation] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
-  const [favorites, setFavorites] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeTab, setActiveTab] = useState('all');
   const audioRef = useRef(null);
 
   // جلب المحطات من قاعدة البيانات
   const { data: dbStations = [], isLoading } = useQuery({
     queryKey: ['radio-stations'],
     queryFn: () => base44.entities.RadioStation.filter({ is_active: true }),
+  });
+
+  // جلب المحطات المفضلة
+  const { data: favoriteStations = [] } = useQuery({
+    queryKey: ['favorite-stations'],
+    queryFn: async () => {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) return [];
+      return base44.entities.FavoriteStation.list();
+    }
+  });
+
+  // إضافة/إزالة محطة من المفضلة
+  const toggleFavoriteMutation = useMutation({
+    mutationFn: async (station) => {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        toast.error('يرجى تسجيل الدخول لحفظ المفضلة');
+        return;
+      }
+
+      const existing = favoriteStations.find(f => f.station_id === station.id);
+      if (existing) {
+        await base44.entities.FavoriteStation.delete(existing.id);
+        toast.success('تمت إزالة المحطة من المفضلة');
+      } else {
+        await base44.entities.FavoriteStation.create({
+          station_id: station.id,
+          station_name: station.name,
+          station_url: station.url
+        });
+        toast.success('تمت إضافة المحطة للمفضلة');
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorite-stations'] });
+    }
   });
 
   // تحويل البيانات للصيغة المطلوبة
@@ -48,31 +89,32 @@ export default function QuranRadio() {
   }));
 
   useEffect(() => {
-    const saved = localStorage.getItem('radio-favorites');
-    if (saved) setFavorites(JSON.parse(saved));
-    
     // الاستماع لتغييرات الصوت من المصادر الأخرى
     const unsubscribe = AudioManager.addListener((source, status) => {
       if (source !== 'radio' && status === 'playing') {
-        // مصدر آخر بدأ التشغيل - إيقاف الراديو
         setIsPlaying(false);
       }
     });
     
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+      audioRef.current.muted = isMuted;
+    }
+    
     return () => unsubscribe();
-  }, []);
+  }, [volume, isMuted]);
 
   const playStation = (station) => {
-    // إيقاف أي صوت آخر أولاً
+    // إيقاف المشغل العام أولاً
+    stopQuranPlayer();
+    // إيقاف أي صوت آخر
     AudioManager.stopAll();
     
     if (currentStation?.id === station.id && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
     } else {
-      // تسجيل الصوت في المدير المركزي
       AudioManager.register(audioRef.current, 'radio');
-      
       setCurrentStation(station);
       if (audioRef.current) {
         audioRef.current.src = station.url;
@@ -83,15 +125,10 @@ export default function QuranRadio() {
     }
   };
 
-  const toggleFavorite = (stationId) => {
-    const updated = favorites.includes(stationId)
-      ? favorites.filter(id => id !== stationId)
-      : [...favorites, stationId];
-    setFavorites(updated);
-    localStorage.setItem('radio-favorites', JSON.stringify(updated));
+  const isFavorite = (stationId) => {
+    return favoriteStations.some(f => f.station_id === stationId);
   };
 
-  // استخراج الفئات الفريدة من البيانات
   const uniqueCategories = [...new Set(RADIO_STATIONS.map(s => s.category))];
   const categories = ['all', ...uniqueCategories];
   
@@ -100,6 +137,8 @@ export default function QuranRadio() {
     const matchesCategory = selectedCategory === 'all' || station.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const favStations = RADIO_STATIONS.filter(s => isFavorite(s.id));
 
   return (
     <div className="min-h-screen py-8 px-4" dir="rtl">
@@ -160,31 +199,44 @@ export default function QuranRadio() {
           </Card>
         )}
 
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="all">كل المحطات</TabsTrigger>
+            <TabsTrigger value="favorites" className="flex items-center gap-2">
+              <Star className="w-4 h-4" />
+              المفضلة ({favStations.length})
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         {/* Search & Filter */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1 relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              placeholder="ابحث عن إذاعة..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10"
-            />
+        {activeTab === 'all' && (
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                placeholder="ابحث عن إذاعة..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pr-10"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {categories.map(cat => (
+                <Button
+                  key={cat}
+                  variant={selectedCategory === cat ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={selectedCategory === cat ? "bg-emerald-600" : ""}
+                >
+                  {cat === 'all' ? 'الكل' : cat}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div className="flex gap-2">
-            {categories.map(cat => (
-              <Button
-                key={cat}
-                variant={selectedCategory === cat ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(cat)}
-                className={selectedCategory === cat ? "bg-emerald-600" : ""}
-              >
-                {cat === 'all' ? 'الكل' : cat}
-              </Button>
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* Loading State */}
         {isLoading && (
@@ -196,7 +248,7 @@ export default function QuranRadio() {
         {/* Stations Grid */}
         {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredStations.map(station => (
+          {(activeTab === 'all' ? filteredStations : favStations).map(station => (
             <Card 
               key={station.id}
               className={`cursor-pointer transition-all hover:shadow-lg ${
@@ -230,10 +282,11 @@ export default function QuranRadio() {
                     size="icon"
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleFavorite(station.id);
+                      toggleFavoriteMutation.mutate(station);
                     }}
+                    disabled={toggleFavoriteMutation.isPending}
                   >
-                    <Heart className={`w-5 h-5 ${favorites.includes(station.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                    <Heart className={`w-5 h-5 ${isFavorite(station.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                   </Button>
                 </div>
               </CardContent>
@@ -242,10 +295,12 @@ export default function QuranRadio() {
         </div>
         )}
 
-        {!isLoading && filteredStations.length === 0 && (
+        {!isLoading && (activeTab === 'all' ? filteredStations : favStations).length === 0 && (
           <Card className="p-8 text-center">
             <Radio className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">لا توجد محطات متاحة</p>
+            <p className="text-gray-500">
+              {activeTab === 'favorites' ? 'لا توجد محطات مفضلة' : 'لا توجد محطات متاحة'}
+            </p>
           </Card>
         )}
       </div>
