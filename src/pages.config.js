@@ -71,6 +71,7 @@ import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
+import Channels from './pages/Channels';
 import __Layout from './Layout.jsx';
 
 
@@ -99,6 +100,7 @@ export const PAGES = {
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
+    "Channels": Channels,
 }
 
 export const pagesConfig = {

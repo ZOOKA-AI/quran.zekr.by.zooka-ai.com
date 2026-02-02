@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -31,6 +31,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'المقرئين', path: 'Reciters', icon: Mic, color: 'text-purple-600' },
     { name: 'رمضان', path: 'Ramadan', icon: Moon, color: 'text-purple-600' },
     { name: 'الأذكار', path: 'Athkar', icon: Sun, color: 'text-cyan-600' },
+    { name: 'القنوات', path: 'Channels', icon: Youtube, color: 'text-red-600' },
     { name: 'الإذاعة', path: 'QuranRadio', icon: Radio, color: 'text-indigo-600' },
     { name: 'التواشيح', path: 'Tawasheeh', icon: Music, color: 'text-amber-600' },
     { name: 'الابتهالات', path: 'Ibtihaalat', icon: AudioLines, color: 'text-orange-600' },
