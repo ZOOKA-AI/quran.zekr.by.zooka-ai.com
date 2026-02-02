@@ -119,7 +119,6 @@ export default function RecitersPage() {
               </p>
             </div>
           </div>
-          </div>
           </Card>
 
         {/* مربع البحث */}
