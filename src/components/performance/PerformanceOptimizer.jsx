@@ -6,10 +6,7 @@ export default function PerformanceOptimizer({ children }) {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         if (entry.duration > 3000) {
-          loggerUtils.warn('Slow operation detected', {
-            name: entry.name,
-            duration: entry.duration
-          });
+          console.warn('[PERF] Slow operation:', entry.name, `${entry.duration.toFixed(2)}ms`);
         }
       }
     });
