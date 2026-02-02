@@ -9,6 +9,7 @@ import { Search, Mic, BookOpen, Star, Users, Sparkles, Loader2, ExternalLink, Up
 import IslamicBackground from '@/components/layout/IslamicBackground';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShareButton from '@/components/share/ShareButton';
+import { motion } from 'framer-motion';
 
 export default function RecitersPage() {
   const [searchQuery, setSearchQuery] = useState('');
