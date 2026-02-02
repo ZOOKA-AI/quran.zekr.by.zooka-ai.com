@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CreditCard, ExternalLink } from 'lucide-react';
+import { CreditCard, ExternalLink, Copy, QrCode, Check } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const PRESET_AMOUNTS = [10, 25, 50, 100, 250, 500, 1000];
+const ZIINA_PAYMENT_URL = 'https://pay.ziina.com/helmyharoon822';
 
 export default function ZiinaAmountSelector() {
   const [amount, setAmount] = useState('');
   const [customAmount, setCustomAmount] = useState('');
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const handlePresetAmount = (value) => {
     setAmount(value);
@@ -22,17 +26,18 @@ export default function ZiinaAmountSelector() {
 
   const finalAmount = customAmount || amount;
 
-  // رابط Ziina مع المبلغ
-  const getZiinaLink = () => {
-    const baseUrl = 'https://pay.ziina.com/RoyalHaroonZLLC/6gIekkkfy';
-    if (finalAmount) {
-      return `${baseUrl}?amount=${finalAmount}`;
-    }
-    return baseUrl;
+  const handleDonate = () => {
+    window.open(ZIINA_PAYMENT_URL, '_blank');
   };
 
-  const handleDonate = () => {
-    window.open(getZiinaLink(), '_blank');
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(ZIINA_PAYMENT_URL);
+    setCopied(true);
+    toast({
+      title: "تم النسخ! ✅",
+      description: "تم نسخ رابط الدفع بنجاح",
+    });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
