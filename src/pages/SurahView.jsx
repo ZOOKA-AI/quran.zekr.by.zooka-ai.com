@@ -18,6 +18,7 @@ import ReadingSettings from '../components/quran/ReadingSettings';
 import ReciterSelector from '../components/quran/ReciterSelector';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
+import ShareButton from '@/components/share/ShareButton';
 import { toast } from 'sonner';
 
 export default function SurahView() {
