@@ -238,8 +238,8 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
             aria-label="مستوى الصوت"
           />
           <span className="text-sm text-gray-600 w-12">{volume}%</span>
-          <Button variant="outline" size="icon" asChild aria-label="تحميل الملف الصوتي">
-            <a href={audioUrl} download>
+          <Button variant="outline" size="icon" asChild>
+            <a href={audioUrl} download aria-label="تحميل الملف الصوتي">
               <Download className="w-4 h-4" />
             </a>
           </Button>
