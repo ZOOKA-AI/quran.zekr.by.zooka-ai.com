@@ -287,13 +287,13 @@ export default function RecitersPage() {
                       variant="outline"
                       size="sm"
                     />
-                    </div>
-                    </Card>
-                    </motion.div>
-                    );
-                    })}
-                    </div>
-                    )}
+                  </div>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+        )}
 
         {!isLoading && filteredReciters.length === 0 && (
           <div className="text-center py-16">
