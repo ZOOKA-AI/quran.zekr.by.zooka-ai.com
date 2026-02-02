@@ -115,11 +115,11 @@ export default function VideoGrid({ pageName, limit = 6 }) {
                   <div className="flex gap-4 pt-3 border-t border-slate-700/50">
                     <div className="flex items-center gap-1 text-slate-400 text-xs">
                       <Eye className="w-3 h-3" />
-                      {formatUtils.formatNumber(video.views_count || 0)}
+                      {formatNumber(video.views_count || 0)}
                     </div>
                     <div className="flex items-center gap-1 text-slate-400 text-xs">
                       <Heart className="w-3 h-3" />
-                      {formatUtils.formatNumber(video.likes_count || 0)}
+                      {formatNumber(video.likes_count || 0)}
                     </div>
                   </div>
                 </div>
