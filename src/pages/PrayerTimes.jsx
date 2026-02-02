@@ -62,7 +62,9 @@ export default function PrayerTimesPage() {
   };
 
   useEffect(() => {
-    getUserLocation();
+    // Don't automatically request geolocation on page load
+    // Let user manually trigger it for better UX and privacy
+    // getUserLocation();
   }, []);
 
   const getUserLocation = () => {
