@@ -247,9 +247,8 @@ export default function RecitersPage() {
                           </Badge>
                         )}
                       </div>
-                    </div>
-                </div>
-              </Card>
+                      </div>
+                      </Card>
             );
           })}
         </div>
