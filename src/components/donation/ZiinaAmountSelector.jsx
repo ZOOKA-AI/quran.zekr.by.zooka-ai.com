@@ -49,6 +49,22 @@ export default function ZiinaAmountSelector() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* QR Code Section */}
+        <div className="bg-white rounded-xl p-4 text-center border border-teal-200">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <QrCode className="w-5 h-5 text-teal-600" />
+            <span className="font-bold text-teal-700">امسح للدفع عبر Ziina</span>
+          </div>
+          <div className="bg-white p-3 rounded-lg inline-block shadow-md">
+            <img 
+              src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://pay.ziina.com/helmyharoon822"
+              alt="Ziina QR Code"
+              className="w-36 h-36 mx-auto"
+            />
+          </div>
+          <p className="text-sm text-gray-600 mt-2">@helmyharoon822</p>
+        </div>
+
         {/* المبالغ المسبقة */}
         <div>
           <label className="text-gray-700 font-bold mb-3 block text-sm">اختر المبلغ (درهم)</label>
@@ -90,17 +106,28 @@ export default function ZiinaAmountSelector() {
           </div>
         )}
 
-        {/* زر التبرع */}
-        <Button
-          onClick={handleDonate}
-          className="w-full h-12 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold"
-        >
-          <ExternalLink className="w-5 h-5 ml-2" />
-          {finalAmount ? `تبرع بـ ${finalAmount} د.إ عبر Ziina` : 'تبرع عبر Ziina'}
-        </Button>
+        {/* أزرار التبرع */}
+        <div className="space-y-2">
+          <Button
+            onClick={handleDonate}
+            className="w-full h-12 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold"
+          >
+            <ExternalLink className="w-5 h-5 ml-2" />
+            {finalAmount ? `تبرع بـ ${finalAmount} د.إ` : 'ادفع الآن عبر Ziina'}
+          </Button>
+          
+          <Button
+            onClick={handleCopyLink}
+            variant="outline"
+            className="w-full h-10 border-teal-300 text-teal-700 hover:bg-teal-50"
+          >
+            {copied ? <Check className="w-4 h-4 ml-2" /> : <Copy className="w-4 h-4 ml-2" />}
+            {copied ? 'تم النسخ!' : 'نسخ رابط الدفع'}
+          </Button>
+        </div>
 
         <p className="text-xs text-gray-500 text-center">
-          سيتم فتح صفحة Ziina الآمنة للدفع
+          💳 آمن ومشفر • يدعم Apple Pay و Google Pay
         </p>
       </CardContent>
     </Card>
