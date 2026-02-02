@@ -248,7 +248,9 @@ export default function RecitersPage() {
                         )}
                       </div>
                       </div>
-                      </Card>
+                    </div>
+                  </div>
+                </Card>
             );
           })}
         </div>
