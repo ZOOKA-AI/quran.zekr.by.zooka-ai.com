@@ -35,10 +35,20 @@ export default function Tawasheeh() {
   const audioRef = useRef(null);
 
   // جلب التواشيح من قاعدة البيانات
-  const { data: dbTawasheeh = [], isLoading } = useQuery({
-    queryKey: ['tawasheeh'],
-    queryFn: () => base44.entities.Tawasheeh.list('-plays_count'),
-  });
+   const { data: dbTawasheeh = [], isLoading } = useQuery({
+     queryKey: ['tawasheeh'],
+     queryFn: async () => {
+       try {
+         const result = await base44.entities.Tawasheeh.list('-plays_count');
+         return result && result.length > 0 ? result : [];
+       } catch (error) {
+         toast.error('خطأ في تحميل البيانات');
+         return [];
+       }
+     },
+     staleTime: 5 * 60 * 1000,
+     cacheTime: 10 * 60 * 1000,
+   });
 
   // تحويل البيانات للصيغة المطلوبة
   const TAWASHEEH = dbTawasheeh.map(t => ({
