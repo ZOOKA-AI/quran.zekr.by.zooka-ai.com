@@ -7,7 +7,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Play, Eye, Heart } from 'lucide-react';
 import FloatingVideoPlayer from './FloatingVideoPlayer';
-import { formatUtils } from '@/utils';
+
+const formatTime = (seconds) => {
+  if (!seconds) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const formatNumber = (num) => {
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+  return num.toString();
+};
 
 export default function VideoGrid({ pageName, limit = 6 }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
