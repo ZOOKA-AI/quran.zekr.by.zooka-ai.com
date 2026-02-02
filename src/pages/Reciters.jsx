@@ -281,8 +281,9 @@ export default function RecitersPage() {
                        variant="outline"
                        size="sm"
                      />
-                  </div>
-                </Card>
+                    </div>
+                    </Card>
+                    </motion.div>
             );
           })}
         </div>
