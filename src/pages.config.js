@@ -72,6 +72,7 @@ import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
 import Channels from './pages/Channels';
+import ShareLibrary from './pages/ShareLibrary';
 import __Layout from './Layout.jsx';
 
 
@@ -101,6 +102,7 @@ export const PAGES = {
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
     "Channels": Channels,
+    "ShareLibrary": ShareLibrary,
 }
 
 export const pagesConfig = {
