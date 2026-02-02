@@ -17,6 +17,7 @@ import DailyVerseCard from '../components/quran/DailyVerseCard';
 import AppFeaturesBanner from '../components/quran/AppFeaturesBanner';
 import ExternalResourcesWidget from '../components/quran/ExternalResourcesWidget';
 import QuickNavigation from '../components/home/QuickNavigation';
+import FeaturedChannels from '@/components/channels/FeaturedChannels';
 import FeaturedSurahs from '../components/home/FeaturedSurahs';
 import AppSettingsPanel from '../components/settings/AppSettingsPanel';
 import QuranStats from '../components/quran/QuranStats';
@@ -145,6 +146,11 @@ export default function QuranPage() {
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
                 <DailyContent />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4">📺 القنوات الإسلامية المميزة</h2>
+                <FeaturedChannels variant="grid" limit={6} />
               </motion.div>
             </TabsContent>
 
