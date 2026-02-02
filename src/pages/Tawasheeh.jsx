@@ -43,12 +43,12 @@ export default function Tawasheeh() {
   // تحويل البيانات للصيغة المطلوبة
   const TAWASHEEH = dbTawasheeh.map(t => ({
     id: t.id,
-    title: t.title,
-    artist: t.artist,
-    duration: t.duration_text || formatTime(t.duration),
-    category: t.category,
-    url: t.audio_url,
-    featured: t.is_featured
+    title: t.title || 'بدون عنوان',
+    artist: t.artist || 'غير معروف',
+    duration: t.duration_text || formatTime(t.duration || 0),
+    category: t.category || 'أخرى',
+    url: t.audio_url || '',
+    featured: t.is_featured || false
   }));
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Tawasheeh() {
   }, []);
 
   useEffect(() => {
-    if (currentTrack && audioRef.current) {
+    if (currentTrack && audioRef.current && currentTrack.url) {
       // إيقاف أي صوت آخر أولاً
       AudioManager.stopAll();
       
@@ -76,7 +76,8 @@ export default function Tawasheeh() {
       audioRef.current.src = currentTrack.url;
       audioRef.current.volume = volume;
       audioRef.current.play().catch(err => {
-        toast.error('تعذر تشغيل الصوت');
+        toast.error('تعذر تشغيل الصوت - تأكد من وجود رابط صحيح');
+        setIsPlaying(false);
       });
     }
   }, [currentTrack]);
