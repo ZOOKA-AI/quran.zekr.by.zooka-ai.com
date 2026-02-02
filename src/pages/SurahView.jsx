@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookMarked, Search as SearchIcon } from 'lucide-react';
+import { ArrowRight, BookMarked, Search as SearchIcon, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
+import { useAudioOptimization } from '@/components/hooks/useAudioOptimization';
+import { useKeyboardShortcuts, useRegisterShortcut } from '@/components/hooks/useKeyboardShortcuts';
+import { performanceUtils, loggerUtils } from '@/utils';
 import AudioPlayer from '../components/quran/AudioPlayer';
 import VerseSync from '../components/quran/VerseSync';
 import SearchBar from '../components/quran/SearchBar';
@@ -13,11 +17,13 @@ import NavigationControls from '../components/quran/NavigationControls';
 import ReadingSettings from '../components/quran/ReadingSettings';
 import ReciterSelector from '../components/quran/ReciterSelector';
 import IslamicBackground from '@/components/layout/IslamicBackground';
+import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
 import { toast } from 'sonner';
 
 export default function SurahView() {
   const urlParams = new URLSearchParams(window.location.search);
   const surahNumber = parseInt(urlParams.get('surah')) || 1;
+  const [isOptimizing, setIsOptimizing] = useState(false);
   
   const [searchResults, setSearchResults] = useState(null);
   const [selectedJuz, setSelectedJuz] = useState(null);
@@ -31,6 +37,12 @@ export default function SurahView() {
   });
   const [selectedReciter, setSelectedReciter] = useState('husary');
   const queryClient = useQueryClient();
+  
+  // استخدام اختصارات لوحة المفاتيح
+  const shortcuts = useKeyboardShortcuts();
+  useRegisterShortcut('Space', () => document.querySelector('[data-player-play]')?.click(), 'تشغيل/إيقاف');
+  useRegisterShortcut('ArrowRight', () => document.querySelector('[data-next-surah]')?.click(), 'التالي');
+  useRegisterShortcut('ArrowLeft', () => document.querySelector('[data-prev-surah]')?.click(), 'السابق');
 
   // حفظ الإعدادات في localStorage
   useEffect(() => {
@@ -45,11 +57,17 @@ export default function SurahView() {
     localStorage.setItem('quran-reading-settings', JSON.stringify(newSettings));
   };
 
-  const { data: verses = [], isLoading } = useQuery({
-    queryKey: ['verses', surahNumber],
-    queryFn: () => base44.entities.Verse.filter({ surah_number: surahNumber }),
-    initialData: [],
-  });
+  // استدعاء محسّن للآيات مع الذاكرة المؤقتة
+  const { data: verses = [], isLoading } = useOptimizedQuery(
+    ['verses', surahNumber],
+    () => base44.entities.Verse.filter({ surah_number: surahNumber }),
+    { staleTime: 15 * 60 * 1000, cacheTime: 30 * 60 * 1000 }
+  );
+
+  // تسجيل تحميل الصفحة
+  useEffect(() => {
+    loggerUtils.info('Surah view loaded', { surah_number: surahNumber, verses_count: verses.length });
+  }, [surahNumber, verses.length]);
 
   const createBookmarkMutation = useMutation({
     mutationFn: (bookmarkData) => base44.entities.Bookmark.create(bookmarkData),
@@ -138,17 +156,46 @@ export default function SurahView() {
 
   const versesToShow = displayedVerses.length > 0 ? displayedVerses : sampleVerses;
 
+  const runOptimization = async () => {
+    setIsOptimizing(true);
+    try {
+      const { result } = await performanceUtils.measureAsync(
+        () => base44.functions.invoke('updatePerformanceMetrics', {}),
+        'Performance update'
+      );
+      loggerUtils.info('Optimization completed', result);
+      toast.success('تم تحسين الأداء بنجاح');
+    } catch (error) {
+      loggerUtils.error('Optimization failed', error);
+      toast.error('فشل تحسين الأداء');
+    } finally {
+      setIsOptimizing(false);
+    }
+  };
+
   return (
+    <PerformanceOptimizer>
     <IslamicBackground variant="default">
       {/* الرأس */}
       <div className="relative text-white pt-8">
         <div className="max-w-6xl mx-auto px-6 py-8">
-          <Link to={createPageUrl('Quran')}>
-            <Button variant="ghost" className="text-amber-200 hover:bg-white/10 mb-6 border border-amber-500/20">
-              <ArrowRight className="w-5 h-5 ml-2" />
-              العودة للقائمة
+          <div className="flex items-center justify-between mb-6">
+            <Link to={createPageUrl('Quran')}>
+              <Button variant="ghost" className="text-amber-200 hover:bg-white/10 border border-amber-500/20">
+                <ArrowRight className="w-5 h-5 ml-2" />
+                العودة للقائمة
+              </Button>
+            </Link>
+            <Button
+              size="icon"
+              className="rounded-full bg-amber-600 hover:bg-amber-700"
+              onClick={runOptimization}
+              disabled={isOptimizing}
+              title="تحسين الأداء (Ctrl+Space)"
+            >
+              <Zap className={`w-5 h-5 ${isOptimizing ? 'animate-spin' : ''}`} />
             </Button>
-          </Link>
+          </div>
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-3 text-amber-100">سورة رقم {surahNumber}</h1>
             <p className="text-xl text-indigo-200 font-arabic">﴿ اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ ﴾</p>
@@ -248,5 +295,6 @@ export default function SurahView() {
         )}
       </div>
     </IslamicBackground>
+    </PerformanceOptimizer>
   );
 }
