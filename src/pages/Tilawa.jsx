@@ -347,6 +347,10 @@ export default function Tilawa() {
             <h2 className="text-2xl font-bold text-purple-200 mb-6">📺 القنوات الإسلامية</h2>
             <FeaturedChannels variant="horizontal" limit={6} />
           </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+            <VideoGrid pageName="Tilawa" limit={6} />
+          </motion.div>
         </>
         )}
       </div>
