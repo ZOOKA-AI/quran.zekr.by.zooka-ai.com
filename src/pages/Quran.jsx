@@ -31,6 +31,7 @@ import WeatherWidget from '../components/weather/WeatherWidget';
 import DedicationCard from '../components/quran/DedicationCard';
 import DailyVerseCard from '../components/quran/DailyVerseCard';
 import AppFeaturesBanner from '../components/quran/AppFeaturesBanner';
+import ExternalResourcesWidget from '../components/quran/ExternalResourcesWidget';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', transliteration: 'Al-Fatihah', verses_count: 7, revelation_place: 'Makkah', juz_start: 1 },
@@ -315,6 +316,11 @@ export default function QuranPage() {
               <WeatherWidget />
             </div>
           </div>
+        </div>
+
+        {/* روابط مفيدة */}
+        <div className="mb-12">
+          <ExternalResourcesWidget />
         </div>
 
         {/* قسم محتوى اليوم */}
