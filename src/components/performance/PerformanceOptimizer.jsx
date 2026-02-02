@@ -1,41 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { base44 } from '@/api/base44Client';
+import { performanceUtils, cacheUtils, loggerUtils } from '@/utils';
 
 export default function PerformanceOptimizer({ children }) {
   useEffect(() => {
     // مراقبة الأداء
-    if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          if (entry.duration > 3000) {
-            console.warn('[PERF] Slow operation:', entry.name, `${entry.duration.toFixed(2)}ms`);
-          }
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.duration > 3000) {
+          loggerUtils.warn('Slow operation detected', {
+            name: entry.name,
+            duration: entry.duration
+          });
         }
-      });
-
-      try {
-        observer.observe({ entryTypes: ['measure', 'navigation'] });
-        return () => observer.disconnect();
-      } catch (e) {
-        console.warn('PerformanceObserver not fully supported');
       }
-    }
+    });
+
+    observer.observe({ entryTypes: ['measure', 'navigation'] });
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    // تنظيف الذاكرة كل ساعة
+    // تنظيف الذاكرة المؤقتة كل ساعة
     const cleanup = setInterval(() => {
-      if ('localStorage' in window) {
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.startsWith('cache_')) {
-            localStorage.removeItem(key);
-          }
-        });
-        console.log('[CACHE] Cleared old cache entries');
-      }
+      cacheUtils.clear();
+      loggerUtils.info('Cache cleared');
     }, 60 * 60 * 1000);
 
     return () => clearInterval(cleanup);
+  }, []);
+
+  useEffect(() => {
+    // قياس الأداء باستخدام Performance API
+    if ('PerformanceObserver' in window) {
+      const perfObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          loggerUtils.info(`Performance: ${entry.name}`, {
+            duration: entry.duration,
+            startTime: entry.startTime
+          });
+        }
+      });
+
+      perfObserver.observe({ entryTypes: ['navigation', 'resource', 'paint'] });
+      return () => perfObserver.disconnect();
+    }
   }, []);
 
   return <>{children}</>;
