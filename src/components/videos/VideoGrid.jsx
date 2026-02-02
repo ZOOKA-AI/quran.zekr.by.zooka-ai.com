@@ -81,7 +81,7 @@ export default function VideoGrid({ pageName, limit = 6 }) {
                   {/* المدة */}
                   {video.duration && (
                     <Badge className="absolute top-2 right-2 bg-black/70 text-white">
-                      {formatUtils.formatTime(video.duration)}
+                      {formatTime(video.duration)}
                     </Badge>
                   )}
 
