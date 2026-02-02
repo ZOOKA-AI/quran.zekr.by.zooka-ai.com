@@ -1,0 +1,45 @@
+{
+  "name": "القرآن والذكر - Quran & Zekr",
+  "short_name": "قرآن وذكر",
+  "description": "تطبيق القرآن الكريم والذكر - قراءة القرآن، مواقيت الصلاة، الأذكار، والمزيد | Quran reading, prayer times, dhikr, and more",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://base44.com/logo_v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "education", "books"],
+  "lang": "ar",
+  "dir": "rtl",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "القرآن الكريم",
+      "short_name": "قرآن",
+      "description": "قراءة القرآن الكريم",
+      "url": "/Quran",
+      "icons": []
+    },
+    {
+      "name": "مواقيت الصلاة",
+      "short_name": "صلاة",
+      "description": "أوقات الصلاة",
+      "url": "/PrayerTimes",
+      "icons": []
+    },
+    {
+      "name": "الأذكار",
+      "short_name": "أذكار",
+      "description": "أذكار الصباح والمساء",
+      "url": "/Athkar",
+      "icons": []
+    }
+  ]
+}
