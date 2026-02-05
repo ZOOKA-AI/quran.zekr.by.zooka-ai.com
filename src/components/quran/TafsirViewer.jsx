@@ -76,33 +76,7 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
     }
   };
 
-  const _fetchAllTafsirs = async () => {
-    setLoading(true);
-    try {
-      const promises = TAFSIR_EDITIONS.map(edition =>
-        fetch(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${verseNumber}/${edition.id}`)
-          .then(res => res.json())
-      );
-      
-      const results = await Promise.all(promises);
-      const newTafsirData = {};
-      
-      results.forEach((data, index) => {
-        if (data.code === 200) {
-          newTafsirData[TAFSIR_EDITIONS[index].id] = data.data;
-        }
-      });
-      
-      setTafsirData(newTafsirData);
-    } catch {
-      setError('خطأ في جلب التفاسير');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const currentTafsir = tafsirData[selectedEdition];
-  const _currentEdition = TAFSIR_EDITIONS.find(e => e.id === selectedEdition);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

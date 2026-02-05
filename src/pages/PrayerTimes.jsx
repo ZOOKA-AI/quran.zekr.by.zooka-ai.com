@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function PrayerTimesPage() {
-  const [_location, setLocation] = useState(null);
+  const [_location, setLocation] = useState(null); // Stored but not displayed currently
   const [prayerTimes, setPrayerTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('');

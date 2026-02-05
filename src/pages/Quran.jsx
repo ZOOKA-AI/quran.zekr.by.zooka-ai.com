@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Search, Play, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Zap } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
-import { useKeyboardShortcuts } from '@/components/hooks/useKeyboardShortcuts';
 import { performanceUtils } from '@/components/utils/performanceUtils';
 import { loggerUtils } from '@/components/utils/loggerUtils';
 import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
@@ -47,12 +46,10 @@ const SURAHS = [
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
-  const [_sidebarOpen, _setSidebarOpen] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const _shortcuts = useKeyboardShortcuts();
 
   // استدعاء محسّن مع الذاكرة المؤقتة
-  const { data: dbSurahs = [], isLoading: _surahsLoading } = useOptimizedQuery(
+  const { data: dbSurahs = [] } = useOptimizedQuery(
     ['surahs-list'],
     async () => {
       return await base44.entities.Surah.list();

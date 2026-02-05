@@ -1,7 +1,6 @@
 import { Play, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 const inspirationalVideos = [
   {
@@ -55,10 +54,7 @@ const inspirationalVideos = [
 ];
 
 export default function InspirationalVideos() {
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  // Placeholder for video selection - will be used when implementing video player
-  const _ = { selectedVideo, setSelectedVideo };
-
+  // Video selection functionality to be implemented
   return (
     <section className="mb-12">
       <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-2">

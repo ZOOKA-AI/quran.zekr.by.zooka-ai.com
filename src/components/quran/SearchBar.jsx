@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Filter, X, History, Sparkles } from 'lucide-react';
 import { debounce } from 'lodash';
 
-const SearchBar = ({ onSearch, _onFilterChange, showSuggestions = true }) => {
+const SearchBar = ({ onSearch, showSuggestions = true }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('all');
   const [recentSearches, setRecentSearches] = useState([]);

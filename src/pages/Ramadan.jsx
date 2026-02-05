@@ -32,9 +32,8 @@ const DAILY_GOALS = [
 
 export default function Ramadan() {
   const [completedGoals, setCompletedGoals] = useState([]);
-  const [ramadanDay, _setRamadanDay] = useState(1);
+  const ramadanDay = 1; // Current Ramadan day (could be calculated from date)
   const [timeToIftar, setTimeToIftar] = useState('');
-  const [_timeToSuhoor, _setTimeToSuhoor] = useState('');
 
   useEffect(() => {
     // حساب الوقت المتبقي (تقريبي)

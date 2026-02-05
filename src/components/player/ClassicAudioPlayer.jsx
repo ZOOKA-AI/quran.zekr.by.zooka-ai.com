@@ -74,11 +74,6 @@ const getTrackOffline = async (trackId) => {
   }
 };
 
-const _isTrackDownloaded = async (trackId) => {
-  const track = await getTrackOffline(trackId);
-  return !!track;
-};
-
 // تنسيق الوقت
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return '0:00';

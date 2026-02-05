@@ -15,7 +15,6 @@ const TAFSIR_SOURCES = [
 ];
 
 export default function TafsirSelector({ verse, onSelectTafsir }) {
-  const [_selectedTafsir, _setSelectedTafsir] = useState('saadi');
   const [expandedTafsirs, setExpandedTafsirs] = useState(['saadi']);
 
   const toggleTafsir = (tafsirId) => {
