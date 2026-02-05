@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
+import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { 
   Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, 
   Repeat, Shuffle, Heart, Download, X, ChevronUp, ChevronDown,
-  Music, Radio, BookOpen, Mic, List, MoreHorizontal, Loader2, Check
+  Music, Radio, BookOpen, Mic, MoreHorizontal, Loader2, Check
 } from 'lucide-react';
 import { toast } from 'sonner';
 

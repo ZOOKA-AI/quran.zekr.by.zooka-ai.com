@@ -1,11 +1,8 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  Users, TrendingUp, Globe, Smartphone, Monitor, 
-  DollarSign, PieChart, Activity, Award, Heart
+import { Globe, Smartphone, Monitor, PieChart, Activity, Award, Heart
 } from 'lucide-react';
 
 export default function AdvancedStats() {

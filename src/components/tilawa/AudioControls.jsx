@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { 
-  Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, 
+  Play, Pause, SkipBack, Volume2, VolumeX, 
   RotateCcw, RotateCw, Repeat, Loader2
 } from 'lucide-react';
 

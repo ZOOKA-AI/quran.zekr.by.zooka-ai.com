@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 
 const GlobalQuranPlayerContext = createContext(null);

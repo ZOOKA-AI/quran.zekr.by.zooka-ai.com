@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { ArrowRight, BookOpen, Shield, FileText, Mail, Loader2, Info, Phone, Scale, HelpCircle } from 'lucide-react';

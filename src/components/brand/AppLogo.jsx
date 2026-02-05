@@ -1,4 +1,3 @@
-import React from 'react';
 import { BookOpen } from 'lucide-react';
 
 export default function AppLogo({ size = 'md', showTagline = true }) {

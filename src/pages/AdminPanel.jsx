@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,9 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
-  Lock, Users, Heart, DollarSign, BarChart3, 
-  Plus, Trash2, Edit, Eye, Search, RefreshCw,
-  TrendingUp, UserCheck, Baby, Gift, FileText, Bell, Activity
+  Lock, Users, Heart, DollarSign, BarChart3, Trash2,
+  TrendingUp, Baby, Gift, FileText, Bell, Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
 import CMSManager from '@/components/admin/CMSManager';
