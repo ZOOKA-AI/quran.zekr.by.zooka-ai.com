@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Play, Pause, Heart, Clock, Music2, Mic2, Star, Volume2, SkipBack, SkipForward, Loader2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
@@ -41,7 +40,7 @@ export default function Tawasheeh() {
        try {
          const result = await base44.entities.Tawasheeh.list('-plays_count');
          return result && result.length > 0 ? result : [];
-       } catch (error) {
+       } catch {
          toast.error('خطأ في تحميل البيانات');
          return [];
        }
@@ -85,7 +84,7 @@ export default function Tawasheeh() {
       
       audioRef.current.src = currentTrack.url;
       audioRef.current.volume = volume;
-      audioRef.current.play().catch(err => {
+      audioRef.current.play().catch(_err => {
         toast.error('تعذر تشغيل الصوت - تأكد من وجود رابط صحيح');
         setIsPlaying(false);
       });

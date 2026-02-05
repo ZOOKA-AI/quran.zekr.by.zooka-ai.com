@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
+import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { 
   Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, 
   Repeat, Shuffle, Heart, Download, X, ChevronUp, ChevronDown,
-  Music, Radio, BookOpen, Mic, List, MoreHorizontal, Loader2, Check
+  Music, Radio, BookOpen, Mic, MoreHorizontal, Loader2, Check
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -69,12 +69,12 @@ const getTrackOffline = async (trackId) => {
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
-  } catch (e) {
+  } catch {
     return null;
   }
 };
 
-const isTrackDownloaded = async (trackId) => {
+const _isTrackDownloaded = async (trackId) => {
   const track = await getTrackOffline(trackId);
   return !!track;
 };
@@ -168,7 +168,7 @@ export function PlayerProvider({ children }) {
     try {
       await audioRef.current.play();
       setIsPlaying(true);
-    } catch (e) {
+    } catch {
       toast.error('تعذر تشغيل الصوت');
     }
   };
@@ -236,7 +236,7 @@ export function PlayerProvider({ children }) {
       
       setDownloadedTracks(prev => new Set([...prev, track.id]));
       toast.success('تم التحميل! يمكنك الاستماع دون نت 📥');
-    } catch (e) {
+    } catch {
       toast.error('فشل التحميل');
     } finally {
       setIsDownloading(false);

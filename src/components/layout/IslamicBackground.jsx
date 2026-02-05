@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function IslamicBackground({ children, variant = 'default' }) {
   const variants = {

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Moon, Sun, BookOpen, Clock, Bell, Gift, Star, Heart, Music2, Calendar, Utensils, Coffee } from 'lucide-react';
+import { Moon, Sun, BookOpen, Bell, Star, Heart, Music2, Utensils, Coffee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -32,9 +32,9 @@ const DAILY_GOALS = [
 
 export default function Ramadan() {
   const [completedGoals, setCompletedGoals] = useState([]);
-  const [ramadanDay, setRamadanDay] = useState(1);
+  const [ramadanDay, _setRamadanDay] = useState(1);
   const [timeToIftar, setTimeToIftar] = useState('');
-  const [timeToSuhoor, setTimeToSuhoor] = useState('');
+  const [_timeToSuhoor, _setTimeToSuhoor] = useState('');
 
   useEffect(() => {
     // حساب الوقت المتبقي (تقريبي)

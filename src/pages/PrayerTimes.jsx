@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 
 export default function PrayerTimesPage() {
-  const [location, setLocation] = useState(null);
+  const [_location, setLocation] = useState(null);
   const [prayerTimes, setPrayerTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('');
@@ -100,7 +100,7 @@ export default function PrayerTimesPage() {
       } else {
         toast.error('حدث خطأ في جلب مواقيت الصلاة');
       }
-    } catch (error) {
+    } catch {
       toast.error('حدث خطأ في الاتصال بالخدمة');
     } finally {
       setLoading(false);
@@ -126,7 +126,7 @@ export default function PrayerTimesPage() {
       } else {
         toast.error('لم يتم العثور على المدينة');
       }
-    } catch (error) {
+    } catch {
       toast.error('حدث خطأ في الاتصال بالخدمة');
     } finally {
       setLoading(false);

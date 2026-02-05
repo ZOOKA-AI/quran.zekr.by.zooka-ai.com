@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -80,7 +79,7 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
         localStorage.setItem('downloaded-surahs', JSON.stringify(newDownloaded));
         toast.success(`تم تحميل سورة ${surahName} للاستماع بدون إنترنت`);
       };
-    } catch (error) {
+    } catch {
       toast.error('فشل التحميل، تحقق من الاتصال بالإنترنت');
     } finally {
       setDownloading(null);

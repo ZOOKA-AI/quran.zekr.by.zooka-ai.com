@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/components/ui/card';
 import { BookOpen, FileText, Layers, BookMarked } from 'lucide-react';
 

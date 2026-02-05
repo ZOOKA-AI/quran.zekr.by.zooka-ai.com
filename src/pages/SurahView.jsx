@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookMarked, Search as SearchIcon, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
-import { useAudioOptimization } from '@/components/hooks/useAudioOptimization';
 import { useKeyboardShortcuts, useRegisterShortcut } from '@/components/hooks/useKeyboardShortcuts';
 import { performanceUtils } from '@/components/utils/performanceUtils';
 import { loggerUtils } from '@/components/utils/loggerUtils';
@@ -41,7 +40,7 @@ export default function SurahView() {
   const queryClient = useQueryClient();
   
   // استخدام اختصارات لوحة المفاتيح
-  const shortcuts = useKeyboardShortcuts();
+  const _shortcuts = useKeyboardShortcuts();
   useRegisterShortcut('Space', () => document.querySelector('[data-player-play]')?.click(), 'تشغيل/إيقاف');
   useRegisterShortcut('ArrowRight', () => document.querySelector('[data-next-surah]')?.click(), 'التالي');
   useRegisterShortcut('ArrowLeft', () => document.querySelector('[data-prev-surah]')?.click(), 'السابق');

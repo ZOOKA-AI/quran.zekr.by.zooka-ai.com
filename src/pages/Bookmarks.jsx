@@ -72,7 +72,7 @@ export default function BookmarksPage() {
       } else {
         toast.error(response.data?.error || 'فشل الحفظ');
       }
-    } catch (error) {
+    } catch {
       toast.error('حدث خطأ أثناء الحفظ');
     } finally {
       setIsSavingToDrive(false);

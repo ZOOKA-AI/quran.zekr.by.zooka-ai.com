@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2, BookOpen, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, BookOpen, ExternalLink } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -69,14 +69,14 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
       } else {
         setError('فشل في جلب التفسير');
       }
-    } catch (err) {
+    } catch {
       setError('خطأ في الاتصال بالخدمة');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchAllTafsirs = async () => {
+  const _fetchAllTafsirs = async () => {
     setLoading(true);
     try {
       const promises = TAFSIR_EDITIONS.map(edition =>
@@ -94,7 +94,7 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
       });
       
       setTafsirData(newTafsirData);
-    } catch (err) {
+    } catch {
       setError('خطأ في جلب التفاسير');
     } finally {
       setLoading(false);
@@ -102,7 +102,7 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
   };
 
   const currentTafsir = tafsirData[selectedEdition];
-  const currentEdition = TAFSIR_EDITIONS.find(e => e.id === selectedEdition);
+  const _currentEdition = TAFSIR_EDITIONS.find(e => e.id === selectedEdition);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

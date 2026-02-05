@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Send, Sparkles } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Send, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/components/AuthProvider';
@@ -19,17 +18,17 @@ import TrendingTopics from '@/components/community/TrendingTopics';
 export default function CommunityPage() {
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
   const [commentText, setCommentText] = useState({});
-  const { user, isAuthenticated } = useAuth();
+  const { user: _user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: shares = [], refetch: refetchShares } = useQuery({
+  const { data: shares = [], refetch: _refetchShares } = useQuery({
     queryKey: ['shares'],
     queryFn: () => base44.entities.DailyShare.list('-created_date', 50),
     initialData: [],
   });
 
   useEffect(() => {
-    const unsubscribe = base44.entities.DailyShare.subscribe((event) => {
+    const unsubscribe = base44.entities.DailyShare.subscribe((_event) => {
       queryClient.invalidateQueries({ queryKey: ['shares'] });
     });
     return unsubscribe;
@@ -156,7 +155,7 @@ export default function CommunityPage() {
                 <p className="text-slate-400">كن أول من يشارك آية أو حديث مع المجتمع!</p>
               </Card>
             ) : (
-              shares.map((share, index) => {
+              shares.map((share, _index) => {
                 const shareComments = getShareComments(share.id);
                 return (
                   <SharedContentCard

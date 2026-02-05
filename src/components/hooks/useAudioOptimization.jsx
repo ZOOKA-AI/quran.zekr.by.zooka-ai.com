@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { audioUtils } from '@/components/utils/audioUtils';
 import { performanceUtils } from '@/components/utils/performanceUtils';
 

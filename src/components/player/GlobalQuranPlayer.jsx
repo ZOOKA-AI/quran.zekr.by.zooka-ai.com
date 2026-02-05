@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -49,7 +49,7 @@ export default function GlobalQuranPlayer() {
     setVerseEnd,
     setIsMinimized,
     play,
-    pause,
+    pause: _pause,
     togglePlay,
     seek
   } = useGlobalQuranPlayer();

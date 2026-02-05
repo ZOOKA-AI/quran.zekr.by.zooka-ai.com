@@ -56,6 +56,8 @@ const inspirationalVideos = [
 
 export default function InspirationalVideos() {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  // Placeholder for video selection - will be used when implementing video player
+  const _ = { selectedVideo, setSelectedVideo };
 
   return (
     <section className="mb-12">

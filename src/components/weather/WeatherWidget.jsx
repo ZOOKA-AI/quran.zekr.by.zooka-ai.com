@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Thermometer, Loader2, MapPin } from 'lucide-react';
+import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Loader2, MapPin } from 'lucide-react';
 
 const weatherIcons = {
   'Clear': Sun,
