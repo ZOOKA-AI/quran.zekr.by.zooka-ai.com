@@ -47,14 +47,17 @@ export default function Ramadan() {
     staleTime: 10 * 60 * 1000,
   });
 
-  // تحويل البيانات للصيغة المطلوبة للمشغل
-  const RAMADAN_NASHEED = dbTawasheeh.map(t => ({
-    id: t.id,
-    title: t.title || 'بدون عنوان',
-    artist: t.artist || 'غير معروف',
-    duration: t.duration_text || formatTime(t.duration || 0),
-    url: t.audio_url || ''
-  }));
+  // تحويل البيانات للصيغة المطلوبة للمشغل (تصفية البيانات الناقصة)
+   const RAMADAN_NASHEED = dbTawasheeh
+     .filter(t => t.audio_url && typeof t.audio_url === 'string' && t.audio_url.trim())
+     .map(t => ({
+       id: t.id,
+       title: t.title || 'بدون عنوان',
+       artist: t.artist || 'غير معروف',
+       duration: t.duration_text || formatTime(t.duration || 0),
+       url: t.audio_url,
+       audioUrl: t.audio_url
+     }));
 
   useEffect(() => {
     // حساب الوقت المتبقي (تقريبي)
