@@ -17,10 +17,14 @@ export function GlobalQuranPlayerProvider({ children }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [speed, setSpeed] = useState(1);
+  const [quality, setQuality] = useState('128');
   const [reciter, setReciter] = useState('ar.alafasy');
   const [surahNumber, setSurahNumber] = useState(1);
   const [verseStart, setVerseStart] = useState(1);
   const [verseEnd, setVerseEnd] = useState(7);
+  const [customStart, setCustomStart] = useState(0);
+  const [customEnd, setCustomEnd] = useState(null);
   const [isMinimized, setIsMinimized] = useState(true);
 
   // حفظ موضع التشغيل
@@ -117,22 +121,48 @@ export function GlobalQuranPlayerProvider({ children }) {
     audioRef.current.volume = volume;
   }, [volume]);
 
+  // تحديث السرعة
+  useEffect(() => {
+    audioRef.current.playbackRate = speed;
+  }, [speed]);
+
+  // إيقاف التشغيل عند نقطة النهاية المخصصة
+  useEffect(() => {
+    const audio = audioRef.current;
+    const handleTimeUpdate = () => {
+      if (customEnd && audio.currentTime >= customEnd) {
+        audio.pause();
+        setIsPlaying(false);
+        audio.currentTime = customStart || 0;
+      }
+    };
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    return () => audio.removeEventListener('timeupdate', handleTimeUpdate);
+  }, [customStart, customEnd]);
+
   const play = (newReciter, newSurah, newVerseStart, newVerseEnd) => {
     if (newReciter) setReciter(newReciter);
     if (newSurah) setSurahNumber(newSurah);
     if (newVerseStart) setVerseStart(newVerseStart);
     if (newVerseEnd) setVerseEnd(newVerseEnd);
 
-    const audioUrl = `https://cdn.islamic.network/quran/audio-surah/128/${newReciter || reciter}/${newSurah || surahNumber}.mp3`;
+    const qualityMap = { 'low': '64', 'medium': '128', 'high': '192' };
+    const qValue = qualityMap[quality] || quality;
+    const audioUrl = `https://cdn.islamic.network/quran/audio-surah/${qValue}/${newReciter || reciter}/${newSurah || surahNumber}.mp3`;
     
     if (audioRef.current.src !== audioUrl) {
       audioRef.current.src = audioUrl;
+    }
+    
+    if (customStart > 0) {
+      audioRef.current.currentTime = customStart;
     }
     
     audioRef.current.play().catch(err => {
       console.error('Audio playback error:', err);
       setIsPlaying(false);
     });
+    audioRef.current.playbackRate = speed;
     setIsPlaying(true);
     setIsMinimized(false);
   };
@@ -167,12 +197,20 @@ export function GlobalQuranPlayerProvider({ children }) {
     currentTime,
     duration,
     volume,
+    speed,
+    quality,
+    customStart,
+    customEnd,
     reciter,
     surahNumber,
     verseStart,
     verseEnd,
     isMinimized,
     setVolume,
+    setSpeed,
+    setQuality,
+    setCustomStart,
+    setCustomEnd,
     setReciter,
     setSurahNumber,
     setVerseStart,
