@@ -28,6 +28,7 @@ import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [language, setLanguage] = useState('ar');
   
   // Safe Area support for mobile devices
   React.useEffect(() => {
@@ -83,13 +84,23 @@ export default function Layout({ children, currentPageName }) {
       <GlobalQuranPlayerProvider>
       <PlayerProvider>
       <div className="min-h-screen relative overflow-hidden bg-white dark:bg-slate-950" dir="rtl">
-      {/* Spiritual Background */}
+      {/* Islamic Spiritual Background */}
       <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900" />
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-10"
-          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80)' }}
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/70 via-white/80 to-emerald-100/70 dark:from-slate-950/90 dark:via-slate-900/95 dark:to-slate-950/98" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/90 to-emerald-50/95" />
+        <div 
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, transparent 0%, rgba(16, 185, 129, 0.3) 100%),
+                            radial-gradient(circle at 80% 80%, transparent 0%, rgba(6, 182, 212, 0.3) 100%)`
+          }}
+        />
       </div>
       <div className="relative z-10">
       <OfflineIndicator />
@@ -97,19 +108,29 @@ export default function Layout({ children, currentPageName }) {
       <PWAInstaller />
       <DailyReminders />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Scheherazade+New:wght@400;700&display=swap');
         
         * {
           font-family: 'Cairo', sans-serif;
         }
         
         .font-arabic {
-          font-family: 'Amiri', serif;
-          line-height: 2.5;
+          font-family: 'Scheherazade New', 'Amiri', serif;
+          line-height: 2.8;
+          letter-spacing: 0.02em;
         }
         
-        .font-urdu {
-          font-family: 'Noto Nastaliq Urdu', serif;
+        .font-spiritual {
+          font-family: 'Amiri', serif;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .islamic-pattern {
+          background-image: 
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(16, 185, 129, 0.03) 35px, rgba(16, 185, 129, 0.03) 70px),
+            repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(6, 182, 212, 0.03) 35px, rgba(6, 182, 212, 0.03) 70px);
         }
         
         :root {
@@ -118,25 +139,38 @@ export default function Layout({ children, currentPageName }) {
           --emerald-700: #047857;
           --emerald-800: #065f46;
           --amber-300: #fcd34d;
+          --gold: #fbbf24;
         }
       `}</style>
+
+      {/* Language Toggle */}
+      <Button
+        onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+        size="sm"
+        className="fixed top-6 left-6 z-50 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white shadow-2xl safe-top safe-left"
+      >
+        {language === 'ar' ? '🌍 English' : '🌍 عربي'}
+      </Button>
 
       {/* Floating Menu Button */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetTrigger asChild>
           <Button
             size="lg"
-            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-2xl safe-top safe-right"
+            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 shadow-2xl border-2 border-amber-400/50 safe-top safe-right"
           >
-            <Menu className="w-7 h-7 text-white" />
+            <Menu className="w-7 h-7 text-white drop-shadow-lg" />
           </Button>
         </SheetTrigger>
         
-        <SheetContent side="right" className="w-96 overflow-y-auto">
-          <SheetHeader>
+        <SheetContent side="right" className="w-96 overflow-y-auto islamic-pattern">
+          <SheetHeader className="border-b-2 border-amber-400/30 pb-4 mb-4">
             <SheetTitle className="flex items-center gap-3 text-2xl">
               <AppLogo size="md" showTagline={false} />
             </SheetTitle>
+            <p className="text-center font-arabic text-emerald-700 text-lg">
+              ﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾
+            </p>
           </SheetHeader>
 
           <div className="mt-8 space-y-6">
@@ -289,11 +323,19 @@ export default function Layout({ children, currentPageName }) {
       <GlobalQuranPlayer />
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
+      <footer className="bg-gradient-to-r from-emerald-900 via-teal-900 to-cyan-900 text-white mt-16 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle, rgba(251, 191, 36, 0.3) 1px, transparent 1px)`,
+            backgroundSize: '30px 30px'
+          }} />
+        </div>
+        <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="text-center">
-            <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
-            <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
+            <p className="text-3xl mb-4 font-arabic text-amber-300 drop-shadow-lg">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
+            <p className="text-xl text-amber-200 mb-6 font-spiritual">اللهم اجعلنا من أهل القرآن وخاصته</p>
+            <div className="h-1 w-64 mx-auto bg-gradient-to-r from-transparent via-amber-400 to-transparent mb-6"></div>
 
             <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-4 max-w-3xl mx-auto border border-purple-400/30">
               <p className="text-amber-300 text-2xl font-bold mb-3">🤲 صدقة جارية على روح المرحومة</p>
