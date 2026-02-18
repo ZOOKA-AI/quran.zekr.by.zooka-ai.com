@@ -75,11 +75,17 @@ export default function Ibtihaalat() {
 
   useEffect(() => {
     if (currentTrack && audioRef.current && currentTrack.audio) {
+      if (typeof currentTrack.audio !== 'string' || !currentTrack.audio.trim()) {
+        toast.error('رابط الصوت غير صحيح');
+        setIsPlaying(false);
+        return;
+      }
+
       audioRef.current.src = currentTrack.audio;
-      audioRef.current.volume = volume / 100;
+      audioRef.current.volume = Math.min(volume / 100, 1);
       audioRef.current.play().catch((error) => {
-        console.error('Error playing audio:', error);
-        toast.error('تعذر تشغيل الصوت - تأكد من رابط الصوت');
+        console.error('Error playing audio:', error?.message);
+        toast.error('تعذر تشغيل الصوت - قد يكون الملف غير متوفر');
         setIsPlaying(false);
       });
     }
@@ -99,14 +105,18 @@ export default function Ibtihaalat() {
       const matchSearch = track.title?.includes(searchQuery) || track.mubtahil_name?.includes(searchQuery);
       const matchCategory = selectedCategory === 'all' || track.category === selectedCategory;
       return matchSearch && matchCategory;
-    }).map(track => ({
-      id: track.id,
-      title: track.title,
-      mubtahil: track.mubtahil_name,
-      audio: track.audio_url,
-      category: track.category,
-      duration: track.duration || 300
-    }));
+    }).map(track => {
+      // Validate and fallback for audio URL
+      const audioUrl = track.audio_url || track.audioUrl || '';
+      return {
+        id: track.id,
+        title: track.title || 'بدون عنوان',
+        mubtahil: track.mubtahil_name || 'مجهول',
+        audio: audioUrl && typeof audioUrl === 'string' ? audioUrl : '',
+        category: track.category || 'عام',
+        duration: track.duration || 300
+      };
+    }).filter(track => track.audio); // Only include tracks with valid audio URLs
   };
 
   const filteredTracks = getFilteredList();
