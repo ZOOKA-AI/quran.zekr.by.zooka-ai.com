@@ -8,6 +8,7 @@ import { base44 } from '@/api/base44Client';
 
 export default function DailyVerseCard() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const speechRef = React.useRef(null);
 
   // جلب آية اليوم
   const { data: dailyVerse } = useQuery({
@@ -29,9 +30,58 @@ export default function DailyVerseCard() {
   });
 
   const handleListen = () => {
-    toast.info('سيتم تفعيل الاستماع قريباً إن شاء الله');
-    setIsPlaying(!isPlaying);
+    if (!dailyVerse?.arabic_text) return;
+
+    // إيقاف أي صوت سابق
+    if (speechRef.current) {
+      window.speechSynthesis.cancel();
+      speechRef.current = null;
+      setIsPlaying(false);
+      return;
+    }
+
+    // إنشاء صوت عربي
+    const utterance = new SpeechSynthesisUtterance(dailyVerse.arabic_text);
+    utterance.lang = 'ar-SA'; // عربي سعودي فصيح
+    utterance.rate = 0.8; // سرعة بطيئة للوضوح
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // البحث عن صوت عربي
+    const voices = window.speechSynthesis.getVoices();
+    const arabicVoice = voices.find(voice => 
+      voice.lang.startsWith('ar') || voice.lang.includes('Arabic')
+    );
+    if (arabicVoice) {
+      utterance.voice = arabicVoice;
+    }
+
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      toast.success('بدأ القراءة بصوت عربي فصيح');
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      speechRef.current = null;
+    };
+
+    utterance.onerror = () => {
+      setIsPlaying(false);
+      speechRef.current = null;
+      toast.error('حدث خطأ في القراءة');
+    };
+
+    speechRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
   };
+
+  // تحميل الأصوات عند بداية المكون
+  React.useEffect(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
 
   const handleCopy = () => {
     if (dailyVerse) {
@@ -84,10 +134,10 @@ export default function DailyVerseCard() {
         <div className="flex gap-2 justify-center flex-wrap">
           <Button 
             onClick={handleListen}
-            className="bg-white hover:bg-gray-50 text-emerald-700 border border-emerald-300"
+            className={`${isPlaying ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700'} hover:bg-emerald-100 border border-emerald-300`}
           >
-            <Volume2 className="w-4 h-4 ml-1" />
-            استمع
+            <Volume2 className={`w-4 h-4 ml-1 ${isPlaying ? 'animate-pulse' : ''}`} />
+            {isPlaying ? 'إيقاف' : 'استمع بصوت عربي'}
           </Button>
           <Button 
             onClick={handleCopy}
