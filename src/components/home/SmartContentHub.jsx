@@ -8,7 +8,7 @@ import { createPageUrl } from '@/utils';
 import { 
   Video, Music, Mic, Moon, Download, Wifi, WifiOff, 
   Play, Heart, Share2, BookOpen, Radio, Sparkles,
-  MessageCircle, Star, TrendingUp, Clock
+  MessageCircle, Star, TrendingUp, Clock, Wand2, RefreshCw
 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 export default function SmartContentHub() {
   const [activeTab, setActiveTab] = useState('videos');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // مراقبة حالة الإنترنت
   useEffect(() => {
@@ -69,6 +70,61 @@ export default function SmartContentHub() {
     toast.info('سيتم إضافة التحميل للاستماع بدون نت قريباً');
   };
 
+  const handleGenerateContent = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `أنشئ محتوى إسلامي روحاني متجدد:
+        - آية قرآنية مع تفسير مختصر
+        - حديث نبوي شريف
+        - حكمة أو موعظة
+        - دعاء مستجاب
+        قدم المحتوى بطريقة روحانية مؤثرة ومختصرة`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            verse: { type: "object", properties: { arabic: { type: "string" }, translation: { type: "string" }, reference: { type: "string" } } },
+            hadith: { type: "object", properties: { text: { type: "string" }, reference: { type: "string" } } },
+            wisdom: { type: "string" },
+            dua: { type: "string" }
+          }
+        }
+      });
+      
+      // عرض المحتوى المولد
+      toast.success('تم توليد محتوى روحاني جديد 🌟');
+      
+      // يمكن حفظه في DailyShare أو عرضه مباشرة
+      await base44.entities.DailyShare.create({
+        content_type: 'verse',
+        arabic_text: response.verse.arabic,
+        translation: response.verse.translation,
+        source: response.verse.reference,
+        is_featured: true
+      });
+      
+    } catch (error) {
+      toast.error('حدث خطأ في التوليد');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleRefreshContent = async () => {
+    toast.promise(
+      Promise.all([
+        base44.entities.Video.list(),
+        base44.entities.Ibtihaal.list(),
+        base44.entities.Tawasheeh.list()
+      ]),
+      {
+        loading: 'جاري تحديث المحتوى...',
+        success: 'تم تحديث المحتوى بنجاح ✨',
+        error: 'حدث خطأ في التحديث'
+      }
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* حالة الاتصال */}
@@ -100,6 +156,41 @@ export default function SmartContentHub() {
           <Download className="w-4 h-4 ml-2" />
           تحديث
         </Button>
+      </motion.div>
+
+      {/* أدوات الروحانية والتوليد */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-600/30 p-6 hover:scale-105 transition-transform cursor-pointer" onClick={handleGenerateContent}>
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-purple-600/30 flex items-center justify-center">
+              {isGenerating ? (
+                <RefreshCw className="w-7 h-7 text-purple-300 animate-spin" />
+              ) : (
+                <Wand2 className="w-7 h-7 text-purple-300" />
+              )}
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-lg mb-1">توليد محتوى روحاني</h3>
+              <p className="text-purple-200 text-sm">آيات، أحاديث، أدعية متجددة</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 border-emerald-600/30 p-6 hover:scale-105 transition-transform cursor-pointer" onClick={handleRefreshContent}>
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-emerald-600/30 flex items-center justify-center">
+              <RefreshCw className="w-7 h-7 text-emerald-300" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-lg mb-1">تحديث المحتوى</h3>
+              <p className="text-emerald-200 text-sm">أحدث الإضافات والتلاوات</p>
+            </div>
+          </div>
+        </Card>
       </motion.div>
 
       {/* المحتوى التفاعلي */}
