@@ -22,32 +22,47 @@ export default function EgyptianRamadanPlayer({ playlist }) {
   }, [volume]);
 
   useEffect(() => {
-    if (audioRef.current && currentTrack?.url) {
-      audioRef.current.src = currentTrack.url;
-      if (isPlaying) {
-        audioRef.current.play().catch(e => console.error('Play error:', e));
-      }
-    }
-  }, [currentTrackIndex]);
+     if (audioRef.current && currentTrack?.url) {
+       if (typeof currentTrack.url !== 'string' || !currentTrack.url.trim()) {
+         console.error('Invalid audio URL:', currentTrack.url);
+         return;
+       }
+       audioRef.current.src = currentTrack.url;
+       if (isPlaying) {
+         audioRef.current.play().catch(e => {
+           console.error('Play error:', e?.message);
+           setIsPlaying(false);
+         });
+       }
+     }
+   }, [currentTrackIndex, currentTrack?.url]);
 
   const togglePlay = () => {
-    if (!audioRef.current || !currentTrack?.url) return;
-    
+    if (!audioRef.current || !currentTrack?.url) {
+      console.warn('Cannot play: missing audio reference or URL');
+      return;
+    }
+
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch(e => console.error('Play error:', e));
+      audioRef.current.play().catch(e => {
+        console.error('Play error:', e?.message);
+        setIsPlaying(false);
+      });
     }
     setIsPlaying(!isPlaying);
   };
 
   const handleNext = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
-  };
+     if (!playlist || playlist.length === 0) return;
+     setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
+   };
 
   const handlePrevious = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
-  };
+     if (!playlist || playlist.length === 0) return;
+     setCurrentTrackIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
+   };
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
