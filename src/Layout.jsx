@@ -31,9 +31,6 @@ export default function Layout({ children, currentPageName }) {
   const [language, setLanguage] = useState('ar');
   const [theme, setTheme] = useState('light');
   
-  // Track mounted tabs to preserve their state
-  const [mountedTabs, setMountedTabs] = useState(new Set([currentPageName]));
-  
   // Safe Area support for mobile devices
   React.useEffect(() => {
     // Add viewport meta for safe area
@@ -80,9 +77,30 @@ export default function Layout({ children, currentPageName }) {
     }
   }, [theme]);
 
-  // Update mounted tabs when page changes
+  // Preserve scroll positions for main tabs
+  const scrollPositions = React.useRef({});
+  const mainTabPages = ['Quran', 'Tilawa', 'QuranRadio', 'Community', 'Profile'];
+
   React.useEffect(() => {
-    setMountedTabs(prev => new Set([...prev, currentPageName]));
+    // Save scroll position before navigation
+    const handleScroll = () => {
+      if (mainTabPages.includes(currentPageName)) {
+        scrollPositions.current[currentPageName] = window.scrollY;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentPageName]);
+
+  React.useEffect(() => {
+    // Restore scroll position after navigation
+    if (mainTabPages.includes(currentPageName)) {
+      const savedPosition = scrollPositions.current[currentPageName];
+      if (savedPosition !== undefined) {
+        setTimeout(() => window.scrollTo(0, savedPosition), 0);
+      }
+    }
   }, [currentPageName]);
 
   const toggleTheme = () => {
@@ -97,9 +115,6 @@ export default function Layout({ children, currentPageName }) {
       themeColorMeta.setAttribute('content', newTheme === 'dark' ? '#020617' : '#ecfdf5');
     }
   };
-  
-  // Define main bottom nav pages that should preserve state
-  const mainTabPages = ['Quran', 'Tilawa', 'QuranRadio', 'Community', 'Profile'];
   
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
@@ -386,27 +401,9 @@ export default function Layout({ children, currentPageName }) {
         </SheetContent>
       </Sheet>
 
-      {/* Main Content - Tab-based routing with preserved state */}
+      {/* Main Content - With scroll preservation */}
       <main className="pb-32 safe-top safe-bottom">
-        {/* Preserve state for main tab pages by keeping them mounted but hidden */}
-        {mainTabPages.includes(currentPageName) ? (
-          <>
-            {mainTabPages.map(tabPage => (
-              mountedTabs.has(tabPage) && (
-                <div
-                  key={tabPage}
-                  className={currentPageName === tabPage ? 'block' : 'hidden'}
-                  style={{ display: currentPageName === tabPage ? 'block' : 'none' }}
-                >
-                  {currentPageName === tabPage && children}
-                </div>
-              )
-            ))}
-          </>
-        ) : (
-          // For non-tab pages, render normally
-          children
-        )}
+        {children}
       </main>
 
       {/* Bottom Navigation */}
