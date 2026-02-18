@@ -129,7 +129,10 @@ export function GlobalQuranPlayerProvider({ children }) {
       audioRef.current.src = audioUrl;
     }
     
-    audioRef.current.play();
+    audioRef.current.play().catch(err => {
+      console.error('Audio playback error:', err);
+      setIsPlaying(false);
+    });
     setIsPlaying(true);
     setIsMinimized(false);
   };
