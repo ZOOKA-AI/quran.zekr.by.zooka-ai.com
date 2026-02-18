@@ -30,6 +30,7 @@ import FeaturedSurahs from '../components/home/FeaturedSurahs';
 import AppSettingsPanel from '../components/settings/AppSettingsPanel';
 import QuranStats from '../components/quran/QuranStats';
 import VideoGrid from '../components/videos/VideoGrid';
+import SmartContentHub from '../components/home/SmartContentHub';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', verses_count: 7, revelation_place: 'Makkah' },
@@ -179,6 +180,14 @@ export default function QuranPage() {
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
+                  <Sparkles className="w-6 h-6" />
+                  مركز المحتوى الذكي
+                </h2>
+                <SmartContentHub />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                 <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
                   <Sparkles className="w-6 h-6" />
                   التنقل السريع
