@@ -74,6 +74,7 @@ import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
 import DeleteAccount from './pages/DeleteAccount';
+import TestingDashboard from './pages/TestingDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -105,6 +106,7 @@ export const PAGES = {
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
     "DeleteAccount": DeleteAccount,
+    "TestingDashboard": TestingDashboard,
 }
 
 export const pagesConfig = {
