@@ -130,7 +130,7 @@ export function GlobalQuranPlayerProvider({ children }) {
   useEffect(() => {
     const audio = audioRef.current;
     const handleTimeUpdate = () => {
-      if (customEnd && audio.currentTime >= customEnd) {
+      if (customEnd !== null && typeof customEnd === 'number' && audio.currentTime >= customEnd) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = customStart || 0;
