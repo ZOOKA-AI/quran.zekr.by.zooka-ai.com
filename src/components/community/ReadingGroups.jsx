@@ -44,7 +44,7 @@ export default function ReadingGroups() {
       members_count: 1
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['readingGroups']);
+      queryClient.invalidateQueries({ queryKey: ['readingGroups'] });
       setShowCreateDialog(false);
       setNewGroup({ name: '', description: '', group_type: 'public' });
     }
@@ -55,7 +55,7 @@ export default function ReadingGroups() {
       const updatedMembers = [
         ...(group.members || []),
         {
-          user_id: user?.id,
+          user_id: user?.email,
           user_email: user?.email,
           joined_date: new Date().toISOString(),
           role: 'member'
@@ -67,7 +67,7 @@ export default function ReadingGroups() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['readingGroups']);
+      queryClient.invalidateQueries({ queryKey: ['readingGroups'] });
     }
   });
 
@@ -78,7 +78,7 @@ export default function ReadingGroups() {
   };
 
   const isUserMember = (group) => {
-    return group.members?.some(m => m.user_id === user?.id);
+    return group.members?.some(m => m.user_id === user?.email || m.user_email === user?.email);
   };
 
   if (isLoading) {

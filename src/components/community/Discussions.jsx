@@ -38,11 +38,13 @@ export default function Discussions({ groupId = null }) {
 
   const { data: comments } = useQuery({
     queryKey: ['discussionComments', selectedDiscussion?.id],
-    queryFn: () => base44.entities.DiscussionComment.filter(
-      { discussion_id: selectedDiscussion.id }, 
-      'created_date', 
-      100
-    ),
+    queryFn: () => selectedDiscussion
+      ? base44.entities.DiscussionComment.filter(
+          { discussion_id: selectedDiscussion.id }, 
+          'created_date', 
+          100
+        )
+      : Promise.resolve([]),
     enabled: !!selectedDiscussion,
     initialData: []
   });
@@ -55,7 +57,7 @@ export default function Discussions({ groupId = null }) {
       group_id: groupId
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['discussions']);
+      queryClient.invalidateQueries({ queryKey: ['discussions'] });
       setShowCreateDialog(false);
       setNewDiscussion({ title: '', content: '', discussion_type: 'general' });
     }
@@ -64,7 +66,7 @@ export default function Discussions({ groupId = null }) {
   const createCommentMutation = useMutation({
     mutationFn: (data) => base44.entities.DiscussionComment.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['discussionComments']);
+      queryClient.invalidateQueries({ queryKey: ['discussionComments'] });
       setNewComment('');
     }
   });
@@ -76,7 +78,7 @@ export default function Discussions({ groupId = null }) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['discussions']);
+      queryClient.invalidateQueries({ queryKey: ['discussions'] });
     }
   });
 
