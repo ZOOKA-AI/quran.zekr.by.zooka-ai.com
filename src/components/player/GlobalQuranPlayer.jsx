@@ -12,18 +12,18 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RECITERS = [
-  { id: 'ar.alafasy', name: 'مشاري العفاسي', quality: '320kbps' },
-  { id: 'ar.abdulbasitmurattal', name: 'عبد الباسط عبد الصمد', quality: '192kbps' },
-  { id: 'ar.abdullahbasfar', name: 'عبدالله بصفر', quality: '192kbps' },
-  { id: 'ar.hudhaify', name: 'علي الحذيفي', quality: '128kbps' },
-  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي', quality: '192kbps' },
-  { id: 'ar.husary', name: 'محمود خليل الحصري', quality: '192kbps' },
-  { id: 'ar.muhammadayyoub', name: 'محمد أيوب', quality: '128kbps' },
-  { id: 'ar.shaatree', name: 'أبو بكر الشاطري', quality: '192kbps' },
-  { id: 'ar.parhizgar', name: 'عبد الرحمن السديس', quality: '192kbps' },
-  { id: 'ar.rifai', name: 'ياسر الدوسري', quality: '192kbps' },
-  { id: 'ar.ajmi', name: 'أحمد العجمي', quality: '192kbps' },
-  { id: 'ar.muhaisiny', name: 'سعد الغامدي', quality: '192kbps' }
+  { id: 'ar.alafasy', name: 'مشاري العفاسي', quality: '320kbps', photo: 'https://static.quran.com/recitors/mishary-alafasy.jpg' },
+  { id: 'ar.abdulbasitmurattal', name: 'عبد الباسط عبد الصمد', quality: '192kbps', photo: 'https://static.quran.com/recitors/abdul-basit.jpg' },
+  { id: 'ar.abdullahbasfar', name: 'عبدالله بصفر', quality: '192kbps', photo: 'https://static.quran.com/recitors/abdullah-basfar.jpg' },
+  { id: 'ar.hudhaify', name: 'علي الحذيفي', quality: '128kbps', photo: 'https://static.quran.com/recitors/ali-huthayfi.jpg' },
+  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي', quality: '192kbps', photo: 'https://static.quran.com/recitors/minshawi.jpg' },
+  { id: 'ar.husary', name: 'محمود خليل الحصري', quality: '192kbps', photo: 'https://static.quran.com/recitors/husary.jpg' },
+  { id: 'ar.muhammadayyoub', name: 'محمد أيوب', quality: '128kbps', photo: 'https://static.quran.com/recitors/ayyoub.jpg' },
+  { id: 'ar.shaatree', name: 'أبو بكر الشاطري', quality: '192kbps', photo: 'https://static.quran.com/recitors/shatree.jpg' },
+  { id: 'ar.parhizgar', name: 'عبد الرحمن السديس', quality: '192kbps', photo: 'https://static.quran.com/recitors/parhizgar.jpg' },
+  { id: 'ar.rifai', name: 'ياسر الدوسري', quality: '192kbps', photo: 'https://static.quran.com/recitors/rifai.jpg' },
+  { id: 'ar.ajmi', name: 'أحمد العجمي', quality: '192kbps', photo: 'https://static.quran.com/recitors/ajmi.jpg' },
+  { id: 'ar.muhaisiny', name: 'سعد الغامدي', quality: '192kbps', photo: 'https://static.quran.com/recitors/muhaisiny.jpg' }
 ];
 
 const HADITH_AUDIO = [
@@ -331,17 +331,24 @@ export default function GlobalQuranPlayer() {
                   ))}
                 </TabsContent>
 
-                {/* الراديو */}
+                {/* الراديو المباشر */}
                 <TabsContent value="radio" className="space-y-4 mt-4">
+                <div className="space-y-3">
+                  <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-4 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
+                      <p className="text-white text-sm font-bold">🔴 بث مباشر 24/7</p>
+                    </div>
+                    <p className="text-red-100 text-xs">من المسجد الحرام والمسجد النبوي</p>
+                  </div>
+
                   <Link to={createPageUrl('QuranRadio')}>
                     <Button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 shadow-lg shadow-cyan-900/50">
                       <Radio className="w-5 h-5 ml-2" />
-                      فتح راديو القرآن الكريم
+                      فتح الإذاعات المباشرة
                     </Button>
                   </Link>
-                  <div className="bg-slate-900/60 border border-cyan-500/30 rounded-lg p-4 text-center">
-                    <p className="text-cyan-300 text-sm font-bold">بث مباشر 24/7 من أفضل الإذاعات القرآنية</p>
-                  </div>
+                </div>
                 </TabsContent>
               </Tabs>
 
