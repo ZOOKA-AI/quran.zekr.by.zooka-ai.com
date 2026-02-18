@@ -29,6 +29,7 @@ import { base44 } from '@/api/base44Client';
 export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [language, setLanguage] = useState('ar');
+  const [theme, setTheme] = useState('light');
   
   // Safe Area support for mobile devices
   React.useEffect(() => {
@@ -54,6 +55,32 @@ export default function Layout({ children, currentPageName }) {
       document.head.removeChild(style);
     };
   }, []);
+
+  // Theme management
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    
+    // Update theme-color meta tag
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', savedTheme === 'dark' ? '#020617' : '#ecfdf5');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    
+    // Update theme-color meta tag
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', newTheme === 'dark' ? '#020617' : '#ecfdf5');
+    }
+  };
   
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
@@ -170,14 +197,23 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </div>
 
-      {/* Language Toggle */}
-      <Button
-        onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-        size="sm"
-        className="fixed top-6 left-6 z-50 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white shadow-2xl safe-top safe-left"
-      >
-        {language === 'ar' ? '🌍 English' : '🌍 عربي'}
-      </Button>
+      {/* Theme & Language Toggle */}
+      <div className="fixed top-6 left-6 z-50 flex gap-2 safe-top safe-left">
+        <Button
+          onClick={toggleTheme}
+          size="sm"
+          className="bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-800 hover:to-black text-white shadow-2xl"
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </Button>
+        <Button
+          onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+          size="sm"
+          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white shadow-2xl"
+        >
+          {language === 'ar' ? '🌍 English' : '🌍 عربي'}
+        </Button>
+      </div>
 
       {/* Floating Menu Button */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
