@@ -6,6 +6,7 @@ import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
+import PWAInstaller from '@/components/pwa/PWAInstaller';
 import ClassicAudioPlayer, { PlayerProvider } from '@/components/player/ClassicAudioPlayer';
 import FloatingAudioControl from '@/components/controls/FloatingAudioControl';
 import { GlobalQuranPlayerProvider } from '@/components/player/GlobalQuranPlayerContext';
@@ -93,6 +94,7 @@ export default function Layout({ children, currentPageName }) {
       <div className="relative z-10">
       <OfflineIndicator />
       <InstallPrompt />
+      <PWAInstaller />
       <DailyReminders />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap');
