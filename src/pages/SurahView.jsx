@@ -161,15 +161,12 @@ export default function SurahView() {
   const runOptimization = async () => {
     setIsOptimizing(true);
     try {
-      const { result } = await performanceUtils.measureAsync(
-        () => base44.functions.invoke('updatePerformanceMetrics', {}),
-        'Performance update'
-      );
-      loggerUtils.info('Optimization completed', result);
-      toast.success('تم تحسين الأداء بنجاح');
+      await queryClient.invalidateQueries(['verses', surahNumber]);
+      toast.success('تم تحديث الآيات بنجاح');
+      loggerUtils.info('Verses cache refreshed');
     } catch (error) {
       loggerUtils.error('Optimization failed', error);
-      toast.error('فشل تحسين الأداء');
+      toast.error('فشل تحديث البيانات');
     } finally {
       setIsOptimizing(false);
     }

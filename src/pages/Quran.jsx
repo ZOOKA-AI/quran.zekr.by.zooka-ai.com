@@ -84,13 +84,12 @@ export default function QuranPage() {
   const runOptimization = async () => {
     setIsOptimizing(true);
     try {
-      const { result } = await performanceUtils.measureAsync(
-        () => base44.functions.invoke('dailySystemOptimization', {}),
-        'System optimization'
-      );
-      loggerUtils.info('Optimization completed', result);
+      await queryClient.invalidateQueries();
+      toast.success('تم تحديث البيانات بنجاح');
+      loggerUtils.info('Cache refreshed successfully');
     } catch (error) {
       loggerUtils.error('Optimization failed', error);
+      toast.error('فشل تحديث البيانات');
     } finally {
       setIsOptimizing(false);
     }

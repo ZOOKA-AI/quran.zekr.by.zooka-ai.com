@@ -48,12 +48,14 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AdminPanel from './pages/AdminPanel';
+import AdvancedSettings from './pages/AdvancedSettings';
 import Assistant from './pages/Assistant';
 import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
 import Channels from './pages/Channels';
 import Community from './pages/Community';
+import DeleteAccount from './pages/DeleteAccount';
 import DonationSuccess from './pages/DonationSuccess';
 import Ibtihaalat from './pages/Ibtihaalat';
 import Library from './pages/Library';
@@ -72,21 +74,21 @@ import ShareLibrary from './pages/ShareLibrary';
 import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
-import Tilawa from './pages/Tilawa';
-import DeleteAccount from './pages/DeleteAccount';
 import TestingDashboard from './pages/TestingDashboard';
-import AdvancedSettings from './pages/AdvancedSettings';
+import Tilawa from './pages/Tilawa';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminPanel": AdminPanel,
+    "AdvancedSettings": AdvancedSettings,
     "Assistant": Assistant,
     "Athkar": Athkar,
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
     "Channels": Channels,
     "Community": Community,
+    "DeleteAccount": DeleteAccount,
     "DonationSuccess": DonationSuccess,
     "Ibtihaalat": Ibtihaalat,
     "Library": Library,
@@ -105,10 +107,8 @@ export const PAGES = {
     "StaticPageView": StaticPageView,
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
-    "Tilawa": Tilawa,
-    "DeleteAccount": DeleteAccount,
     "TestingDashboard": TestingDashboard,
-    "AdvancedSettings": AdvancedSettings,
+    "Tilawa": Tilawa,
 }
 
 export const pagesConfig = {
