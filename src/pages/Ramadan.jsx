@@ -40,6 +40,22 @@ export default function Ramadan() {
   const [timeToIftar, setTimeToIftar] = useState('');
   const [timeToSuhoor, setTimeToSuhoor] = useState('');
 
+  // جلب الأناشيد من قاعدة البيانات
+  const { data: dbTawasheeh = [] } = useQuery({
+    queryKey: ['ramadan-nasheed'],
+    queryFn: () => base44.entities.Tawasheeh.list('-plays_count'),
+    staleTime: 10 * 60 * 1000,
+  });
+
+  // تحويل البيانات للصيغة المطلوبة للمشغل
+  const RAMADAN_NASHEED = dbTawasheeh.map(t => ({
+    id: t.id,
+    title: t.title || 'بدون عنوان',
+    artist: t.artist || 'غير معروف',
+    duration: t.duration_text || formatTime(t.duration || 0),
+    url: t.audio_url || ''
+  }));
+
   useEffect(() => {
     // حساب الوقت المتبقي (تقريبي)
     const updateTimes = () => {
