@@ -56,18 +56,26 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  // Theme management
+  // Theme management with meta tag update
   React.useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     
-    // Update theme-color meta tag
+    // Update theme-color meta tag dynamically
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
       themeColorMeta.setAttribute('content', savedTheme === 'dark' ? '#020617' : '#ecfdf5');
     }
   }, []);
+  
+  // Update theme-color when theme changes
+  React.useEffect(() => {
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', theme === 'dark' ? '#020617' : '#ecfdf5');
+    }
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -367,8 +375,10 @@ export default function Layout({ children, currentPageName }) {
         </SheetContent>
       </Sheet>
 
-      {/* Main Content */}
-      <main className="pb-32 safe-top safe-bottom">{children}</main>
+      {/* Main Content - Tab-based routing with preserved state */}
+      <main className="pb-32 safe-top safe-bottom">
+        {children}
+      </main>
 
       {/* Bottom Navigation */}
       <BottomNav />
