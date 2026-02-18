@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Send, Sparkles } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Send, Sparkles, Users, MessageSquare, BarChart3, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -17,8 +17,13 @@ import InspirationalVideos from '@/components/community/InspirationalVideos';
 import TrendingTopics from '@/components/community/TrendingTopics';
 import PullToRefresh from '@/components/mobile/PullToRefresh';
 import PageTransition from '@/components/transitions/PageTransition';
+import ReadingGroups from '@/components/community/ReadingGroups';
+import Discussions from '@/components/community/Discussions';
+import CommunityAnalytics from '@/components/community/CommunityAnalytics';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function CommunityPage() {
+  const [activeTab, setActiveTab] = useState('overview');
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
   const [commentText, setCommentText] = useState({});
   const { user, isAuthenticated } = useAuth();
@@ -102,7 +107,29 @@ export default function CommunityPage() {
       
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
         <CommunityHero />
-        <CommunityStats />
+        
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-pink-500/30">
+            <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
+              <Share2 className="w-4 h-4" />
+              <span className="hidden sm:inline">نظرة عامة</span>
+            </TabsTrigger>
+            <TabsTrigger value="groups" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">المجموعات</span>
+            </TabsTrigger>
+            <TabsTrigger value="discussions" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">النقاشات</span>
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">الإحصائيات</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-8 mt-8">
+            <CommunityStats />
 
         {isAuthenticated && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -181,11 +208,25 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* Trending Topics */}
-        <TrendingTopics />
+            {/* Trending Topics */}
+            <TrendingTopics />
 
-        {/* Inspirational Videos */}
-        <InspirationalVideos />
+            {/* Inspirational Videos */}
+            <InspirationalVideos />
+          </TabsContent>
+
+          <TabsContent value="groups" className="mt-8">
+            <ReadingGroups />
+          </TabsContent>
+
+          <TabsContent value="discussions" className="mt-8">
+            <Discussions />
+          </TabsContent>
+
+          <TabsContent value="analytics" className="mt-8">
+            <CommunityAnalytics />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
     </PullToRefresh>
