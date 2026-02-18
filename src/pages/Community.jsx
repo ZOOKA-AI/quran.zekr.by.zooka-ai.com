@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Send, Sparkles, Users, MessageSquare, BarChart3, TrendingUp } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Send, Sparkles, Users, MessageSquare, BarChart3, TrendingUp, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -20,6 +20,7 @@ import PageTransition from '@/components/transitions/PageTransition';
 import ReadingGroups from '@/components/community/ReadingGroups';
 import Discussions from '@/components/community/Discussions';
 import CommunityAnalytics from '@/components/community/CommunityAnalytics';
+import Leaderboard from '@/components/community/Leaderboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function CommunityPage() {
@@ -109,10 +110,14 @@ export default function CommunityPage() {
         <CommunityHero />
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-pink-500/30">
+          <TabsList className="grid grid-cols-5 w-full max-w-4xl mx-auto bg-slate-900/60 backdrop-blur-xl border border-pink-500/30">
             <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
               <Share2 className="w-4 h-4" />
               <span className="hidden sm:inline">نظرة عامة</span>
+            </TabsTrigger>
+            <TabsTrigger value="leaderboard" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
+              <Trophy className="w-4 h-4" />
+              <span className="hidden sm:inline">المتصدرين</span>
             </TabsTrigger>
             <TabsTrigger value="groups" className="flex items-center gap-2 data-[state=active]:bg-pink-600/30">
               <Users className="w-4 h-4" />
@@ -213,6 +218,10 @@ export default function CommunityPage() {
 
             {/* Inspirational Videos */}
             <InspirationalVideos />
+          </TabsContent>
+
+          <TabsContent value="leaderboard" className="mt-8">
+            <Leaderboard />
           </TabsContent>
 
           <TabsContent value="groups" className="mt-8">
