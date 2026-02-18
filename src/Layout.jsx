@@ -378,6 +378,10 @@ export default function Layout({ children, currentPageName }) {
                 <Shield className="w-4 h-4" />
                 سياسة الخصوصية
               </Link>
+              <Link to={createPageUrl('StaticPageView?slug=ai-disclosure')} className="flex items-center gap-1 text-purple-200 hover:text-white transition-colors">
+                <Sparkles className="w-4 h-4" />
+                إفصاح AI
+              </Link>
               <Link to={createPageUrl('StaticPageView?slug=terms')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
                 <FileText className="w-4 h-4" />
                 الشروط والأحكام
