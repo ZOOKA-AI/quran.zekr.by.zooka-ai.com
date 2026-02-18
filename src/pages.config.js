@@ -76,6 +76,7 @@ import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import TestingDashboard from './pages/TestingDashboard';
 import Tilawa from './pages/Tilawa';
+import ZekrDashboard from './pages/ZekrDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +110,7 @@ export const PAGES = {
     "Tawasheeh": Tawasheeh,
     "TestingDashboard": TestingDashboard,
     "Tilawa": Tilawa,
+    "ZekrDashboard": ZekrDashboard,
 }
 
 export const pagesConfig = {
