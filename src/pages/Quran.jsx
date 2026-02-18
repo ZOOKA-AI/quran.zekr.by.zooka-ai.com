@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus, Zap } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
 import { useKeyboardShortcuts } from '@/components/hooks/useKeyboardShortcuts';
@@ -17,6 +17,8 @@ import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import PullToRefresh from '@/components/mobile/PullToRefresh';
+import PageTransition from '@/components/transitions/PageTransition';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
 import DailyContent from '../components/daily/DailyContent';
@@ -55,15 +57,21 @@ export default function QuranPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const shortcuts = useKeyboardShortcuts();
+  const queryClient = useQueryClient();
 
   // استدعاء محسّن مع الذاكرة المؤقتة
-  const { data: dbSurahs = [], isLoading: surahsLoading } = useOptimizedQuery(
+  const { data: dbSurahs = [], isLoading: surahsLoading, refetch } = useOptimizedQuery(
     ['surahs-list'],
     async () => {
       return await base44.entities.Surah.list();
     },
     { staleTime: 10 * 60 * 1000 }
   );
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success('تم التحديث بنجاح');
+  };
 
   // مراقبة الأداء
   useEffect(() => {
@@ -96,18 +104,20 @@ export default function QuranPage() {
     : allSurahs;
 
   return (
+    <PageTransition>
     <PerformanceOptimizer>
-    <div className="min-h-screen relative pb-32" dir="rtl">
+    <PullToRefresh onRefresh={handleRefresh}>
+    <div className="min-h-screen relative pb-32 bg-white dark:bg-slate-950" dir="rtl">
       {/* خلفية روحانية */}
       <div className="fixed inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center opacity-100 dark:opacity-70"
           style={{ 
             backgroundImage: 'url(https://images.unsplash.com/photo-1564769625905-50e93615e769?w=1920&q=80)',
             filter: 'brightness(0.25)'
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98" />
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98 dark:from-slate-950/95 dark:via-slate-900/98 dark:to-black/98" />
       </div>
       
       <div className="relative z-10">
@@ -446,6 +456,8 @@ export default function QuranPage() {
         </div>
       </div>
     </div>
+    </PullToRefresh>
     </PerformanceOptimizer>
+    </PageTransition>
   );
 }

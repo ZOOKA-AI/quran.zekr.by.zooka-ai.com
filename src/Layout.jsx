@@ -81,14 +81,14 @@ export default function Layout({ children, currentPageName }) {
     <AuthProvider>
       <GlobalQuranPlayerProvider>
       <PlayerProvider>
-      <div className="min-h-screen relative overflow-hidden" dir="rtl">
+      <div className="min-h-screen relative overflow-hidden bg-white dark:bg-slate-950" dir="rtl">
       {/* Spiritual Background */}
       <div className="fixed inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20"
+          className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-10"
           style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/70 via-white/80 to-emerald-100/70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/70 via-white/80 to-emerald-100/70 dark:from-slate-950/90 dark:via-slate-900/95 dark:to-slate-950/98" />
       </div>
       <div className="relative z-10">
       <OfflineIndicator />

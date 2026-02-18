@@ -15,6 +15,8 @@ import CommunityStats from '@/components/community/CommunityStats';
 import SharedContentCard from '@/components/community/SharedContentCard';
 import InspirationalVideos from '@/components/community/InspirationalVideos';
 import TrendingTopics from '@/components/community/TrendingTopics';
+import PullToRefresh from '@/components/mobile/PullToRefresh';
+import PageTransition from '@/components/transitions/PageTransition';
 
 export default function CommunityPage() {
   const [newShare, setNewShare] = useState({ content_type: 'verse', arabic_text: '', translation: '', source: '' });
@@ -27,6 +29,11 @@ export default function CommunityPage() {
     queryFn: () => base44.entities.DailyShare.list('-created_date', 50),
     initialData: [],
   });
+
+  const handleRefresh = async () => {
+    await refetchShares();
+    toast.success('تم التحديث بنجاح');
+  };
 
   useEffect(() => {
     const unsubscribe = base44.entities.DailyShare.subscribe((event) => {
@@ -86,9 +93,11 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="min-h-screen relative pb-24" dir="rtl">
+    <PageTransition>
+    <PullToRefresh onRefresh={handleRefresh}>
+    <div className="min-h-screen relative pb-24 bg-white dark:bg-slate-950" dir="rtl">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-pink-950/90 via-purple-950/95 to-slate-950/98" />
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-950/90 via-purple-950/95 to-slate-950/98 dark:from-pink-950/95 dark:via-purple-950/98 dark:to-black/98" />
       </div>
       
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
@@ -179,5 +188,7 @@ export default function CommunityPage() {
         <InspirationalVideos />
       </div>
     </div>
+    </PullToRefresh>
+    </PageTransition>
   );
 }
