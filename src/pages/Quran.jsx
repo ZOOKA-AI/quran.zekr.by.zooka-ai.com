@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import PullToRefresh from '@/components/mobile/PullToRefresh';
 import PageTransition from '@/components/transitions/PageTransition';
+import AIDisclosure from '@/components/disclosure/AIDisclosure';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
 import DailyContent from '../components/daily/DailyContent';
@@ -107,6 +108,8 @@ export default function QuranPage() {
     <PageTransition>
     <PerformanceOptimizer>
     <PullToRefresh onRefresh={handleRefresh}>
+    <>
+    <AIDisclosure />
     <div className="min-h-screen relative pb-32 bg-white dark:bg-slate-950" dir="rtl">
       {/* خلفية روحانية */}
       <div className="fixed inset-0 z-0">
@@ -456,6 +459,7 @@ export default function QuranPage() {
         </div>
       </div>
     </div>
+    </>
     </PullToRefresh>
     </PerformanceOptimizer>
     </PageTransition>
