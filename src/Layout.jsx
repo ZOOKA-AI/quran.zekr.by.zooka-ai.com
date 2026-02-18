@@ -143,6 +143,33 @@ export default function Layout({ children, currentPageName }) {
         }
       `}</style>
 
+      {/* Islamic Logo Badge */}
+      <div className="fixed top-24 left-6 z-50 safe-top safe-left">
+        <div className="relative group">
+          <div className="w-20 h-20 bg-gradient-to-br from-slate-900 via-slate-800 to-black rounded-2xl shadow-2xl border-2 border-amber-400 flex items-center justify-center overflow-hidden">
+            {/* Golden Pattern Background */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute inset-0" style={{
+                backgroundImage: `radial-gradient(circle, rgba(251, 191, 36, 0.5) 1px, transparent 1px)`,
+                backgroundSize: '8px 8px'
+              }} />
+            </div>
+            {/* Icon Content */}
+            <div className="relative z-10 text-center">
+              <BookOpen className="w-10 h-10 text-amber-400 mb-1 mx-auto drop-shadow-lg" />
+              <div className="text-amber-400 text-xs font-bold font-arabic">القرآن</div>
+            </div>
+          </div>
+          {/* Hover Tooltip */}
+          <div className="absolute left-24 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <div className="bg-gradient-to-r from-slate-900 to-black text-amber-300 px-4 py-2 rounded-lg shadow-xl border border-amber-400/50 whitespace-nowrap">
+              <p className="font-bold text-sm">📖 تطبيق القرآن الكريم</p>
+              <p className="text-xs text-amber-200 mt-1">القراءة • الاستماع • التدبر</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Language Toggle */}
       <Button
         onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
