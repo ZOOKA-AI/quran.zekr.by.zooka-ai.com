@@ -75,6 +75,7 @@ import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
 import DeleteAccount from './pages/DeleteAccount';
 import TestingDashboard from './pages/TestingDashboard';
+import AdvancedSettings from './pages/AdvancedSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -107,6 +108,7 @@ export const PAGES = {
     "Tilawa": Tilawa,
     "DeleteAccount": DeleteAccount,
     "TestingDashboard": TestingDashboard,
+    "AdvancedSettings": AdvancedSettings,
 }
 
 export const pagesConfig = {
