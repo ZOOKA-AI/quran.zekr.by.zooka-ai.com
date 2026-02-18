@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import EgyptianRamadanPlayer from '@/components/ramadan/EgyptianRamadanPlayer';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
 const RAMADAN_DUAS = [
   { id: 1, title: 'دعاء الإفطار', text: 'ذَهَبَ الظَّمَأُ وَابْتَلَّتِ العُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ', time: 'عند الإفطار' },
@@ -17,43 +19,12 @@ const RAMADAN_DUAS = [
   { id: 4, title: 'دعاء القيام', text: 'اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ المُتَطَهِّرِينَ', time: 'صلاة التراويح' },
 ];
 
-const RAMADAN_NASHEED = [
-  { 
-    id: 1, 
-    title: 'وحوي يا وحوي', 
-    artist: 'أغنية شعبية مصرية', 
-    duration: '3:45',
-    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/001.mp3'
-  },
-  { 
-    id: 2, 
-    title: 'رمضان جانا', 
-    artist: 'التراث المصري', 
-    duration: '4:20',
-    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/002.mp3'
-  },
-  { 
-    id: 3, 
-    title: 'طلع البدر علينا', 
-    artist: 'نشيد إسلامي', 
-    duration: '5:00',
-    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/036.mp3'
-  },
-  { 
-    id: 4, 
-    title: 'أهلاً يا رمضان', 
-    artist: 'مشاري العفاسي', 
-    duration: '4:30',
-    url: 'https://server11.mp3quran.net/sds/Rewayat-Hafs-A-n-Assem/001.mp3'
-  },
-  { 
-    id: 5, 
-    title: 'ياما في الليالي', 
-    artist: 'أم كلثوم (روحاني)', 
-    duration: '6:15',
-    url: 'https://server11.mp3quran.net/sds/Rewayat-Hafs-A-n-Assem/002.mp3'
-  },
-];
+const formatTime = (seconds) => {
+  if (!seconds || isNaN(seconds)) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 const DAILY_GOALS = [
   { id: 1, title: 'قراءة جزء من القرآن', icon: BookOpen, points: 100 },
