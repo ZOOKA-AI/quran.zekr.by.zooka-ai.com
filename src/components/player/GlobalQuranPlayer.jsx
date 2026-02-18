@@ -328,9 +328,9 @@ export default function GlobalQuranPlayer() {
                   {/* Quality Control */}
                   <div>
                     <label className="text-sm text-amber-300 mb-2 block font-bold">جودة الصوت</label>
-                    <Select value={quality} onValueChange={setQuality}>
+                    <Select value={quality || 'medium'} onValueChange={setQuality}>
                       <SelectTrigger className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50">
-                        <SelectValue />
+                        <SelectValue placeholder="اختر الجودة" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="low">منخفضة (64kbps)</SelectItem>
@@ -347,9 +347,12 @@ export default function GlobalQuranPlayer() {
                       <Input
                         type="number"
                         min="0"
-                        max={duration}
-                        value={customStart}
-                        onChange={(e) => setCustomStart(parseFloat(e.target.value) || 0)}
+                        max={duration || 0}
+                        value={typeof customStart === 'number' ? customStart : 0}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setCustomStart(val ? parseFloat(val) : 0);
+                        }}
                         className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50"
                       />
                     </div>
@@ -358,9 +361,12 @@ export default function GlobalQuranPlayer() {
                       <Input
                         type="number"
                         min="0"
-                        max={duration}
-                        value={customEnd || ''}
-                        onChange={(e) => setCustomEnd(e.target.value ? parseFloat(e.target.value) : null)}
+                        max={duration || 0}
+                        value={customEnd ? String(customEnd) : ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setCustomEnd(val && val.trim() ? parseFloat(val) : null);
+                        }}
                         className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50"
                         placeholder="بدون حد"
                       />
