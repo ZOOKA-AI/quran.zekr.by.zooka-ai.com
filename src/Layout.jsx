@@ -31,6 +31,9 @@ export default function Layout({ children, currentPageName }) {
   const [language, setLanguage] = useState('ar');
   const [theme, setTheme] = useState('light');
   
+  // Track mounted tabs to preserve their state
+  const [mountedTabs, setMountedTabs] = useState(new Set([currentPageName]));
+  
   // Safe Area support for mobile devices
   React.useEffect(() => {
     // Add viewport meta for safe area
@@ -77,6 +80,11 @@ export default function Layout({ children, currentPageName }) {
     }
   }, [theme]);
 
+  // Update mounted tabs when page changes
+  React.useEffect(() => {
+    setMountedTabs(prev => new Set([...prev, currentPageName]));
+  }, [currentPageName]);
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
@@ -89,6 +97,9 @@ export default function Layout({ children, currentPageName }) {
       themeColorMeta.setAttribute('content', newTheme === 'dark' ? '#020617' : '#ecfdf5');
     }
   };
+  
+  // Define main bottom nav pages that should preserve state
+  const mainTabPages = ['Quran', 'Tilawa', 'QuranRadio', 'Community', 'Profile'];
   
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
@@ -377,7 +388,25 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main Content - Tab-based routing with preserved state */}
       <main className="pb-32 safe-top safe-bottom">
-        {children}
+        {/* Preserve state for main tab pages by keeping them mounted but hidden */}
+        {mainTabPages.includes(currentPageName) ? (
+          <>
+            {mainTabPages.map(tabPage => (
+              mountedTabs.has(tabPage) && (
+                <div
+                  key={tabPage}
+                  className={currentPageName === tabPage ? 'block' : 'hidden'}
+                  style={{ display: currentPageName === tabPage ? 'block' : 'none' }}
+                >
+                  {currentPageName === tabPage && children}
+                </div>
+              )
+            ))}
+          </>
+        ) : (
+          // For non-tab pages, render normally
+          children
+        )}
       </main>
 
       {/* Bottom Navigation */}
