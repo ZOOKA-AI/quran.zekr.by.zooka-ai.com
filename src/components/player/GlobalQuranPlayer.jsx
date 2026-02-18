@@ -5,7 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Play, Pause, Volume2, VolumeX, ChevronDown, ChevronUp, ChevronRight, BookOpen, User, Radio, Mic, Book, Shield, Info } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, ChevronDown, ChevronUp, ChevronRight, BookOpen, User, Radio, Mic, Book, Shield, Info, Zap } from 'lucide-react';
 import { useGlobalQuranPlayer } from './GlobalQuranPlayerContext';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -59,12 +59,20 @@ export default function GlobalQuranPlayer() {
     currentTime,
     duration,
     volume,
+    speed,
+    quality,
+    customStart,
+    customEnd,
     reciter,
     surahNumber,
     verseStart,
     verseEnd,
     isMinimized,
     setVolume,
+    setSpeed,
+    setQuality,
+    setCustomStart,
+    setCustomEnd,
     setReciter,
     setSurahNumber,
     setVerseStart,
@@ -294,6 +302,69 @@ export default function GlobalQuranPlayer() {
                       onValueChange={handleVolumeChange}
                       className="flex-1"
                     />
+                  </div>
+
+                  {/* Speed Control */}
+                  <div>
+                    <label className="text-sm text-amber-300 mb-2 flex items-center gap-2 font-bold">
+                      <Zap className="w-4 h-4" />
+                      سرعة التشغيل
+                    </label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[0.75, 1, 1.25, 1.5].map(s => (
+                        <Button
+                          key={s}
+                          variant={speed === s ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setSpeed(s)}
+                          className={speed === s ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white' : 'border-amber-500/30 text-amber-300 hover:bg-amber-900/20'}
+                        >
+                          {s}x
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quality Control */}
+                  <div>
+                    <label className="text-sm text-amber-300 mb-2 block font-bold">جودة الصوت</label>
+                    <Select value={quality} onValueChange={setQuality}>
+                      <SelectTrigger className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">منخفضة (64kbps)</SelectItem>
+                        <SelectItem value="medium">متوسطة (128kbps)</SelectItem>
+                        <SelectItem value="high">عالية (192kbps)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Custom Start/End Points */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm text-amber-300 mb-2 block font-bold">نقطة البدء (ثانية)</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max={duration}
+                        value={customStart}
+                        onChange={(e) => setCustomStart(parseFloat(e.target.value) || 0)}
+                        className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-amber-300 mb-2 block font-bold">نقطة النهاية (ثانية)</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max={duration}
+                        value={customEnd || ''}
+                        onChange={(e) => setCustomEnd(e.target.value ? parseFloat(e.target.value) : null)}
+                        className="bg-slate-900/80 border-amber-500/30 text-amber-100 hover:border-amber-500/50"
+                        placeholder="بدون حد"
+                      />
+                    </div>
                   </div>
                 </TabsContent>
 
