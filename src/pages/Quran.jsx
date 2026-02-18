@@ -34,6 +34,7 @@ import AppSettingsPanel from '../components/settings/AppSettingsPanel';
 import QuranStats from '../components/quran/QuranStats';
 import VideoGrid from '../components/videos/VideoGrid';
 import SmartContentHub from '../components/home/SmartContentHub';
+import QuranQuizCard from '../components/quran/QuranQuizCard';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', verses_count: 7, revelation_place: 'Makkah' },
@@ -190,6 +191,10 @@ export default function QuranPage() {
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
                 <DailyVerseCard />
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+                <QuranQuizCard />
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
