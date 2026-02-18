@@ -23,35 +23,35 @@ const RAMADAN_NASHEED = [
     title: 'وحوي يا وحوي', 
     artist: 'أغنية شعبية مصرية', 
     duration: '3:45',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/001.mp3'
   },
   { 
     id: 2, 
     title: 'رمضان جانا', 
     artist: 'التراث المصري', 
     duration: '4:20',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
+    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/002.mp3'
   },
   { 
     id: 3, 
     title: 'طلع البدر علينا', 
     artist: 'نشيد إسلامي', 
     duration: '5:00',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'
+    url: 'https://server11.mp3quran.net/a_jbr/Rewayat-Warsh-A-n-Nafi/036.mp3'
   },
   { 
     id: 4, 
     title: 'أهلاً يا رمضان', 
     artist: 'مشاري العفاسي', 
     duration: '4:30',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
+    url: 'https://server11.mp3quran.net/sds/Rewayat-Hafs-A-n-Assem/001.mp3'
   },
   { 
     id: 5, 
     title: 'ياما في الليالي', 
     artist: 'أم كلثوم (روحاني)', 
     duration: '6:15',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'
+    url: 'https://server11.mp3quran.net/sds/Rewayat-Hafs-A-n-Assem/002.mp3'
   },
 ];
 
