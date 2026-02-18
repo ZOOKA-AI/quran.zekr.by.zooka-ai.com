@@ -73,6 +73,7 @@ import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
+import DeleteAccount from './pages/DeleteAccount';
 import __Layout from './Layout.jsx';
 
 
@@ -103,6 +104,7 @@ export const PAGES = {
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
+    "DeleteAccount": DeleteAccount,
 }
 
 export const pagesConfig = {

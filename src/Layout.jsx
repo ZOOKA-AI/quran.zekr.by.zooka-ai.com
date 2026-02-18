@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2 } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2, Trash2 } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -13,6 +13,7 @@ import GlobalQuranPlayer from '@/components/player/GlobalQuranPlayer';
 import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
 import AutoRefreshButton from '@/components/controls/AutoRefreshButton';
+import BottomNav from '@/components/navigation/BottomNav';
 import { Button } from '@/components/ui/button';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -26,6 +27,31 @@ import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Safe Area support for mobile devices
+  React.useEffect(() => {
+    // Add viewport meta for safe area
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no');
+    }
+    
+    // Add CSS variables for safe area insets
+    const style = document.createElement('style');
+    style.textContent = `
+      :root {
+        --safe-area-inset-top: env(safe-area-inset-top);
+        --safe-area-inset-right: env(safe-area-inset-right);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
+        --safe-area-inset-left: env(safe-area-inset-left);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
   
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
@@ -98,7 +124,7 @@ export default function Layout({ children, currentPageName }) {
         <SheetTrigger asChild>
           <Button
             size="lg"
-            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-2xl"
+            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-2xl safe-top safe-right"
           >
             <Menu className="w-7 h-7 text-white" />
           </Button>
@@ -218,8 +244,17 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </div>
 
-            {/* Logout */}
-            <div className="pt-4 border-t">
+            {/* Account Management */}
+            <div className="pt-4 border-t space-y-2">
+              <Link to={createPageUrl('DeleteAccount')} onClick={() => setSidebarOpen(false)}>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-gray-700 border-gray-200 hover:bg-gray-50"
+                >
+                  <Trash2 className="w-5 h-5 ml-2" />
+                  <span className="font-bold">حذف الحساب</span>
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
@@ -234,7 +269,10 @@ export default function Layout({ children, currentPageName }) {
       </Sheet>
 
       {/* Main Content */}
-      <main className="pb-24">{children}</main>
+      <main className="pb-32 safe-top safe-bottom">{children}</main>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
 
       {/* Classic Audio Player */}
       <ClassicAudioPlayer />
