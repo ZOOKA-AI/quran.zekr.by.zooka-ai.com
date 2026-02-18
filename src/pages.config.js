@@ -52,6 +52,7 @@ import Assistant from './pages/Assistant';
 import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
+import Channels from './pages/Channels';
 import Community from './pages/Community';
 import DonationSuccess from './pages/DonationSuccess';
 import Ibtihaalat from './pages/Ibtihaalat';
@@ -67,12 +68,11 @@ import QuranRadio from './pages/QuranRadio';
 import Ramadan from './pages/Ramadan';
 import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
+import ShareLibrary from './pages/ShareLibrary';
 import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
 import Tilawa from './pages/Tilawa';
-import Channels from './pages/Channels';
-import ShareLibrary from './pages/ShareLibrary';
 import __Layout from './Layout.jsx';
 
 
@@ -82,6 +82,7 @@ export const PAGES = {
     "Athkar": Athkar,
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
+    "Channels": Channels,
     "Community": Community,
     "DonationSuccess": DonationSuccess,
     "Ibtihaalat": Ibtihaalat,
@@ -97,12 +98,11 @@ export const PAGES = {
     "Ramadan": Ramadan,
     "Reciters": Reciters,
     "Rewards": Rewards,
+    "ShareLibrary": ShareLibrary,
     "StaticPageView": StaticPageView,
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
     "Tilawa": Tilawa,
-    "Channels": Channels,
-    "ShareLibrary": ShareLibrary,
 }
 
 export const pagesConfig = {

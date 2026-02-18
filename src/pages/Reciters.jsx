@@ -217,6 +217,14 @@ export default function RecitersPage() {
                     {reciter.bio}
                   </p>
                   <div className="space-y-4 pt-4 border-t border-slate-700">
+                    {/* زر تشغيل */}
+                    <Link to={createPageUrl(`Tilawa?reciter=${reciter.id}`)}>
+                      <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500">
+                        <BookOpen className="w-4 h-4 ml-2" />
+                        استمع إلى تلاوات {reciter.name_arabic}
+                      </Button>
+                    </Link>
+                    
                     {/* مصادر ومراجع */}
                     <div className="flex items-center justify-between">
                       <div className="text-xs text-slate-400">

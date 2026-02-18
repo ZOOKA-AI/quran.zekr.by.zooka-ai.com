@@ -74,9 +74,14 @@ export default function Ibtihaalat() {
   };
 
   useEffect(() => {
-    if (currentTrack && audioRef.current) {
+    if (currentTrack && audioRef.current && currentTrack.audio) {
       audioRef.current.src = currentTrack.audio;
-      audioRef.current.play().catch(() => {});
+      audioRef.current.volume = volume / 100;
+      audioRef.current.play().catch((error) => {
+        console.error('Error playing audio:', error);
+        toast.error('تعذر تشغيل الصوت - تأكد من رابط الصوت');
+        setIsPlaying(false);
+      });
     }
   }, [currentTrack]);
 
