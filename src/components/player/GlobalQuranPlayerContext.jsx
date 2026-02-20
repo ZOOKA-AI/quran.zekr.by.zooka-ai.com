@@ -140,18 +140,38 @@ export function GlobalQuranPlayerProvider({ children }) {
     return () => audio.removeEventListener('timeupdate', handleTimeUpdate);
   }, [customStart, customEnd]);
 
-  const play = (newReciter, newSurah, newVerseStart, newVerseEnd) => {
+  const play = async (newReciter, newSurah, newVerseStart, newVerseEnd) => {
     if (newReciter) setReciter(newReciter);
     if (newSurah) setSurahNumber(newSurah);
     if (newVerseStart) setVerseStart(newVerseStart);
     if (newVerseEnd) setVerseEnd(newVerseEnd);
 
-    const qualityMap = { 'low': '64', 'medium': '128', 'high': '192' };
-    const qValue = qualityMap[quality] || quality;
-    const audioUrl = `https://cdn.islamic.network/quran/audio-surah/${qValue}/${newReciter || reciter}/${newSurah || surahNumber}.mp3`;
+    const reciterValue = newReciter || reciter;
+    const surahValue = newSurah || surahNumber;
     
-    if (audioRef.current.src !== audioUrl) {
-      audioRef.current.src = audioUrl;
+    // محاولة جلب التلاوة من قاعدة البيانات المحلية
+    try {
+      const recitations = await base44.entities.Recitation.filter({
+        reciter_id: reciterValue,
+        surah_number: surahValue
+      });
+      
+      if (recitations.length > 0 && recitations[0].audio_url) {
+        const audioUrl = recitations[0].audio_url;
+        
+        // Try to use cached version from IndexedDB
+        const cachedBlob = await getCachedAudio(audioUrl);
+        if (cachedBlob) {
+          const blobUrl = URL.createObjectURL(cachedBlob);
+          audioRef.current.src = blobUrl;
+        } else {
+          audioRef.current.src = audioUrl;
+          // Download and cache in background
+          cacheAudio(audioUrl);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch recitation from database:', err);
     }
     
     if (customStart > 0) {
@@ -165,6 +185,56 @@ export function GlobalQuranPlayerProvider({ children }) {
     audioRef.current.playbackRate = speed;
     setIsPlaying(true);
     setIsMinimized(false);
+  };
+
+  // وظيفة للحصول على الصوت من الذاكرة المحلية
+  const getCachedAudio = async (url) => {
+    try {
+      const db = await openDB();
+      const transaction = db.transaction(['audio'], 'readonly');
+      const store = transaction.objectStore('audio');
+      const request = store.get(url);
+      
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result?.blob);
+        request.onerror = () => reject(request.error);
+      });
+    } catch (err) {
+      console.error('Failed to get cached audio:', err);
+      return null;
+    }
+  };
+
+  // وظيفة لحفظ الصوت في الذاكرة المحلية
+  const cacheAudio = async (url) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      const db = await openDB();
+      const transaction = db.transaction(['audio'], 'readwrite');
+      const store = transaction.objectStore('audio');
+      store.put({ url, blob, timestamp: Date.now() });
+    } catch (err) {
+      console.error('Failed to cache audio:', err);
+    }
+  };
+
+  // فتح قاعدة البيانات المحلية
+  const openDB = () => {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('QuranAudioDB', 1);
+      
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('audio')) {
+          db.createObjectStore('audio', { keyPath: 'url' });
+        }
+      };
+      
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
   };
 
   const pause = () => {

@@ -75,6 +75,7 @@ import Tawasheeh from './pages/Tawasheeh';
 import TestingDashboard from './pages/TestingDashboard';
 import Tilawa from './pages/Tilawa';
 import ZekrDashboard from './pages/ZekrDashboard';
+import OfflineDownloads from './pages/OfflineDownloads';
 import __Layout from './Layout.jsx';
 
 
@@ -107,6 +108,7 @@ export const PAGES = {
     "TestingDashboard": TestingDashboard,
     "Tilawa": Tilawa,
     "ZekrDashboard": ZekrDashboard,
+    "OfflineDownloads": OfflineDownloads,
 }
 
 export const pagesConfig = {
