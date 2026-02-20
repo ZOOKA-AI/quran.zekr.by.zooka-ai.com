@@ -127,7 +127,6 @@ export default function Layout({ children, currentPageName }) {
     { name: 'التواشيح', path: 'Tawasheeh', icon: Music, color: 'text-amber-600' },
     { name: 'الابتهالات', path: 'Ibtihaalat', icon: AudioLines, color: 'text-orange-600' },
     { name: 'المؤذن', path: 'Muathin', icon: AlarmClock, color: 'text-teal-600' },
-
     { name: 'المجتمع', path: 'Community', icon: MessageSquare, color: 'text-pink-600' },
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
     { name: 'المساعد', path: 'Assistant', icon: Sparkles, color: 'text-indigo-600' },
@@ -436,10 +435,10 @@ export default function Layout({ children, currentPageName }) {
             <p className="text-xl text-amber-200 mb-6 font-spiritual">اللهم اجعلنا من أهل القرآن وخاصته</p>
             <div className="h-1 w-64 mx-auto bg-gradient-to-r from-transparent via-amber-400 to-transparent mb-6"></div>
 
-            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-4 max-w-3xl mx-auto border border-purple-400/30">
+            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-6 max-w-3xl mx-auto border border-purple-400/30">
               <p className="text-amber-300 text-2xl font-bold mb-3">🤲 صدقة جارية على روح المرحومة</p>
               <p className="text-white text-xl font-arabic mb-2">جزبية عبد الرحيم هارون علي</p>
-              <p className="text-emerald-200 mb-4">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
+              <p className="text-emerald-200">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
             </div>
 
             <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
