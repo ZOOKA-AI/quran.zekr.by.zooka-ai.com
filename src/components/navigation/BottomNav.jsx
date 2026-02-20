@@ -8,7 +8,6 @@ const navItems = [
   { id: 'tilawa', label: 'التلاوة', path: 'Tilawa', icon: BookOpen },
   { id: 'radio', label: 'الإذاعة', path: 'QuranRadio', icon: Radio },
   { id: 'community', label: 'المجتمع', path: 'Community', icon: Users },
-  { id: 'profile', label: 'حسابي', path: 'Profile', icon: User },
 ];
 
 export default function BottomNav() {
