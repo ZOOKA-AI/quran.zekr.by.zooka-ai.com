@@ -76,6 +76,8 @@ import TestingDashboard from './pages/TestingDashboard';
 import Tilawa from './pages/Tilawa';
 import ZekrDashboard from './pages/ZekrDashboard';
 import OfflineDownloads from './pages/OfflineDownloads';
+import MyPlaylists from './pages/MyPlaylists';
+import PlaylistEditor from './pages/PlaylistEditor';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +111,8 @@ export const PAGES = {
     "Tilawa": Tilawa,
     "ZekrDashboard": ZekrDashboard,
     "OfflineDownloads": OfflineDownloads,
+    "MyPlaylists": MyPlaylists,
+    "PlaylistEditor": PlaylistEditor,
 }
 
 export const pagesConfig = {

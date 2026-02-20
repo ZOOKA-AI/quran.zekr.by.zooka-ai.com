@@ -120,6 +120,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
     { name: 'التلاوة', path: 'Tilawa', icon: Volume2, color: 'text-blue-600' },
     { name: 'المقرئين', path: 'Reciters', icon: Mic, color: 'text-purple-600' },
+    { name: 'قوائم التشغيل', path: 'MyPlaylists', icon: Music, color: 'text-indigo-600' },
     { name: 'رمضان', path: 'Ramadan', icon: Moon, color: 'text-purple-600' },
     { name: 'الأذكار', path: 'Athkar', icon: Sun, color: 'text-cyan-600' },
     { name: 'القنوات', path: 'Channels', icon: Youtube, color: 'text-red-600' },
