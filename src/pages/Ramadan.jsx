@@ -347,7 +347,7 @@ export default function Ramadan() {
         </Tabs>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Link to={createPageUrl('Athkar')}>
             <Card className="hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
               <CardContent className="p-4 text-center">
@@ -372,14 +372,7 @@ export default function Ramadan() {
               </CardContent>
             </Card>
           </Link>
-          <Link to={createPageUrl('Orphans')}>
-            <Card className="hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-red-500 to-pink-500 text-white">
-              <CardContent className="p-4 text-center">
-                <Heart className="w-8 h-8 mx-auto mb-2" />
-                <p className="font-bold">الصدقة</p>
-              </CardContent>
-            </Card>
-          </Link>
+
         </div>
       </div>
     </div>

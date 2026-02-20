@@ -56,13 +56,11 @@ import Calligraphy from './pages/Calligraphy';
 import Channels from './pages/Channels';
 import Community from './pages/Community';
 import DeleteAccount from './pages/DeleteAccount';
-import DonationSuccess from './pages/DonationSuccess';
 import Ibtihaalat from './pages/Ibtihaalat';
 import Library from './pages/Library';
 import Messages from './pages/Messages';
 import Muathin from './pages/Muathin';
 import NotificationSettings from './pages/NotificationSettings';
-import Orphans from './pages/Orphans';
 import PrayerTimes from './pages/PrayerTimes';
 import Profile from './pages/Profile';
 import Quran from './pages/Quran';
@@ -90,13 +88,11 @@ export const PAGES = {
     "Channels": Channels,
     "Community": Community,
     "DeleteAccount": DeleteAccount,
-    "DonationSuccess": DonationSuccess,
     "Ibtihaalat": Ibtihaalat,
     "Library": Library,
     "Messages": Messages,
     "Muathin": Muathin,
     "NotificationSettings": NotificationSettings,
-    "Orphans": Orphans,
     "PrayerTimes": PrayerTimes,
     "Profile": Profile,
     "Quran": Quran,
