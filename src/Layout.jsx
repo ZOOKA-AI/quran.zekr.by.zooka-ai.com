@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { BookOpen, Home, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, LogOut, Trophy, Mail, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2, Trash2 } from 'lucide-react';
