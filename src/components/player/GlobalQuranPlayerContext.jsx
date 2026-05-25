@@ -26,6 +26,8 @@ export function GlobalQuranPlayerProvider({ children }) {
   const [customStart, setCustomStart] = useState(0);
   const [customEnd, setCustomEnd] = useState(null);
   const [isMinimized, setIsMinimized] = useState(true);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+  const [currentPlaylistIndex, setCurrentPlaylistIndex] = useState(0);
 
   // حفظ موضع التشغيل
   const savePlaybackPosition = async () => {
@@ -103,6 +105,7 @@ export function GlobalQuranPlayerProvider({ children }) {
     const handleEnded = () => {
       setIsPlaying(false);
       savePlaybackPosition();
+      playNextInPlaylist();
     };
 
     audio.addEventListener('timeupdate', updateTime);
@@ -237,6 +240,26 @@ export function GlobalQuranPlayerProvider({ children }) {
     });
   };
 
+  const playPlaylist = async (playlist) => {
+    if (!playlist || !playlist.items || playlist.items.length === 0) return;
+    setCurrentPlaylist(playlist);
+    setCurrentPlaylistIndex(0);
+    const firstItem = playlist.items[0];
+    await play(firstItem.reciter_id, firstItem.surah_number, 1, null);
+  };
+
+  const playNextInPlaylist = async () => {
+    if (!currentPlaylist || !currentPlaylist.items) return;
+    const nextIndex = currentPlaylistIndex + 1;
+    if (nextIndex >= currentPlaylist.items.length) {
+      setCurrentPlaylist(null);
+      return;
+    }
+    setCurrentPlaylistIndex(nextIndex);
+    const nextItem = currentPlaylist.items[nextIndex];
+    await play(nextItem.reciter_id, nextItem.surah_number, 1, null);
+  };
+
   const pause = () => {
     audioRef.current.pause();
     setIsPlaying(false);
@@ -291,7 +314,11 @@ export function GlobalQuranPlayerProvider({ children }) {
     togglePlay,
     seek,
     stop,
-    savePlaybackPosition
+    savePlaybackPosition,
+    playPlaylist,
+    playNextInPlaylist,
+    currentPlaylist,
+    currentPlaylistIndex
   };
 
   return (

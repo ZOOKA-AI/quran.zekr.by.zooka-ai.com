@@ -33,7 +33,7 @@ export default function MyPlaylists() {
   const createPlaylistMutation = useMutation({
     mutationFn: async (name) => {
       return await base44.entities.Playlist.create({
-        name: name,
+        title: name,
         items: [],
         total_duration: 0,
         is_public: false
@@ -93,8 +93,8 @@ export default function MyPlaylists() {
       toast.error('قائمة التشغيل فارغة');
       return;
     }
-    playPlaylist(playlist);
-    toast.success(`جاري تشغيل: ${playlist.name}`);
+    if (playPlaylist) playPlaylist(playlist);
+    toast.success(`جاري تشغيل: ${playlist.title}`);
   };
 
   if (isLoading) {
@@ -172,7 +172,7 @@ export default function MyPlaylists() {
                   <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <Music className="w-5 h-5 text-emerald-600" />
-                      {playlist.name}
+                      {playlist.title}
                     </span>
                     <Button
                       variant="ghost"

@@ -16,7 +16,7 @@ export const loggerUtils = {
   },
 
   debug(message, data = null) {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.debug(`[Debug] ${message}`, data);
     }
   },

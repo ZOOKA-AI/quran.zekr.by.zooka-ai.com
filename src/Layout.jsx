@@ -141,9 +141,8 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <AuthProvider>
-      <GlobalQuranPlayerProvider>
-      <PlayerProvider>
+    <GlobalQuranPlayerProvider>
+    <PlayerProvider>
       <div className="min-h-screen relative overflow-hidden bg-white dark:bg-slate-950" dir="rtl">
       {/* Islamic Spiritual Background */}
       <div className="fixed inset-0 z-0">
@@ -517,6 +516,5 @@ export default function Layout({ children, currentPageName }) {
       </div>
       </PlayerProvider>
       </GlobalQuranPlayerProvider>
-    </AuthProvider>
   );
 }
