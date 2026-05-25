@@ -153,7 +153,7 @@ export default function PlaylistEditor() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-4xl font-bold text-emerald-900 mb-2">{playlist.name}</h1>
+            <h1 className="text-4xl font-bold text-emerald-900 mb-2">{playlist.title}</h1>
             <p className="text-gray-600">
               {playlist.items?.length || 0} عنصر • {Math.floor((playlist.total_duration || 0) / 60)} دقيقة
             </p>

@@ -28,6 +28,8 @@ export function GlobalQuranPlayerProvider({ children }) {
   const [isMinimized, setIsMinimized] = useState(true);
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
   const [currentPlaylistIndex, setCurrentPlaylistIndex] = useState(0);
+  const currentPlaylistRef = useRef(null);
+  const currentPlaylistIndexRef = useRef(0);
 
   // حفظ موضع التشغيل
   const savePlaybackPosition = async () => {
@@ -242,6 +244,8 @@ export function GlobalQuranPlayerProvider({ children }) {
 
   const playPlaylist = async (playlist) => {
     if (!playlist || !playlist.items || playlist.items.length === 0) return;
+    currentPlaylistRef.current = playlist;
+    currentPlaylistIndexRef.current = 0;
     setCurrentPlaylist(playlist);
     setCurrentPlaylistIndex(0);
     const firstItem = playlist.items[0];
@@ -249,14 +253,19 @@ export function GlobalQuranPlayerProvider({ children }) {
   };
 
   const playNextInPlaylist = async () => {
-    if (!currentPlaylist || !currentPlaylist.items) return;
-    const nextIndex = currentPlaylistIndex + 1;
-    if (nextIndex >= currentPlaylist.items.length) {
+    const playlist = currentPlaylistRef.current;
+    if (!playlist || !playlist.items) return;
+    const nextIndex = currentPlaylistIndexRef.current + 1;
+    if (nextIndex >= playlist.items.length) {
+      currentPlaylistRef.current = null;
+      currentPlaylistIndexRef.current = 0;
       setCurrentPlaylist(null);
+      setCurrentPlaylistIndex(0);
       return;
     }
+    currentPlaylistIndexRef.current = nextIndex;
     setCurrentPlaylistIndex(nextIndex);
-    const nextItem = currentPlaylist.items[nextIndex];
+    const nextItem = playlist.items[nextIndex];
     await play(nextItem.reciter_id, nextItem.surah_number, 1, null);
   };
 

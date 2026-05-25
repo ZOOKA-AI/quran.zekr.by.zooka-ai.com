@@ -113,7 +113,7 @@ export default function AddToPlaylistButton({ surah, recitation, size = "sm", va
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-bold">{playlist.name}</p>
+                        <p className="font-bold">{playlist.title}</p>
                         <p className="text-sm text-gray-600">{playlist.items?.length || 0} عنصر</p>
                       </div>
                       {alreadyAdded && <Check className="w-5 h-5 text-emerald-600" />}

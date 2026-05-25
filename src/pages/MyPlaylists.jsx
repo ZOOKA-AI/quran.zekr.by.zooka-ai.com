@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +14,7 @@ import { useGlobalQuranPlayer } from '@/components/player/GlobalQuranPlayerConte
 
 export default function MyPlaylists() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { playPlaylist } = useGlobalQuranPlayer();
   const [isCreating, setIsCreating] = useState(false);
@@ -234,8 +236,7 @@ export default function MyPlaylists() {
                       <Button
                         variant="outline"
                         onClick={() => {
-                          setEditingPlaylist(playlist);
-                          window.location.href = `/PlaylistEditor?id=${playlist.id}`;
+                          navigate(`/PlaylistEditor?id=${playlist.id}`);
                         }}
                       >
                         <Edit2 className="w-4 h-4" />
