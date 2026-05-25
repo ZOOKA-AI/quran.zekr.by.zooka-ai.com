@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2, Trash2 } from 'lucide-react';
+import { BookOpen, Home, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, LogOut, Trophy, Mail, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2, Trash2 } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
 
 import InstallPrompt from '@/components/pwa/InstallPrompt';
@@ -16,7 +17,6 @@ import AppLogo from '@/components/brand/AppLogo';
 import AutoRefreshButton from '@/components/controls/AutoRefreshButton';
 import BottomNav from '@/components/navigation/BottomNav';
 import { Button } from '@/components/ui/button';
-import { Link as RouterLink } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
