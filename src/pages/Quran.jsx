@@ -35,6 +35,7 @@ import QuranStats from '../components/quran/QuranStats';
 import VideoGrid from '../components/videos/VideoGrid';
 import SmartContentHub from '../components/home/SmartContentHub';
 import QuranQuizCard from '../components/quran/QuranQuizCard';
+import SpiritualAmbience from '../components/spiritual/SpiritualAmbience';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', verses_count: 7, revelation_place: 'Makkah' },
@@ -184,6 +185,10 @@ export default function QuranPage() {
 
             {/* تبويب الرئيسية */}
             <TabsContent value="home" className="space-y-8 mt-8">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <SpiritualAmbience />
+              </motion.div>
+
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <DedicationCard />
               </motion.div>
