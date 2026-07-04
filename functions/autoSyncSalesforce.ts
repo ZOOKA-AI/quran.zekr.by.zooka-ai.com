@@ -1,18 +1,15 @@
-import { createClient } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-// هذه الدالة تُستدعى تلقائياً من automation مجدول
+// هذه الدالة تُستدعى تلقائياً عند تحديث بيانات المستخدم
 Deno.serve(async (req) => {
     try {
-        const base44 = createClient({
-            serviceRoleKey: Deno.env.get('BASE44_SERVICE_ROLE_KEY'),
-            appId: Deno.env.get('BASE44_APP_ID')
-        });
+        const base44 = createClientFromRequest(req);
         
         // جلب جميع المستخدمين مع نقاطهم
-        const allUserPoints = await base44.entities.UserPoints.list();
+        const allUserPoints = await base44.asServiceRole.entities.UserPoints.list();
         
         // الحصول على Access Token من Salesforce
-        const accessToken = await base44.connectors.getAccessToken("salesforce");
+        const accessToken = await base44.asServiceRole.connectors.getAccessToken("salesforce");
         const sfInstanceUrl = 'https://login.salesforce.com';
         
         let syncedCount = 0;

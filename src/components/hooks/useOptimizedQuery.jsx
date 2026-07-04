@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export function useOptimizedQuery(queryKey, queryFn, options = {}) {
   const defaultOptions = {
@@ -20,6 +20,7 @@ export function useOptimizedQuery(queryKey, queryFn, options = {}) {
 }
 
 export function useOptimizedInfiniteQuery(queryKey, queryFn, options = {}) {
+  const { useInfiniteQuery } = require('@tanstack/react-query');
   
   const defaultOptions = {
     staleTime: 5 * 60 * 1000,

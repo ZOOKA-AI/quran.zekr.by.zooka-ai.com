@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus, Zap } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
 import { useKeyboardShortcuts } from '@/components/hooks/useKeyboardShortcuts';
@@ -17,9 +17,6 @@ import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import PullToRefresh from '@/components/mobile/PullToRefresh';
-import PageTransition from '@/components/transitions/PageTransition';
-import AIDisclosure from '@/components/disclosure/AIDisclosure';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
 import DailyContent from '../components/daily/DailyContent';
@@ -33,9 +30,6 @@ import FeaturedSurahs from '../components/home/FeaturedSurahs';
 import AppSettingsPanel from '../components/settings/AppSettingsPanel';
 import QuranStats from '../components/quran/QuranStats';
 import VideoGrid from '../components/videos/VideoGrid';
-import SmartContentHub from '../components/home/SmartContentHub';
-import QuranQuizCard from '../components/quran/QuranQuizCard';
-import SpiritualAmbience from '../components/spiritual/SpiritualAmbience';
 
 const SURAHS = [
   { number: 1, name: 'الفاتحة', arabic_name: 'ٱلْفَاتِحَة', verses_count: 7, revelation_place: 'Makkah' },
@@ -60,21 +54,15 @@ export default function QuranPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const shortcuts = useKeyboardShortcuts();
-  const queryClient = useQueryClient();
 
   // استدعاء محسّن مع الذاكرة المؤقتة
-  const { data: dbSurahs = [], isLoading: surahsLoading, refetch } = useOptimizedQuery(
+  const { data: dbSurahs = [], isLoading: surahsLoading } = useOptimizedQuery(
     ['surahs-list'],
     async () => {
       return await base44.entities.Surah.list();
     },
     { staleTime: 10 * 60 * 1000 }
   );
-
-  const handleRefresh = async () => {
-    await refetch();
-    toast.success('تم التحديث بنجاح');
-  };
 
   // مراقبة الأداء
   useEffect(() => {
@@ -85,12 +73,13 @@ export default function QuranPage() {
   const runOptimization = async () => {
     setIsOptimizing(true);
     try {
-      await queryClient.invalidateQueries();
-      toast.success('تم تحديث البيانات بنجاح');
-      loggerUtils.info('Cache refreshed successfully');
+      const { result } = await performanceUtils.measureAsync(
+        () => base44.functions.invoke('dailySystemOptimization', {}),
+        'System optimization'
+      );
+      loggerUtils.info('Optimization completed', result);
     } catch (error) {
       loggerUtils.error('Optimization failed', error);
-      toast.error('فشل تحديث البيانات');
     } finally {
       setIsOptimizing(false);
     }
@@ -106,22 +95,18 @@ export default function QuranPage() {
     : allSurahs;
 
   return (
-    <PageTransition>
     <PerformanceOptimizer>
-    <PullToRefresh onRefresh={handleRefresh}>
-    <>
-    <AIDisclosure />
-    <div className="min-h-screen relative pb-32 bg-white dark:bg-slate-950" dir="rtl">
+    <div className="min-h-screen relative pb-32" dir="rtl">
       {/* خلفية روحانية */}
       <div className="fixed inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-100 dark:opacity-70"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ 
             backgroundImage: 'url(https://images.unsplash.com/photo-1564769625905-50e93615e769?w=1920&q=80)',
             filter: 'brightness(0.25)'
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98 dark:from-slate-950/95 dark:via-slate-900/98 dark:to-black/98" />
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/90 via-slate-900/95 to-slate-950/98" />
       </div>
       
       <div className="relative z-10">
@@ -186,10 +171,6 @@ export default function QuranPage() {
             {/* تبويب الرئيسية */}
             <TabsContent value="home" className="space-y-8 mt-8">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <SpiritualAmbience />
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <DedicationCard />
               </motion.div>
 
@@ -197,19 +178,7 @@ export default function QuranPage() {
                 <DailyVerseCard />
               </motion.div>
 
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-                <QuranQuizCard />
-              </motion.div>
-
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
-                  <Sparkles className="w-6 h-6" />
-                  مركز المحتوى الذكي
-                </h2>
-                <SmartContentHub />
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                 <h2 className="text-2xl font-bold text-amber-100 mb-4 flex items-center gap-2">
                   <Sparkles className="w-6 h-6" />
                   التنقل السريع
@@ -468,9 +437,6 @@ export default function QuranPage() {
         </div>
       </div>
     </div>
-    </>
-    </PullToRefresh>
     </PerformanceOptimizer>
-    </PageTransition>
   );
 }

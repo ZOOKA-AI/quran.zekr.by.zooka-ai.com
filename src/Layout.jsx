@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BookOpen, Home, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, LogOut, Trophy, Mail, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2, Trash2 } from 'lucide-react';
+import { BookOpen, BookMarked, Home, User, Clock, MessageSquare, Mic, Sparkles, Bell, Volume2, Menu, Settings, Music, Library, Palette, LogOut, Trophy, Mail, Heart, Moon, Sun, Radio, AudioLines, AlarmClock, FileText, Info, Shield, Youtube, Share2 } from 'lucide-react';
 import DailyReminders from '@/components/notifications/DailyReminders';
-
+import { AuthProvider } from '@/components/AuthProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import OfflineIndicator from '@/components/pwa/OfflineIndicator';
-import PWAInstaller from '@/components/pwa/PWAInstaller';
 import ClassicAudioPlayer, { PlayerProvider } from '@/components/player/ClassicAudioPlayer';
 import FloatingAudioControl from '@/components/controls/FloatingAudioControl';
 import { GlobalQuranPlayerProvider } from '@/components/player/GlobalQuranPlayerContext';
@@ -14,8 +13,8 @@ import GlobalQuranPlayer from '@/components/player/GlobalQuranPlayer';
 import SocialLinks from '@/components/social/SocialLinks';
 import AppLogo from '@/components/brand/AppLogo';
 import AutoRefreshButton from '@/components/controls/AutoRefreshButton';
-import BottomNav from '@/components/navigation/BottomNav';
 import { Button } from '@/components/ui/button';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
@@ -27,99 +26,11 @@ import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [language, setLanguage] = useState('ar');
-  const [theme, setTheme] = useState('light');
-  
-  // Safe Area support for mobile devices
-  React.useEffect(() => {
-    // Add viewport meta for safe area
-    const meta = document.querySelector('meta[name="viewport"]');
-    if (meta) {
-      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no');
-    }
-    
-    // Add CSS variables for safe area insets
-    const style = document.createElement('style');
-    style.textContent = `
-      :root {
-        --safe-area-inset-top: env(safe-area-inset-top);
-        --safe-area-inset-right: env(safe-area-inset-right);
-        --safe-area-inset-bottom: env(safe-area-inset-bottom);
-        --safe-area-inset-left: env(safe-area-inset-left);
-      }
-    `;
-    document.head.appendChild(style);
-    
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
-  // Theme management with meta tag update
-  React.useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    
-    // Update theme-color meta tag dynamically
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', savedTheme === 'dark' ? '#020617' : '#ecfdf5');
-    }
-  }, []);
-  
-  // Update theme-color when theme changes
-  React.useEffect(() => {
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', theme === 'dark' ? '#020617' : '#ecfdf5');
-    }
-  }, [theme]);
-
-  // Preserve scroll positions for main tabs
-  const scrollPositions = React.useRef({});
-  const mainTabPages = ['Quran', 'Tilawa', 'QuranRadio', 'Community', 'Profile'];
-
-  React.useEffect(() => {
-    // Save scroll position before navigation
-    const handleScroll = () => {
-      if (mainTabPages.includes(currentPageName)) {
-        scrollPositions.current[currentPageName] = window.scrollY;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentPageName]);
-
-  React.useEffect(() => {
-    // Restore scroll position after navigation
-    if (mainTabPages.includes(currentPageName)) {
-      const savedPosition = scrollPositions.current[currentPageName];
-      if (savedPosition !== undefined) {
-        setTimeout(() => window.scrollTo(0, savedPosition), 0);
-      }
-    }
-  }, [currentPageName]);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    
-    // Update theme-color meta tag
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', newTheme === 'dark' ? '#020617' : '#ecfdf5');
-    }
-  };
   
   const navItems = [
     { name: 'الرئيسية', path: 'Quran', icon: Home, color: 'text-emerald-600' },
     { name: 'التلاوة', path: 'Tilawa', icon: Volume2, color: 'text-blue-600' },
     { name: 'المقرئين', path: 'Reciters', icon: Mic, color: 'text-purple-600' },
-    { name: 'قوائم التشغيل', path: 'MyPlaylists', icon: Music, color: 'text-indigo-600' },
     { name: 'رمضان', path: 'Ramadan', icon: Moon, color: 'text-purple-600' },
     { name: 'الأذكار', path: 'Athkar', icon: Sun, color: 'text-cyan-600' },
     { name: 'القنوات', path: 'Channels', icon: Youtube, color: 'text-red-600' },
@@ -127,6 +38,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'التواشيح', path: 'Tawasheeh', icon: Music, color: 'text-amber-600' },
     { name: 'الابتهالات', path: 'Ibtihaalat', icon: AudioLines, color: 'text-orange-600' },
     { name: 'المؤذن', path: 'Muathin', icon: AlarmClock, color: 'text-teal-600' },
+    { name: 'الأيتام', path: 'Orphans', icon: Heart, color: 'text-red-600' },
     { name: 'المجتمع', path: 'Community', icon: MessageSquare, color: 'text-pink-600' },
     { name: 'المكافآت', path: 'Rewards', icon: Trophy, color: 'text-amber-600' },
     { name: 'المساعد', path: 'Assistant', icon: Sparkles, color: 'text-indigo-600' },
@@ -140,56 +52,36 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <GlobalQuranPlayerProvider>
-    <PlayerProvider>
-      <div className="min-h-screen relative overflow-hidden bg-white dark:bg-slate-950" dir="rtl">
-      {/* Islamic Spiritual Background */}
+    <AuthProvider>
+      <GlobalQuranPlayerProvider>
+      <PlayerProvider>
+      <div className="min-h-screen relative overflow-hidden" dir="rtl">
+      {/* Spiritual Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900" />
         <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }}
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/90 to-emerald-50/95" />
-        <div 
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: `radial-gradient(circle at 20% 50%, transparent 0%, rgba(16, 185, 129, 0.3) 100%),
-                            radial-gradient(circle at 80% 80%, transparent 0%, rgba(6, 182, 212, 0.3) 100%)`
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/70 via-white/80 to-emerald-100/70" />
       </div>
       <div className="relative z-10">
       <OfflineIndicator />
       <InstallPrompt />
-      <PWAInstaller />
       <DailyReminders />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Scheherazade+New:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap');
         
         * {
           font-family: 'Cairo', sans-serif;
         }
         
         .font-arabic {
-          font-family: 'Scheherazade New', 'Amiri', serif;
-          line-height: 2.8;
-          letter-spacing: 0.02em;
-        }
-        
-        .font-spiritual {
           font-family: 'Amiri', serif;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          line-height: 2.5;
         }
         
-        .islamic-pattern {
-          background-image: 
-            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(16, 185, 129, 0.03) 35px, rgba(16, 185, 129, 0.03) 70px),
-            repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(6, 182, 212, 0.03) 35px, rgba(6, 182, 212, 0.03) 70px);
+        .font-urdu {
+          font-family: 'Noto Nastaliq Urdu', serif;
         }
         
         :root {
@@ -198,74 +90,25 @@ export default function Layout({ children, currentPageName }) {
           --emerald-700: #047857;
           --emerald-800: #065f46;
           --amber-300: #fcd34d;
-          --gold: #fbbf24;
         }
       `}</style>
-
-      {/* Islamic Logo Badge */}
-      <div className="fixed top-24 left-6 z-50 safe-top safe-left">
-        <div className="relative group">
-          <div className="w-20 h-20 bg-gradient-to-br from-slate-900 via-slate-800 to-black rounded-2xl shadow-2xl border-2 border-amber-400 flex items-center justify-center overflow-hidden">
-            {/* Golden Pattern Background */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `radial-gradient(circle, rgba(251, 191, 36, 0.5) 1px, transparent 1px)`,
-                backgroundSize: '8px 8px'
-              }} />
-            </div>
-            {/* Icon Content */}
-            <div className="relative z-10 text-center">
-              <BookOpen className="w-10 h-10 text-amber-400 mb-1 mx-auto drop-shadow-lg" />
-              <div className="text-amber-400 text-xs font-bold font-arabic">القرآن</div>
-            </div>
-          </div>
-          {/* Hover Tooltip */}
-          <div className="absolute left-24 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            <div className="bg-gradient-to-r from-slate-900 to-black text-amber-300 px-4 py-2 rounded-lg shadow-xl border border-amber-400/50 whitespace-nowrap">
-              <p className="font-bold text-sm">📖 تطبيق القرآن الكريم</p>
-              <p className="text-xs text-amber-200 mt-1">القراءة • الاستماع • التدبر</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Theme & Language Toggle */}
-      <div className="fixed top-6 left-6 z-50 flex gap-2 safe-top safe-left">
-        <Button
-          onClick={toggleTheme}
-          size="sm"
-          className="bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-800 hover:to-black text-white shadow-2xl"
-        >
-          {theme === 'light' ? '🌙' : '☀️'}
-        </Button>
-        <Button
-          onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-          size="sm"
-          className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white shadow-2xl"
-        >
-          {language === 'ar' ? '🌍 English' : '🌍 عربي'}
-        </Button>
-      </div>
 
       {/* Floating Menu Button */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetTrigger asChild>
           <Button
             size="lg"
-            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 shadow-2xl border-2 border-amber-400/50 safe-top safe-right"
+            className="fixed top-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-2xl"
           >
-            <Menu className="w-7 h-7 text-white drop-shadow-lg" />
+            <Menu className="w-7 h-7 text-white" />
           </Button>
         </SheetTrigger>
         
-        <SheetContent side="right" className="w-96 overflow-y-auto islamic-pattern">
-          <SheetHeader className="border-b-2 border-amber-400/30 pb-4 mb-4">
+        <SheetContent side="right" className="w-96 overflow-y-auto">
+          <SheetHeader>
             <SheetTitle className="flex items-center gap-3 text-2xl">
               <AppLogo size="md" showTagline={false} />
             </SheetTitle>
-            <p className="text-center font-arabic text-emerald-700 text-lg">
-              ﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾
-            </p>
           </SheetHeader>
 
           <div className="mt-8 space-y-6">
@@ -375,17 +218,8 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </div>
 
-            {/* Account Management */}
-            <div className="pt-4 border-t space-y-2">
-              <Link to={createPageUrl('DeleteAccount')} onClick={() => setSidebarOpen(false)}>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-gray-700 border-gray-200 hover:bg-gray-50"
-                >
-                  <Trash2 className="w-5 h-5 ml-2" />
-                  <span className="font-bold">حذف الحساب</span>
-                </Button>
-              </Link>
+            {/* Logout */}
+            <div className="pt-4 border-t">
               <Button
                 variant="outline"
                 className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
@@ -399,13 +233,8 @@ export default function Layout({ children, currentPageName }) {
         </SheetContent>
       </Sheet>
 
-      {/* Main Content - With scroll preservation */}
-      <main className="pb-32 safe-top safe-bottom">
-        {children}
-      </main>
-
-      {/* Bottom Navigation */}
-      <BottomNav />
+      {/* Main Content */}
+      <main className="pb-24">{children}</main>
 
       {/* Classic Audio Player */}
       <ClassicAudioPlayer />
@@ -420,24 +249,48 @@ export default function Layout({ children, currentPageName }) {
       <GlobalQuranPlayer />
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-emerald-900 via-teal-900 to-cyan-900 text-white mt-16 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle, rgba(251, 191, 36, 0.3) 1px, transparent 1px)`,
-            backgroundSize: '30px 30px'
-          }} />
-        </div>
-        <div className="relative z-10">
+      <footer className="bg-gradient-to-r from-emerald-800 via-emerald-900 to-emerald-800 text-white mt-16">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="text-center">
-            <p className="text-3xl mb-4 font-arabic text-amber-300 drop-shadow-lg">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
-            <p className="text-xl text-amber-200 mb-6 font-spiritual">اللهم اجعلنا من أهل القرآن وخاصته</p>
-            <div className="h-1 w-64 mx-auto bg-gradient-to-r from-transparent via-amber-400 to-transparent mb-6"></div>
+            <p className="text-2xl mb-4 font-arabic">﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾</p>
+            <p className="text-emerald-200 mb-6">اللهم اجعلنا من أهل القرآن وخاصته</p>
 
-            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-6 max-w-3xl mx-auto border border-purple-400/30">
+            <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-xl p-6 mb-4 max-w-3xl mx-auto border border-purple-400/30">
               <p className="text-amber-300 text-2xl font-bold mb-3">🤲 صدقة جارية على روح المرحومة</p>
               <p className="text-white text-xl font-arabic mb-2">جزبية عبد الرحيم هارون علي</p>
-              <p className="text-emerald-200">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
+              <p className="text-emerald-200 mb-4">وموتانا وموتى المسلمين أجمعين • اللهم ارحمهم واغفر لهم</p>
+              
+              <Link to={createPageUrl('Orphans')} className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity mb-4">
+                <Heart className="w-5 h-5" />
+                صفحة كفالة الأيتام والتبرعات
+              </Link>
+              
+              <div className="border-t border-purple-400/30 pt-4 mt-4">
+                <p className="text-amber-200 font-bold mb-3">💝 طرق التبرع والتحويل:</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-right">
+                  <a href="https://pay.ziina.com/RoyalHaroonZLLC/6gIekkkfy" target="_blank" rel="noopener noreferrer" 
+                     className="bg-gradient-to-r from-teal-600/40 to-cyan-600/40 p-3 rounded-lg hover:opacity-80 transition-opacity block border border-teal-400/30">
+                    <p className="text-white font-bold">💳 Ziina زينة</p>
+                    <p className="text-emerald-200 text-sm">اضغط للتبرع مباشرة - خيارات متعددة</p>
+                  </a>
+                  
+                  <a href="tel:00201090193337" className="bg-gradient-to-r from-red-600/40 to-pink-600/40 p-3 rounded-lg border border-red-400/30 hover:opacity-80 transition-opacity block">
+                    <p className="text-white font-bold">📱 فودافون كاش</p>
+                    <p className="text-emerald-200 text-sm">00201090193337</p>
+                  </a>
+                  
+                  <a href="tel:+971566047579" className="bg-gradient-to-r from-orange-600/40 to-amber-600/40 p-3 rounded-lg border border-orange-400/30 hover:opacity-80 transition-opacity block">
+                    <p className="text-white font-bold">📞 e& اتصالات</p>
+                    <p className="text-emerald-200 text-sm">+971 56 604 7579</p>
+                  </a>
+                  
+                  <div className="bg-gradient-to-r from-blue-600/40 to-indigo-600/40 p-3 rounded-lg border border-blue-400/30">
+                    <p className="text-white font-bold">🏦 Stripe تحويل</p>
+                    <p className="text-emerald-200 text-sm">قريباً بإذن الله</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-emerald-700/30 rounded-xl p-4 mb-6 max-w-2xl mx-auto">
@@ -487,10 +340,6 @@ export default function Layout({ children, currentPageName }) {
                 <Shield className="w-4 h-4" />
                 سياسة الخصوصية
               </Link>
-              <Link to={createPageUrl('StaticPageView?slug=ai-disclosure')} className="flex items-center gap-1 text-purple-200 hover:text-white transition-colors">
-                <Sparkles className="w-4 h-4" />
-                إفصاح AI
-              </Link>
               <Link to={createPageUrl('StaticPageView?slug=terms')} className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors">
                 <FileText className="w-4 h-4" />
                 الشروط والأحكام
@@ -508,12 +357,11 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
         </div>
-        </div>
       </footer>
-
       </div>
       </div>
       </PlayerProvider>
       </GlobalQuranPlayerProvider>
+    </AuthProvider>
   );
 }

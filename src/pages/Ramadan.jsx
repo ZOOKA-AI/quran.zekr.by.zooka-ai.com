@@ -4,13 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Moon, Sun, BookOpen, Clock, Bell, Gift, Star, Heart, Music2, Calendar, Utensils, Coffee, Sparkles } from 'lucide-react';
+import { Moon, Sun, BookOpen, Clock, Bell, Gift, Star, Heart, Music2, Calendar, Utensils, Coffee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import EgyptianRamadanPlayer from '@/components/ramadan/EgyptianRamadanPlayer';
-import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
 
 const RAMADAN_DUAS = [
   { id: 1, title: 'دعاء الإفطار', text: 'ذَهَبَ الظَّمَأُ وَابْتَلَّتِ العُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ', time: 'عند الإفطار' },
@@ -19,12 +15,12 @@ const RAMADAN_DUAS = [
   { id: 4, title: 'دعاء القيام', text: 'اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ المُتَطَهِّرِينَ', time: 'صلاة التراويح' },
 ];
 
-const formatTime = (seconds) => {
-  if (!seconds || isNaN(seconds)) return '0:00';
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
+const RAMADAN_NASHEED = [
+  { id: 1, title: 'رمضان أهلاً', artist: 'ماهر زين', duration: '4:30' },
+  { id: 2, title: 'رمضان كريم', artist: 'سامي يوسف', duration: '5:15' },
+  { id: 3, title: 'يا رمضان', artist: 'مشاري العفاسي', duration: '6:00' },
+  { id: 4, title: 'أهلاً رمضان', artist: 'أحمد بو خاطر', duration: '4:45' },
+];
 
 const DAILY_GOALS = [
   { id: 1, title: 'قراءة جزء من القرآن', icon: BookOpen, points: 100 },
@@ -39,25 +35,6 @@ export default function Ramadan() {
   const [ramadanDay, setRamadanDay] = useState(1);
   const [timeToIftar, setTimeToIftar] = useState('');
   const [timeToSuhoor, setTimeToSuhoor] = useState('');
-
-  // جلب الأناشيد من قاعدة البيانات
-  const { data: dbTawasheeh = [] } = useQuery({
-    queryKey: ['ramadan-nasheed'],
-    queryFn: () => base44.entities.Tawasheeh.list('-plays_count'),
-    staleTime: 10 * 60 * 1000,
-  });
-
-  // تحويل البيانات للصيغة المطلوبة للمشغل (تصفية البيانات الناقصة)
-   const RAMADAN_NASHEED = dbTawasheeh
-     .filter(t => t.audio_url && typeof t.audio_url === 'string' && t.audio_url.trim())
-     .map(t => ({
-       id: t.id,
-       title: t.title || 'بدون عنوان',
-       artist: t.artist || 'غير معروف',
-       duration: t.duration_text || formatTime(t.duration || 0),
-       url: t.audio_url,
-       audioUrl: t.audio_url
-     }));
 
   useEffect(() => {
     // حساب الوقت المتبقي (تقريبي)
@@ -96,117 +73,47 @@ export default function Ramadan() {
   const progressPercentage = (completedGoals.length / DAILY_GOALS.length) * 100;
 
   return (
-    <div className="min-h-screen py-8 px-4 relative overflow-hidden" dir="rtl">
-      {/* خلفية مصرية روحانية */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900 via-orange-800 to-red-900" />
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fbbf24' fill-opacity='1'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40z' fill-opacity='0.1'/%3E%3Cpath d='M40 0h40v40H40V0z' fill-opacity='0.15'/%3E%3C/g%3E%3C/svg%3E")`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-orange-50/95 via-amber-50/90 to-yellow-50/95" />
-        <motion.div
-          animate={{
-            opacity: [0.3, 0.5, 0.3],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-20 right-20 w-32 h-32 bg-amber-400/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute bottom-20 left-20 w-40 h-40 bg-orange-400/20 rounded-full blur-3xl"
-        />
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Header بطابع مصري */}
-        <motion.div 
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="relative inline-block mb-4">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="w-28 h-28 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-amber-200"
-            >
-              <Moon className="w-14 h-14 text-white drop-shadow-lg" />
-            </motion.div>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute -top-2 -right-2 text-4xl"
-            >
-              ✨
-            </motion.div>
+    <div className="min-h-screen py-8 px-4 bg-gradient-to-b from-purple-50 to-indigo-50" dir="rtl">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-indigo-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <Moon className="w-12 h-12 text-white" />
           </div>
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 mb-2 drop-shadow-lg">
-            🌙 رمضان كريم 🕌
-          </h1>
-          <p className="text-2xl text-amber-800 font-bold mb-2">أهلاً وحوي يا رمضان</p>
-          <p className="text-orange-700 text-lg font-arabic">شهر الرحمة والمغفرة والبركة • روح مصر الأصيلة</p>
-          <Badge className="mt-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-lg px-6 py-2 shadow-lg">
-            اليوم {ramadanDay} من رمضان المبارك
+          <h1 className="text-4xl font-bold text-purple-800 mb-2">🌙 رمضان كريم</h1>
+          <p className="text-purple-600 text-lg">شهر الرحمة والمغفرة والعتق من النار</p>
+          <Badge className="mt-2 bg-purple-600 text-lg px-4 py-1">
+            اليوم {ramadanDay} من رمضان
           </Badge>
-        </motion.div>
+        </div>
 
-        {/* Time Cards بطابع مصري */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="grid grid-cols-2 gap-4 mb-8"
-        >
-          <Card className="bg-gradient-to-br from-orange-600 via-red-500 to-pink-600 text-white shadow-2xl border-2 border-amber-300 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20" />
-            <CardContent className="p-6 text-center relative z-10">
-              <div className="mb-2 text-3xl">🥘</div>
-              <Utensils className="w-12 h-12 mx-auto mb-3 drop-shadow-lg" />
-              <p className="text-sm font-bold mb-1">الباقي على الإفطار</p>
-              <p className="text-4xl font-bold drop-shadow-lg">{timeToIftar}</p>
-              <p className="text-xs opacity-90 mt-2">⏰ استعد للمدفع يا معلم</p>
+        {/* Time Cards */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <Card className="bg-gradient-to-br from-orange-500 to-red-500 text-white">
+            <CardContent className="p-6 text-center">
+              <Utensils className="w-10 h-10 mx-auto mb-2" />
+              <p className="text-sm opacity-90">المتبقي للإفطار</p>
+              <p className="text-3xl font-bold">{timeToIftar}</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white shadow-2xl border-2 border-blue-300 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20" />
-            <CardContent className="p-6 text-center relative z-10">
-              <div className="mb-2 text-3xl">☕</div>
-              <Coffee className="w-12 h-12 mx-auto mb-3 drop-shadow-lg" />
-              <p className="text-sm font-bold mb-1">موعد السحور</p>
-              <p className="text-4xl font-bold drop-shadow-lg">4:30 ص</p>
-              <p className="text-xs opacity-90 mt-2">🎺 اصحى يا نايم وحد الدايم</p>
+          <Card className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+            <CardContent className="p-6 text-center">
+              <Coffee className="w-10 h-10 mx-auto mb-2" />
+              <p className="text-sm opacity-90">وقت السحور</p>
+              <p className="text-3xl font-bold">4:30 ص</p>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
 
         {/* Daily Progress */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
-        <Card className="mb-8 bg-gradient-to-br from-amber-50 to-orange-50 shadow-2xl border-2 border-amber-300">
-          <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-t-xl">
+        <Card className="mb-8 bg-white shadow-lg">
+          <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
-                <Star className="w-6 h-6 drop-shadow-lg" />
-                <span className="drop-shadow-lg">الأهداف اليومية • الحسنات</span>
+                <Star className="w-6 h-6 text-amber-500" />
+                الأهداف اليومية
               </span>
-              <Badge className="bg-white text-amber-700 font-bold text-lg shadow-lg">{totalPoints} نقطة ✨</Badge>
+              <Badge className="bg-amber-500">{totalPoints} نقطة</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -248,20 +155,13 @@ export default function Ramadan() {
             </div>
           </CardContent>
         </Card>
-        </motion.div>
 
         {/* Tabs Section */}
         <Tabs defaultValue="duas" className="mb-8">
-          <TabsList className="grid grid-cols-3 mb-4 bg-gradient-to-r from-amber-200 to-orange-200 p-1 h-auto">
-            <TabsTrigger value="duas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-orange-600 data-[state=active]:text-white py-3 text-base font-bold">
-              🤲 أدعية
-            </TabsTrigger>
-            <TabsTrigger value="nasheed" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-orange-600 data-[state=active]:text-white py-3 text-base font-bold">
-              🎵 أناشيد
-            </TabsTrigger>
-            <TabsTrigger value="quran" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-orange-600 data-[state=active]:text-white py-3 text-base font-bold">
-              📖 ختمة
-            </TabsTrigger>
+          <TabsList className="grid grid-cols-3 mb-4">
+            <TabsTrigger value="duas">🤲 أدعية</TabsTrigger>
+            <TabsTrigger value="nasheed">🎵 أناشيد</TabsTrigger>
+            <TabsTrigger value="quran">📖 ختمة</TabsTrigger>
           </TabsList>
 
           <TabsContent value="duas">
@@ -281,48 +181,26 @@ export default function Ramadan() {
           </TabsContent>
 
           <TabsContent value="nasheed">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <div className="mb-6 p-4 bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl border-2 border-amber-300">
-                <div className="flex items-center gap-3 mb-2">
-                  <Sparkles className="w-6 h-6 text-amber-600" />
-                  <h3 className="text-xl font-bold text-amber-900">🎵 أغاني رمضان المصرية الأصيلة</h3>
-                </div>
-                <p className="text-amber-800">استمع لأجمل أغاني وأناشيد رمضان بروح مصرية • وحوي يا وحوي</p>
-              </div>
-
-              <div className="mb-6">
-                <EgyptianRamadanPlayer playlist={RAMADAN_NASHEED} />
-              </div>
-
-              <div className="space-y-3">
-                {RAMADAN_NASHEED.map((nasheed, index) => (
-                  <motion.div
-                    key={nasheed.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Card className="hover:shadow-lg transition-all border-2 border-amber-200 bg-gradient-to-r from-orange-50 to-amber-50">
-                      <CardContent className="p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <Music2 className="w-7 h-7 text-white" />
-                          </div>
-                          <div>
-                            <p className="font-bold text-amber-900 text-lg">{nasheed.title}</p>
-                            <p className="text-sm text-orange-700">{nasheed.artist} • {nasheed.duration}</p>
-                          </div>
-                        </div>
-                        <div className="text-2xl">🎵</div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            <div className="space-y-3">
+              {RAMADAN_NASHEED.map(nasheed => (
+                <Card key={nasheed.id} className="hover:shadow-md transition-all cursor-pointer">
+                  <CardContent className="p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <Music2 className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-gray-800">{nasheed.title}</p>
+                        <p className="text-sm text-gray-500">{nasheed.artist} • {nasheed.duration}</p>
+                      </div>
+                    </div>
+                    <Button size="icon" className="bg-purple-600 hover:bg-purple-700 rounded-full">
+                      <span className="mr-0.5">▶</span>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="quran">
@@ -347,7 +225,7 @@ export default function Ramadan() {
         </Tabs>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link to={createPageUrl('Athkar')}>
             <Card className="hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
               <CardContent className="p-4 text-center">
@@ -372,7 +250,14 @@ export default function Ramadan() {
               </CardContent>
             </Card>
           </Link>
-
+          <Link to={createPageUrl('Orphans')}>
+            <Card className="hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-red-500 to-pink-500 text-white">
+              <CardContent className="p-4 text-center">
+                <Heart className="w-8 h-8 mx-auto mb-2" />
+                <p className="font-bold">الصدقة</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </div>
     </div>

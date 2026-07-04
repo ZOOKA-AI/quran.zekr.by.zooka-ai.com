@@ -17,19 +17,11 @@ export function GlobalQuranPlayerProvider({ children }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
-  const [speed, setSpeed] = useState(1);
-  const [quality, setQuality] = useState('128');
   const [reciter, setReciter] = useState('ar.alafasy');
   const [surahNumber, setSurahNumber] = useState(1);
   const [verseStart, setVerseStart] = useState(1);
   const [verseEnd, setVerseEnd] = useState(7);
-  const [customStart, setCustomStart] = useState(0);
-  const [customEnd, setCustomEnd] = useState(null);
   const [isMinimized, setIsMinimized] = useState(true);
-  const [currentPlaylist, setCurrentPlaylist] = useState(null);
-  const [currentPlaylistIndex, setCurrentPlaylistIndex] = useState(0);
-  const currentPlaylistRef = useRef(null);
-  const currentPlaylistIndexRef = useRef(0);
 
   // حفظ موضع التشغيل
   const savePlaybackPosition = async () => {
@@ -107,7 +99,6 @@ export function GlobalQuranPlayerProvider({ children }) {
     const handleEnded = () => {
       setIsPlaying(false);
       savePlaybackPosition();
-      playNextInPlaylist();
     };
 
     audio.addEventListener('timeupdate', updateTime);
@@ -126,147 +117,21 @@ export function GlobalQuranPlayerProvider({ children }) {
     audioRef.current.volume = volume;
   }, [volume]);
 
-  // تحديث السرعة
-  useEffect(() => {
-    audioRef.current.playbackRate = speed;
-  }, [speed]);
-
-  // إيقاف التشغيل عند نقطة النهاية المخصصة
-  useEffect(() => {
-    const audio = audioRef.current;
-    const handleTimeUpdate = () => {
-      if (customEnd !== null && typeof customEnd === 'number' && audio.currentTime >= customEnd) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = customStart || 0;
-      }
-    };
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    return () => audio.removeEventListener('timeupdate', handleTimeUpdate);
-  }, [customStart, customEnd]);
-
-  const play = async (newReciter, newSurah, newVerseStart, newVerseEnd) => {
+  const play = (newReciter, newSurah, newVerseStart, newVerseEnd) => {
     if (newReciter) setReciter(newReciter);
     if (newSurah) setSurahNumber(newSurah);
     if (newVerseStart) setVerseStart(newVerseStart);
     if (newVerseEnd) setVerseEnd(newVerseEnd);
 
-    const reciterValue = newReciter || reciter;
-    const surahValue = newSurah || surahNumber;
+    const audioUrl = `https://cdn.islamic.network/quran/audio-surah/128/${newReciter || reciter}/${newSurah || surahNumber}.mp3`;
     
-    // محاولة جلب التلاوة من قاعدة البيانات المحلية
-    try {
-      const recitations = await base44.entities.Recitation.filter({
-        reciter_id: reciterValue,
-        surah_number: surahValue
-      });
-      
-      if (recitations.length > 0 && recitations[0].audio_url) {
-        const audioUrl = recitations[0].audio_url;
-        
-        // Try to use cached version from IndexedDB
-        const cachedBlob = await getCachedAudio(audioUrl);
-        if (cachedBlob) {
-          const blobUrl = URL.createObjectURL(cachedBlob);
-          audioRef.current.src = blobUrl;
-        } else {
-          audioRef.current.src = audioUrl;
-          // Download and cache in background
-          cacheAudio(audioUrl);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to fetch recitation from database:', err);
+    if (audioRef.current.src !== audioUrl) {
+      audioRef.current.src = audioUrl;
     }
     
-    if (customStart > 0) {
-      audioRef.current.currentTime = customStart;
-    }
-    
-    audioRef.current.play().catch(err => {
-      console.error('Audio playback error:', err);
-      setIsPlaying(false);
-    });
-    audioRef.current.playbackRate = speed;
+    audioRef.current.play();
     setIsPlaying(true);
     setIsMinimized(false);
-  };
-
-  // وظيفة للحصول على الصوت من الذاكرة المحلية
-  const getCachedAudio = async (url) => {
-    try {
-      const db = await openDB();
-      const transaction = db.transaction(['audio'], 'readonly');
-      const store = transaction.objectStore('audio');
-      const request = store.get(url);
-      
-      return new Promise((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result?.blob);
-        request.onerror = () => reject(request.error);
-      });
-    } catch (err) {
-      console.error('Failed to get cached audio:', err);
-      return null;
-    }
-  };
-
-  // وظيفة لحفظ الصوت في الذاكرة المحلية
-  const cacheAudio = async (url) => {
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      
-      const db = await openDB();
-      const transaction = db.transaction(['audio'], 'readwrite');
-      const store = transaction.objectStore('audio');
-      store.put({ url, blob, timestamp: Date.now() });
-    } catch (err) {
-      console.error('Failed to cache audio:', err);
-    }
-  };
-
-  // فتح قاعدة البيانات المحلية
-  const openDB = () => {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open('QuranAudioDB', 1);
-      
-      request.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains('audio')) {
-          db.createObjectStore('audio', { keyPath: 'url' });
-        }
-      };
-      
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-  };
-
-  const playPlaylist = async (playlist) => {
-    if (!playlist || !playlist.items || playlist.items.length === 0) return;
-    currentPlaylistRef.current = playlist;
-    currentPlaylistIndexRef.current = 0;
-    setCurrentPlaylist(playlist);
-    setCurrentPlaylistIndex(0);
-    const firstItem = playlist.items[0];
-    await play(firstItem.reciter_id, firstItem.surah_number, 1, null);
-  };
-
-  const playNextInPlaylist = async () => {
-    const playlist = currentPlaylistRef.current;
-    if (!playlist || !playlist.items) return;
-    const nextIndex = currentPlaylistIndexRef.current + 1;
-    if (nextIndex >= playlist.items.length) {
-      currentPlaylistRef.current = null;
-      currentPlaylistIndexRef.current = 0;
-      setCurrentPlaylist(null);
-      setCurrentPlaylistIndex(0);
-      return;
-    }
-    currentPlaylistIndexRef.current = nextIndex;
-    setCurrentPlaylistIndex(nextIndex);
-    const nextItem = playlist.items[nextIndex];
-    await play(nextItem.reciter_id, nextItem.surah_number, 1, null);
   };
 
   const pause = () => {
@@ -299,20 +164,12 @@ export function GlobalQuranPlayerProvider({ children }) {
     currentTime,
     duration,
     volume,
-    speed,
-    quality,
-    customStart,
-    customEnd,
     reciter,
     surahNumber,
     verseStart,
     verseEnd,
     isMinimized,
     setVolume,
-    setSpeed,
-    setQuality,
-    setCustomStart,
-    setCustomEnd,
     setReciter,
     setSurahNumber,
     setVerseStart,
@@ -323,11 +180,7 @@ export function GlobalQuranPlayerProvider({ children }) {
     togglePlay,
     seek,
     stop,
-    savePlaybackPosition,
-    playPlaylist,
-    playNextInPlaylist,
-    currentPlaylist,
-    currentPlaylistIndex
+    savePlaybackPosition
   };
 
   return (

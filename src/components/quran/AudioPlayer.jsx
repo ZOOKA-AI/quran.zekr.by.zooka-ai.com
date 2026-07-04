@@ -5,13 +5,18 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Play, Pause, SkipForward, SkipBack, Volume2, Download, Repeat, Repeat1, Gauge } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
 
 const RECITERS = [
-  { id: '6997a933ba6eafe4cb77984f', name: 'مشاري راشد العفاسي' },
-  { id: '6997a933ba6eafe4cb77984e', name: 'محمود خليل الحصري' },
-  { id: '6997a933ba6eafe4cb77984d', name: 'محمد صديق المنشاوي' },
-  { id: '6997a933ba6eafe4cb77984c', name: 'عبد الباسط عبد الصمد' }
+  { id: 'afasy', name: 'مشاري راشد العفاسي', url: 'https://server8.mp3quran.net/afs/' },
+  { id: 'husary', name: 'محمود خليل الحصري', url: 'https://server8.mp3quran.net/husary/' },
+  { id: 'minshawi', name: 'محمد صديق المنشاوي', url: 'https://server10.mp3quran.net/minsh/' },
+  { id: 'abdulbasit', name: 'عبد الباسط عبد الصمد', url: 'https://server7.mp3quran.net/basit/' },
+  { id: 'sudais', name: 'عبد الرحمن السديس', url: 'https://server11.mp3quran.net/sds/' },
+  { id: 'ghamadi', name: 'سعد الغامدي', url: 'https://server7.mp3quran.net/s_gmd/' },
+  { id: 'shuraim', name: 'سعود الشريم', url: 'https://server6.mp3quran.net/shur/' },
+  { id: 'alajmi', name: 'أحمد العجمي', url: 'https://server10.mp3quran.net/ajm/' },
+  { id: 'jibreen', name: 'عبد الله الجبرين', url: 'https://server16.mp3quran.net/jbreen/' },
+  { id: 'budair', name: 'عبد الله بصفر', url: 'https://server11.mp3quran.net/bsfr/' }
 ];
 
 const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
@@ -22,28 +27,10 @@ const AudioPlayer = ({ surahNumber, onTimeUpdate, onPlayingChange }) => {
   const [selectedReciter, setSelectedReciter] = useState(RECITERS[0].id);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [repeatMode, setRepeatMode] = useState('none'); // none, one, all
-  const [audioUrl, setAudioUrl] = useState('');
   const audioRef = useRef(null);
 
-  // Fetch audio URL from database
-  React.useEffect(() => {
-    const fetchAudioUrl = async () => {
-      try {
-        const recitations = await base44.entities.Recitation.filter({
-          reciter_id: selectedReciter,
-          surah_number: surahNumber
-        });
-        
-        if (recitations.length > 0 && recitations[0].audio_url) {
-          setAudioUrl(recitations[0].audio_url);
-        }
-      } catch (err) {
-        console.error('Failed to fetch audio URL:', err);
-      }
-    };
-    
-    fetchAudioUrl();
-  }, [selectedReciter, surahNumber]);
+  const reciter = RECITERS.find(r => r.id === selectedReciter);
+  const audioUrl = `${reciter.url}${String(surahNumber).padStart(3, '0')}.mp3`;
 
   useEffect(() => {
     if (audioRef.current) {

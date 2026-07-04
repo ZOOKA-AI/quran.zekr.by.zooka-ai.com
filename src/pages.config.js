@@ -48,19 +48,18 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AdminPanel from './pages/AdminPanel';
-import AdvancedSettings from './pages/AdvancedSettings';
 import Assistant from './pages/Assistant';
 import Athkar from './pages/Athkar';
 import Bookmarks from './pages/Bookmarks';
 import Calligraphy from './pages/Calligraphy';
-import Channels from './pages/Channels';
 import Community from './pages/Community';
-import DeleteAccount from './pages/DeleteAccount';
+import DonationSuccess from './pages/DonationSuccess';
 import Ibtihaalat from './pages/Ibtihaalat';
 import Library from './pages/Library';
 import Messages from './pages/Messages';
 import Muathin from './pages/Muathin';
 import NotificationSettings from './pages/NotificationSettings';
+import Orphans from './pages/Orphans';
 import PrayerTimes from './pages/PrayerTimes';
 import Profile from './pages/Profile';
 import Quran from './pages/Quran';
@@ -68,34 +67,29 @@ import QuranRadio from './pages/QuranRadio';
 import Ramadan from './pages/Ramadan';
 import Reciters from './pages/Reciters';
 import Rewards from './pages/Rewards';
-import ShareLibrary from './pages/ShareLibrary';
 import StaticPageView from './pages/StaticPageView';
 import SurahView from './pages/SurahView';
 import Tawasheeh from './pages/Tawasheeh';
-import TestingDashboard from './pages/TestingDashboard';
 import Tilawa from './pages/Tilawa';
-import ZekrDashboard from './pages/ZekrDashboard';
-import OfflineDownloads from './pages/OfflineDownloads';
-import MyPlaylists from './pages/MyPlaylists';
-import PlaylistEditor from './pages/PlaylistEditor';
+import Channels from './pages/Channels';
+import ShareLibrary from './pages/ShareLibrary';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminPanel": AdminPanel,
-    "AdvancedSettings": AdvancedSettings,
     "Assistant": Assistant,
     "Athkar": Athkar,
     "Bookmarks": Bookmarks,
     "Calligraphy": Calligraphy,
-    "Channels": Channels,
     "Community": Community,
-    "DeleteAccount": DeleteAccount,
+    "DonationSuccess": DonationSuccess,
     "Ibtihaalat": Ibtihaalat,
     "Library": Library,
     "Messages": Messages,
     "Muathin": Muathin,
     "NotificationSettings": NotificationSettings,
+    "Orphans": Orphans,
     "PrayerTimes": PrayerTimes,
     "Profile": Profile,
     "Quran": Quran,
@@ -103,16 +97,12 @@ export const PAGES = {
     "Ramadan": Ramadan,
     "Reciters": Reciters,
     "Rewards": Rewards,
-    "ShareLibrary": ShareLibrary,
     "StaticPageView": StaticPageView,
     "SurahView": SurahView,
     "Tawasheeh": Tawasheeh,
-    "TestingDashboard": TestingDashboard,
     "Tilawa": Tilawa,
-    "ZekrDashboard": ZekrDashboard,
-    "OfflineDownloads": OfflineDownloads,
-    "MyPlaylists": MyPlaylists,
-    "PlaylistEditor": PlaylistEditor,
+    "Channels": Channels,
+    "ShareLibrary": ShareLibrary,
 }
 
 export const pagesConfig = {

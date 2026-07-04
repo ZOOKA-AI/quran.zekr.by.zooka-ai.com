@@ -11,23 +11,8 @@ export default function QuickBookmark({ surahNumber, verseNumber, isBookmarked: 
 
   const createBookmarkMutation = useMutation({
     mutationFn: (data) => base44.entities.Bookmark.create(data),
-    onMutate: async (newBookmark) => {
-      // Optimistic update
-      setIsBookmarked(true);
-      await queryClient.cancelQueries({ queryKey: ['bookmarks'] });
-      
-      const previousBookmarks = queryClient.getQueryData(['bookmarks']);
-      queryClient.setQueryData(['bookmarks'], (old = []) => [...old, newBookmark]);
-      
-      return { previousBookmarks };
-    },
-    onError: (err, newBookmark, context) => {
-      // Rollback on error
-      setIsBookmarked(false);
-      queryClient.setQueryData(['bookmarks'], context.previousBookmarks);
-      toast.error('حدث خطأ في الإضافة');
-    },
     onSuccess: () => {
+      setIsBookmarked(true);
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
       toast.success('تمت إضافة الإشارة المرجعية ✅');
     },
@@ -35,25 +20,8 @@ export default function QuickBookmark({ surahNumber, verseNumber, isBookmarked: 
 
   const deleteBookmarkMutation = useMutation({
     mutationFn: (id) => base44.entities.Bookmark.delete(id),
-    onMutate: async (deletedId) => {
-      // Optimistic update
-      setIsBookmarked(false);
-      await queryClient.cancelQueries({ queryKey: ['bookmarks'] });
-      
-      const previousBookmarks = queryClient.getQueryData(['bookmarks']);
-      queryClient.setQueryData(['bookmarks'], (old = []) => 
-        old.filter(b => b.id !== deletedId)
-      );
-      
-      return { previousBookmarks };
-    },
-    onError: (err, deletedId, context) => {
-      // Rollback on error
-      setIsBookmarked(true);
-      queryClient.setQueryData(['bookmarks'], context.previousBookmarks);
-      toast.error('حدث خطأ في الحذف');
-    },
     onSuccess: () => {
+      setIsBookmarked(false);
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
       toast.success('تم حذف الإشارة المرجعية');
     },

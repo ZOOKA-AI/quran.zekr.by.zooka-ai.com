@@ -161,16 +161,11 @@ export default function Muathin() {
   };
 
   const playAdhan = () => {
-    if (audioRef.current && selectedMuathin && selectedMuathin.audio_url) {
+    if (audioRef.current && selectedMuathin) {
       audioRef.current.src = selectedMuathin.audio_url;
       audioRef.current.volume = volume / 100;
-      audioRef.current.play().catch((error) => {
-        console.error('Error playing adhan:', error);
-        toast.error('تعذر تشغيل الأذان - تأكد من رابط الصوت');
-        setIsPlaying(false);
-      });
+      audioRef.current.play();
       setIsPlaying(true);
-      toast.success(`استمع للأذان بصوت ${selectedMuathin.name}`);
       
       // تسجيل التحليلات
       base44.entities.ContentAnalytics.create({
@@ -179,8 +174,6 @@ export default function Muathin() {
         content_name: selectedMuathin.name,
         action: 'play'
       }).catch(() => {});
-    } else {
-      toast.error('لا يوجد رابط صوت متاح للمؤذن المحدد');
     }
   };
 
