@@ -1,0 +1,14 @@
+# robots.txt for quran.zekr.by.zooka-ai.com
+# Guide search engine crawlers for optimal indexing
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /_vite/
+
+# Crawl-delay to avoid overloading the server
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://quran.zekr.by.zooka-ai.com/sitemap.xml
