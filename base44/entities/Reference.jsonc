@@ -1,0 +1,54 @@
+{
+  "name": "Reference",
+  "type": "object",
+  "properties": {
+    "entity_type": {
+      "type": "string",
+      "description": "Target entity name (e.g., Reciter, Recitation)"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of target record (optional if using entity_slug)"
+    },
+    "entity_slug": {
+      "type": "string",
+      "description": "Slug of the target record for stable linking when ID unknown"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "photo",
+        "bio",
+        "audio",
+        "integration",
+        "general"
+      ],
+      "default": "general",
+      "description": "Type of reference being recorded"
+    },
+    "title": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "description": "Source URL"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "entity_type",
+    "category",
+    "url"
+  ]
+}

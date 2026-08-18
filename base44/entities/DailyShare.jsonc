@@ -1,0 +1,66 @@
+{
+  "name": "DailyShare",
+  "type": "object",
+  "properties": {
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "verse",
+        "hadith",
+        "wisdom"
+      ],
+      "description": "\u0646\u0648\u0639 \u0627\u0644\u0645\u062d\u062a\u0648\u0649"
+    },
+    "title": {
+      "type": "string",
+      "description": "\u0627\u0644\u0639\u0646\u0648\u0627\u0646"
+    },
+    "arabic_text": {
+      "type": "string",
+      "description": "\u0627\u0644\u0646\u0635 \u0627\u0644\u0639\u0631\u0628\u064a"
+    },
+    "translation": {
+      "type": "string",
+      "description": "\u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0623\u0648 \u0627\u0644\u0634\u0631\u062d"
+    },
+    "source": {
+      "type": "string",
+      "description": "\u0627\u0644\u0645\u0635\u062f\u0631 (\u0633\u0648\u0631\u0629\u060c \u0643\u062a\u0627\u0628 \u0627\u0644\u062d\u062f\u064a\u062b)"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "\u0635\u0648\u0631\u0629 \u062e\u0644\u0641\u064a\u0629"
+    },
+    "likes_count": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0627\u0644\u0625\u0639\u062c\u0627\u0628\u0627\u062a"
+    },
+    "comments_count": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0627\u0644\u062a\u0639\u0644\u064a\u0642\u0627\u062a"
+    },
+    "shares_count": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062a"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u0645\u0645\u064a\u0632"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "\u0627\u0644\u0648\u0633\u0648\u0645"
+    }
+  },
+  "required": [
+    "content_type",
+    "arabic_text"
+  ]
+}

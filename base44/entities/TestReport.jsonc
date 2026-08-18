@@ -1,0 +1,100 @@
+{
+  "name": "TestReport",
+  "type": "object",
+  "properties": {
+    "test_type": {
+      "type": "string",
+      "enum": [
+        "bugs",
+        "performance",
+        "security",
+        "full_scan"
+      ],
+      "description": "\u0646\u0648\u0639 \u0627\u0644\u0641\u062d\u0635"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "completed",
+        "failed"
+      ],
+      "default": "running",
+      "description": "\u062d\u0627\u0644\u0629 \u0627\u0644\u0641\u062d\u0635"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low",
+              "info"
+            ]
+          },
+          "category": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "suggested_fix": {
+            "type": "string"
+          },
+          "auto_fixed": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "description": "\u0627\u0644\u0646\u062a\u0627\u0626\u062c \u0648\u0627\u0644\u0645\u0634\u0627\u0643\u0644 \u0627\u0644\u0645\u0643\u062a\u0634\u0641\u0629"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "total_issues": {
+          "type": "number"
+        },
+        "critical_issues": {
+          "type": "number"
+        },
+        "auto_fixed_issues": {
+          "type": "number"
+        },
+        "performance_score": {
+          "type": "number"
+        },
+        "security_score": {
+          "type": "number"
+        }
+      },
+      "description": "\u0645\u0642\u0627\u064a\u064a\u0633 \u0627\u0644\u0641\u062d\u0635"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "\u0627\u0644\u062a\u0648\u0635\u064a\u0627\u062a"
+    },
+    "execution_time": {
+      "type": "number",
+      "description": "\u0645\u062f\u0629 \u0627\u0644\u0641\u062d\u0635 \u0628\u0627\u0644\u062b\u0648\u0627\u0646\u064a"
+    }
+  },
+  "required": [
+    "test_type",
+    "status"
+  ]
+}

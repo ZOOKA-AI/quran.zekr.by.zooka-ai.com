@@ -1,0 +1,38 @@
+{
+  "name": "VisitorAnalytics",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "\u0645\u0639\u0631\u0641 \u0627\u0644\u062c\u0644\u0633\u0629"
+    },
+    "page_visited": {
+      "type": "string",
+      "description": "\u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u0645\u0632\u0627\u0631\u0629"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "\u0645\u0635\u062f\u0631 \u0627\u0644\u0632\u064a\u0627\u0631\u0629"
+    },
+    "device_type": {
+      "type": "string",
+      "enum": [
+        "mobile",
+        "desktop",
+        "tablet"
+      ],
+      "description": "\u0646\u0648\u0639 \u0627\u0644\u062c\u0647\u0627\u0632"
+    },
+    "country": {
+      "type": "string",
+      "description": "\u0627\u0644\u0628\u0644\u062f"
+    },
+    "browser": {
+      "type": "string",
+      "description": "\u0627\u0644\u0645\u062a\u0635\u0641\u062d"
+    }
+  },
+  "required": [
+    "page_visited"
+  ]
+}

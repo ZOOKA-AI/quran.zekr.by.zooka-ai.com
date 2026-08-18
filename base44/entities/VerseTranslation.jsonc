@@ -1,0 +1,44 @@
+{
+  "name": "VerseTranslation",
+  "type": "object",
+  "properties": {
+    "surah_number": {
+      "type": "number",
+      "description": "\u0631\u0642\u0645 \u0627\u0644\u0633\u0648\u0631\u0629"
+    },
+    "verse_number": {
+      "type": "number",
+      "description": "\u0631\u0642\u0645 \u0627\u0644\u0622\u064a\u0629"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "english",
+        "urdu",
+        "french",
+        "indonesian",
+        "turkish",
+        "spanish"
+      ],
+      "description": "\u0644\u063a\u0629 \u0627\u0644\u062a\u0631\u062c\u0645\u0629"
+    },
+    "translator_name": {
+      "type": "string",
+      "description": "\u0627\u0633\u0645 \u0627\u0644\u0645\u062a\u0631\u062c\u0645"
+    },
+    "translation_text": {
+      "type": "string",
+      "description": "\u0646\u0635 \u0627\u0644\u062a\u0631\u062c\u0645\u0629"
+    },
+    "source": {
+      "type": "string",
+      "description": "\u0627\u0644\u0645\u0635\u062f\u0631 (Quran.com, etc)"
+    }
+  },
+  "required": [
+    "surah_number",
+    "verse_number",
+    "language",
+    "translation_text"
+  ]
+}

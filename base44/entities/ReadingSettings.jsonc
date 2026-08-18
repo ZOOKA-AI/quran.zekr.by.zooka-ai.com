@@ -1,0 +1,52 @@
+{
+  "name": "ReadingSettings",
+  "type": "object",
+  "properties": {
+    "font_size": {
+      "type": "number",
+      "default": 3,
+      "description": "\u062d\u062c\u0645 \u0627\u0644\u062e\u0637 (1-5)"
+    },
+    "font_style": {
+      "type": "string",
+      "enum": [
+        "uthmani",
+        "indopak",
+        "simplified"
+      ],
+      "default": "uthmani",
+      "description": "\u0646\u0645\u0637 \u0627\u0644\u062e\u0637"
+    },
+    "translation_language": {
+      "type": "string",
+      "default": "english",
+      "description": "\u0644\u063a\u0629 \u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629"
+    },
+    "show_translation": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u0625\u0638\u0647\u0627\u0631 \u0627\u0644\u062a\u0631\u062c\u0645\u0629"
+    },
+    "show_tafsir": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u0625\u0638\u0647\u0627\u0631 \u0627\u0644\u062a\u0641\u0633\u064a\u0631"
+    },
+    "word_by_word": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u0643\u0644\u0645\u0629 \u0628\u0643\u0644\u0645\u0629"
+    },
+    "audio_reciter": {
+      "type": "string",
+      "default": "ar.alafasy",
+      "description": "\u0627\u0644\u0642\u0627\u0631\u0626 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a"
+    },
+    "auto_scroll": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u0627\u0644\u062a\u0645\u0631\u064a\u0631 \u0627\u0644\u062a\u0644\u0642\u0627\u0626\u064a \u0645\u0639 \u0627\u0644\u0635\u0648\u062a"
+    }
+  },
+  "required": []
+}

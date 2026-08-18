@@ -1,0 +1,185 @@
+{
+  "name": "Reciter",
+  "type": "object",
+  "properties": {
+    "name_arabic": {
+      "type": "string",
+      "description": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+    },
+    "name_english": {
+      "type": "string",
+      "description": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0625\u0646\u062c\u0644\u064a\u0632\u064a\u0629"
+    },
+    "slug": {
+      "type": "string",
+      "description": "\u0645\u0639\u0631\u0651\u0641 \u0646\u0635\u064a \u0641\u0631\u064a\u062f \u0644\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0641\u064a \u0627\u0644\u0631\u0648\u0627\u0628\u0637 \u0648\u0627\u0644\u0645\u0631\u0627\u062c\u0639"
+    },
+    "country": {
+      "type": "string",
+      "description": "\u0627\u0644\u0628\u0644\u062f"
+    },
+    "bio": {
+      "type": "string",
+      "description": "\u0646\u0628\u0630\u0629 \u0639\u0646 \u0627\u0644\u0645\u0642\u0631\u0626"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "\u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0642\u0631\u0626 (\u0631\u0627\u0628\u0637)"
+    },
+    "image_alt": {
+      "type": "string",
+      "description": "\u0646\u0635 \u0628\u062f\u064a\u0644 \u0644\u0644\u0635\u0648\u0631\u0629"
+    },
+    "photo_attribution": {
+      "type": "object",
+      "properties": {
+        "source_url": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "description": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0625\u0633\u0646\u0627\u062f \u0627\u0644\u0635\u0648\u0631\u0629 \u0648\u0627\u0644\u062a\u0631\u062e\u064a\u0635"
+    },
+    "wikipedia_url": {
+      "type": "string",
+      "description": "\u0631\u0627\u0628\u0637 \u0648\u064a\u0643\u064a\u0628\u064a\u062f\u064a\u0627"
+    },
+    "official_website": {
+      "type": "string",
+      "description": "\u0627\u0644\u0645\u0648\u0642\u0639 \u0627\u0644\u0631\u0633\u0645\u064a"
+    },
+    "recitation_style": {
+      "type": "string",
+      "enum": [
+        "\u0645\u0631\u062a\u0644",
+        "\u0645\u062c\u0648\u062f",
+        "\u0645\u0639\u0644\u0645",
+        "\u062d\u062f\u0631"
+      ],
+      "description": "\u0646\u0648\u0639 \u0627\u0644\u062a\u0644\u0627\u0648\u0629"
+    },
+    "riwaya": {
+      "type": "string",
+      "enum": [
+        "\u062d\u0641\u0635 \u0639\u0646 \u0639\u0627\u0635\u0645",
+        "\u0648\u0631\u0634 \u0639\u0646 \u0646\u0627\u0641\u0639",
+        "\u0642\u0627\u0644\u0648\u0646 \u0639\u0646 \u0646\u0627\u0641\u0639",
+        "\u0627\u0644\u062f\u0648\u0631\u064a \u0639\u0646 \u0623\u0628\u064a \u0639\u0645\u0631\u0648"
+      ],
+      "default": "\u062d\u0641\u0635 \u0639\u0646 \u0639\u0627\u0635\u0645",
+      "description": "\u0627\u0644\u0631\u0648\u0627\u064a\u0629"
+    },
+    "audio_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "stream",
+              "archive",
+              "cdn"
+            ]
+          }
+        }
+      },
+      "description": "\u0645\u0635\u0627\u062f\u0631 \u0627\u0644\u0635\u0648\u062a (Quran.com, mp3quran, CDN, ...)"
+    },
+    "birth_year": {
+      "type": "number",
+      "description": "\u0633\u0646\u0629 \u0627\u0644\u0645\u064a\u0644\u0627\u062f"
+    },
+    "death_year": {
+      "type": "number",
+      "description": "\u0633\u0646\u0629 \u0627\u0644\u0648\u0641\u0627\u0629 (\u0625\u0646 \u0648\u062c\u062f\u062a)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u0647\u0644 \u0627\u0644\u0645\u0642\u0631\u0626 \u0646\u0634\u0637 \u062d\u0627\u0644\u064a\u0627\u064b"
+    },
+    "total_listeners": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0627\u0644\u0645\u0633\u062a\u0645\u0639\u064a\u0646"
+    },
+    "total_plays": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0645\u0631\u0627\u062a \u0627\u0644\u0627\u0633\u062a\u0645\u0627\u0639"
+    },
+    "popularity_score": {
+      "type": "number",
+      "default": 0,
+      "description": "\u062f\u0631\u062c\u0629 \u0627\u0644\u0634\u0647\u0631\u0629 (0-100)"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u0645\u0642\u0631\u0626 \u0645\u0645\u064a\u0632"
+    },
+    "audio_quality": {
+      "type": "string",
+      "enum": [
+        "128kbps",
+        "192kbps",
+        "320kbps",
+        "lossless"
+      ],
+      "default": "192kbps",
+      "description": "\u062c\u0648\u062f\u0629 \u0627\u0644\u0635\u0648\u062a"
+    },
+    "social_media": {
+      "type": "object",
+      "properties": {
+        "youtube": {
+          "type": "string"
+        },
+        "twitter": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "string"
+        },
+        "instagram": {
+          "type": "string"
+        }
+      },
+      "description": "\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0627\u062c\u062a\u0645\u0627\u0639\u064a"
+    },
+    "awards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "\u0627\u0644\u062c\u0648\u0627\u0626\u0632 \u0648\u0627\u0644\u0625\u0646\u062c\u0627\u0632\u0627\u062a"
+    },
+    "specialties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "\u0627\u0644\u062a\u062e\u0635\u0635\u0627\u062a (\u0645\u062b\u0644: \u0623\u062f\u0627\u0621 \u0639\u0627\u0637\u0641\u064a\u060c \u0648\u0636\u0648\u062d \u0627\u0644\u062d\u0631\u0648\u0641)"
+    }
+  },
+  "required": [
+    "name_arabic",
+    "name_english",
+    "country"
+  ]
+}

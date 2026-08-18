@@ -1,0 +1,32 @@
+{
+  "name": "Comment",
+  "type": "object",
+  "properties": {
+    "share_id": {
+      "type": "string",
+      "description": "\u0645\u0639\u0631\u0641 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629"
+    },
+    "parent_comment_id": {
+      "type": "string",
+      "description": "\u0645\u0639\u0631\u0641 \u0627\u0644\u062a\u0639\u0644\u064a\u0642 \u0627\u0644\u0623\u0628 (\u0644\u0644\u0631\u062f\u0648\u062f)"
+    },
+    "content": {
+      "type": "string",
+      "description": "\u0646\u0635 \u0627\u0644\u062a\u0639\u0644\u064a\u0642"
+    },
+    "likes_count": {
+      "type": "number",
+      "default": 0,
+      "description": "\u0639\u062f\u062f \u0627\u0644\u0625\u0639\u062c\u0627\u0628\u0627\u062a"
+    },
+    "is_approved": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u062a\u0645\u062a \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629"
+    }
+  },
+  "required": [
+    "share_id",
+    "content"
+  ]
+}
