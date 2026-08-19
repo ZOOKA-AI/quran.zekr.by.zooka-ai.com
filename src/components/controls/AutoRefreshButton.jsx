@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Zap } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';

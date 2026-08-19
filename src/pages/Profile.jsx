@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,7 +24,7 @@ export default function ProfilePage() {
     queryFn: async () => {
       try {
         return await base44.auth.me();
-      } catch (error) {
+      } catch {
         return null;
       }
     },
@@ -63,7 +63,7 @@ export default function ProfilePage() {
       } else {
         toast.error('فشلت المزامنة - تحقق من الإعدادات');
       }
-    } catch (error) {
+    } catch {
       toast.error('خطأ في المزامنة مع Salesforce');
     } finally {
       setIsSyncing(false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -103,7 +103,7 @@ export default function NotificationSettingsPage() {
       } else if (permission === 'denied') {
         toast.error('تم رفض إذن الإشعارات - يمكنك تغييرها من إعدادات المتصفح');
       }
-    } catch (error) {
+    } catch {
       toast.error('حدث خطأ في طلب الإذن');
     }
   };

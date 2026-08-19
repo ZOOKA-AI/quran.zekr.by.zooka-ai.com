@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bell, X, Sun, Moon, BookOpen } from 'lucide-react';
+import { X, Sun, Moon, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 
 const REMINDERS = {
@@ -31,7 +31,7 @@ const REMINDERS = {
 export default function DailyReminders() {
   const [showReminder, setShowReminder] = useState(false);
   const [currentReminder, setCurrentReminder] = useState(null);
-  const [reminderEnabled, setReminderEnabled] = useState(true);
+  const [reminderEnabled, _setReminderEnabled] = useState(true);
 
   useEffect(() => {
     if (!reminderEnabled) return;
@@ -40,7 +40,7 @@ export default function DailyReminders() {
       const now = new Date();
       const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       
-      Object.entries(REMINDERS).forEach(([key, reminder]) => {
+      Object.entries(REMINDERS).forEach(([_key, reminder]) => {
         if (currentTime === reminder.time) {
           setCurrentReminder(reminder);
           setShowReminder(true);

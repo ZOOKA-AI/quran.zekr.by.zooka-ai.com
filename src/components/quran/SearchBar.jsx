@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Filter, X, History, Sparkles } from 'lucide-react';
 import { debounce } from 'lodash';
 
-const SearchBar = ({ onSearch, onFilterChange, showSuggestions = true }) => {
+const SearchBar = ({ onSearch, showSuggestions = true }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('all');
   const [recentSearches, setRecentSearches] = useState([]);

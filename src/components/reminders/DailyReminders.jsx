@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bell, X, Sun, Moon, BookOpen } from 'lucide-react';
+import { X, Sun, Moon, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 
 const DAILY_REMINDERS = [

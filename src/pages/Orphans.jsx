@@ -1,6 +1,4 @@
-import React from 'react';
-import { Heart, Users, Gift, Phone, Mail, CreditCard, Smartphone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Heart, Phone, Smartphone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import DonationForm from '@/components/donation/DonationForm';
 import ZiinaAmountSelector from '@/components/donation/ZiinaAmountSelector';

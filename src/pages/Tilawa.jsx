@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Search, Mic, BookOpen, Star, Heart, Loader2, Music } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Search, Mic, Star, Loader2, Music } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import AudioManager from '@/components/audio/AudioManager';

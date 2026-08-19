@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
@@ -41,7 +41,7 @@ export default function RealtimeBookmarks() {
     try {
       await base44.entities.Bookmark.delete(id);
       toast.success('تم حذف الإشارة المرجعية');
-    } catch (error) {
+    } catch {
       toast.error('فشل حذف الإشارة المرجعية');
     }
   };

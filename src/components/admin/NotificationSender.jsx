@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,7 +59,7 @@ export default function NotificationSender() {
               </div>
             `
           });
-        } catch (e) {
+        } catch {
           console.error('Error sending to', user.email);
         }
       }

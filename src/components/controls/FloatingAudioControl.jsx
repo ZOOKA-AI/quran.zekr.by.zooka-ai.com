@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
 import { 
-  Music, X, Play, Pause, Volume2, VolumeX, 
-  SkipBack, SkipForward, Radio, Square
+  Music, X, Radio, Square
 } from 'lucide-react';
 import AudioManager from '@/components/audio/AudioManager';
 

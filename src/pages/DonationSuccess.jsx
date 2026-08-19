@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { CheckCircle, Heart, Home, Share2, Copy } from 'lucide-react';
@@ -33,7 +33,7 @@ export default function DonationSuccess() {
           text: shareMessage,
           url: window.location.origin
         });
-      } catch (err) {
+      } catch {
         console.log('Share cancelled');
       }
     } else {

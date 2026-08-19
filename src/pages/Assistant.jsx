@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Send, Mic, MicOff, MessageSquare, Volume2, VolumeX, Loader2, Bot, Sparkles } from 'lucide-react';
+import { Send, Mic, MicOff, Volume2, VolumeX, Loader2, Bot, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import MessageBubble from '../components/assistant/MessageBubble';
@@ -27,7 +27,7 @@ export default function AssistantPage() {
         });
         setConversationId(conversation.id);
         setMessages(conversation.messages || []);
-      } catch (error) {
+      } catch {
         toast.error('حدث خطأ في إنشاء المحادثة');
       }
     };
@@ -71,7 +71,7 @@ export default function AssistantPage() {
         role: 'user',
         content: messageText
       });
-    } catch (error) {
+    } catch {
       toast.error('فشل إرسال الرسالة');
       setIsSending(false);
     }
@@ -96,7 +96,7 @@ export default function AssistantPage() {
       utterance.onerror = () => setIsSpeaking(false);
       
       setTimeout(() => speechSynthesis.speak(utterance), 100);
-    } catch (error) {
+    } catch {
       setIsSpeaking(false);
     }
   };
@@ -143,7 +143,7 @@ export default function AssistantPage() {
 
       recognition.onend = () => setIsListening(false);
       recognition.start();
-    } catch (error) {
+    } catch {
       toast.error('فشل تشغيل التعرف على الصوت');
       setIsListening(false);
     }

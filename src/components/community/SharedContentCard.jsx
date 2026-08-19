@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-export default function SharedContentCard({ share, comments, onComment, isAuthenticated }) {
+export default function SharedContentCard({ share, comments }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(share.likes_count || 0);
 

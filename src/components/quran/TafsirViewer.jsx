@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2, BookOpen, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, BookOpen, ExternalLink } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -69,40 +69,14 @@ export default function TafsirViewer({ surahNumber, verseNumber, isOpen, onClose
       } else {
         setError('فشل في جلب التفسير');
       }
-    } catch (err) {
+    } catch {
       setError('خطأ في الاتصال بالخدمة');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchAllTafsirs = async () => {
-    setLoading(true);
-    try {
-      const promises = TAFSIR_EDITIONS.map(edition =>
-        fetch(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${verseNumber}/${edition.id}`)
-          .then(res => res.json())
-      );
-      
-      const results = await Promise.all(promises);
-      const newTafsirData = {};
-      
-      results.forEach((data, index) => {
-        if (data.code === 200) {
-          newTafsirData[TAFSIR_EDITIONS[index].id] = data.data;
-        }
-      });
-      
-      setTafsirData(newTafsirData);
-    } catch (err) {
-      setError('خطأ في جلب التفاسير');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const currentTafsir = tafsirData[selectedEdition];
-  const currentEdition = TAFSIR_EDITIONS.find(e => e.id === selectedEdition);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

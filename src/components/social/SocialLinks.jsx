@@ -1,7 +1,6 @@
-import React from 'react';
 import { 
   Facebook, Twitter, Instagram, Youtube, 
-  MessageCircle, Send, Globe, Mail
+  MessageCircle, Send
 } from 'lucide-react';
 
 const SOCIAL_LINKS = [

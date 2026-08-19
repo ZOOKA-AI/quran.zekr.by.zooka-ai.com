@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Search, Play, Menu, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Plus, Zap } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { BookOpen, Search, Play, Filter, Settings as SettingsIcon, Home, Star, Sparkles, ChevronLeft, Zap } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useOptimizedQuery } from '@/components/hooks/useOptimizedQuery';
-import { useKeyboardShortcuts } from '@/components/hooks/useKeyboardShortcuts';
 import { performanceUtils } from '@/components/utils/performanceUtils';
-import { cacheUtils } from '@/components/utils/cacheUtils';
 import { loggerUtils } from '@/components/utils/loggerUtils';
 import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
 import DailyContent from '../components/daily/DailyContent';
@@ -51,12 +46,10 @@ const SURAHS = [
 export default function QuranPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const shortcuts = useKeyboardShortcuts();
 
   // استدعاء محسّن مع الذاكرة المؤقتة
-  const { data: dbSurahs = [], isLoading: surahsLoading } = useOptimizedQuery(
+  const { data: dbSurahs = [] } = useOptimizedQuery(
     ['surahs-list'],
     async () => {
       return await base44.entities.Surah.list();

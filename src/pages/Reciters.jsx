@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Mic, BookOpen, Star, Users, Sparkles, Loader2, ExternalLink, Upload, ImagePlus, Link as LinkIcon, Share2 } from 'lucide-react';
+import { Search, Mic, Sparkles, Loader2, ExternalLink, ImagePlus, Link as LinkIcon } from 'lucide-react';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShareButton from '@/components/share/ShareButton';
@@ -37,7 +37,7 @@ export default function RecitersPage() {
           const me = await base44.auth.me();
           setIsAdmin(me?.role === 'admin');
         }
-      } catch (_) {}
+      } catch {}
     })();
   }, []);
 

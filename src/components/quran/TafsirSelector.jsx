@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { BookOpen, ChevronDown, ChevronUp, Loader2, ExternalLink } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const TAFSIR_SOURCES = [
@@ -15,7 +15,6 @@ const TAFSIR_SOURCES = [
 ];
 
 export default function TafsirSelector({ verse, onSelectTafsir }) {
-  const [selectedTafsir, setSelectedTafsir] = useState('saadi');
   const [expandedTafsirs, setExpandedTafsirs] = useState(['saadi']);
 
   const toggleTafsir = (tafsirId) => {
