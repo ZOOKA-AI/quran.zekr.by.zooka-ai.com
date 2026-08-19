@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Parent Issue #8
+    url: https://github.com/ZOOKA-AI/quran.zekr.by.zooka-ai.com/issues/8
+    about: Main issue for this sub-issue
