@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Bell, MapPin, Clock, Play, Pause, Volume2, VolumeX, Sun, Sunrise, Sunset, Moon, Cloud, Settings, ChevronDown, Check, RefreshCw, Loader2 } from 'lucide-react';
+import { Bell, MapPin, Clock, Play, Pause, Volume2, Sun, Sunrise, Sunset, Moon, Cloud, Settings, Check, RefreshCw, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,8 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { GitCompare, BookOpen, Download, Loader2, Globe } from 'lucide-react';
+import { GitCompare, BookOpen, Loader2, Globe } from 'lucide-react';
 
 const CompareTafsirDialog = ({ isOpen, onClose, verse }) => {
   const [compareMode, setCompareMode] = useState(false);

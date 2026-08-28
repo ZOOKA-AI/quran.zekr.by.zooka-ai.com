@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Youtube, Radio, Globe, CheckCircle2, Play, ChevronLeft, Filter, Star } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from 'sonner';
+import { Search, Plus, Youtube, Radio, Globe, CheckCircle2, Play, ChevronLeft, Filter } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const platformIcons = {
   'YouTube': Youtube,

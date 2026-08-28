@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Send, Mic, MicOff, MessageSquare, Volume2, VolumeX, Loader2, Bot, Sparkles } from 'lucide-react';
+import { Send, Mic, MicOff, Volume2, VolumeX, Loader2, Bot, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import MessageBubble from '../components/assistant/MessageBubble';

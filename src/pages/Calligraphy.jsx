@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sparkles, Download, Share2, RefreshCw, Search, Palette } from 'lucide-react';
+import { Download, Share2, RefreshCw, Search, Palette } from 'lucide-react';
 import { toast } from 'sonner';
 import IslamicBackground from '@/components/layout/IslamicBackground';
 
