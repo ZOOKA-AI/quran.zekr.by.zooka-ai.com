@@ -36,6 +36,7 @@ export default function SurahView() {
     fontSize: 24,
     fontFamily: 'amiri',
     lineHeight: 2,
+    tajweedEnabled: true,
   });
   const [selectedReciter, setSelectedReciter] = useState('husary');
   const queryClient = useQueryClient();
@@ -244,6 +245,7 @@ export default function SurahView() {
             surahNumber={surahNumber}
             currentTime={audioCurrentTime}
             isPlaying={isAudioPlaying}
+            tajweedEnabled={readingSettings.tajweedEnabled}
           />
         </div>
 

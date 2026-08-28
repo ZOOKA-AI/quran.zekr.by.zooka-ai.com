@@ -12,6 +12,7 @@ import CompareTafsirDialog from './CompareTafsirDialog';
 import VerseAudioPlayer from './VerseAudioPlayer';
 import TafsirViewer from './TafsirViewer';
 import TafsirSelector from './TafsirSelector';
+import TajweedText from './TajweedText';
 
 const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [copied, setCopied] = useState(false);
@@ -23,7 +24,7 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showTafsirViewer, setShowTafsirViewer] = useState(false);
 
-  const { fontSize = 24, fontFamily = 'amiri', lineHeight = 2 } = readingSettings;
+  const { fontSize = 24, fontFamily = 'amiri', lineHeight = 2, tajweedEnabled = true } = readingSettings;
   
   const fontFamilyClass = {
     'amiri': 'font-[Amiri]',
@@ -195,7 +196,11 @@ const VerseCard = ({ verse, onBookmark, readingSettings = {} }) => {
               lineHeight: lineHeight,
             }}
           >
-            {verse.arabic_text} ﴿{verse.verse_number}﴾
+            <TajweedText 
+              text={verse.arabic_text} 
+              enabled={tajweedEnabled}
+            />
+            {' '}﴿{verse.verse_number}﴾
           </p>
         </div>
 

@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Settings, Plus, Minus, Moon, Sun, Download, Check } from 'lucide-react';
+import { Settings, Plus, Minus, Moon, Sun, Download, Check, Palette } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import TajweedText, { TAJWEED_COLORS } from './TajweedText';
 import { toast } from 'sonner';
 
 const FONT_FAMILIES = [
@@ -41,6 +42,7 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
   const [fontFamily, setFontFamily] = useState(settings?.fontFamily || 'amiri');
   const [lineHeight, setLineHeight] = useState(settings?.lineHeight || 2);
   const [darkMode, setDarkMode] = useState(settings?.darkMode || false);
+  const [tajweedEnabled, setTajweedEnabled] = useState(settings?.tajweedEnabled ?? true);
   const [downloadedSurahs, setDownloadedSurahs] = useState([]);
   const [downloading, setDownloading] = useState(null);
 
@@ -51,8 +53,8 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
   }, []);
 
   useEffect(() => {
-    onSettingsChange({ fontSize, fontFamily, lineHeight, darkMode });
-  }, [fontSize, fontFamily, lineHeight, darkMode]);
+    onSettingsChange({ fontSize, fontFamily, lineHeight, darkMode, tajweedEnabled });
+  }, [fontSize, fontFamily, lineHeight, darkMode, tajweedEnabled, onSettingsChange]);
 
   const handleDownloadSurah = async (surahNum, surahName) => {
     setDownloading(surahNum);
@@ -196,6 +198,58 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
             />
           </div>
 
+          {/* التجويد */}
+          <div className="p-4 bg-gradient-to-br from-emerald-50 to-amber-50 rounded-lg border border-emerald-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <Palette className="w-5 h-5 text-emerald-600" />
+                <span className="font-bold text-gray-700">تلوين التجويد</span>
+              </div>
+              <Switch
+                checked={tajweedEnabled}
+                onCheckedChange={setTajweedEnabled}
+              />
+            </div>
+            <p className="text-xs text-gray-500 mb-3">
+              تلوين النص القرآني حسب أحكام التجويد لتسهيل القراءة الصحيحة
+            </p>
+            {tajweedEnabled && (
+              <div className="p-3 bg-white rounded-lg">
+                <TajweedText 
+                  text="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
+                  enabled={true}
+                  className="block text-xl text-center font-[Amiri] mb-3"
+                />
+                <div className="flex flex-wrap gap-2 text-xs justify-center">
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.ghunnah }} />
+                    <span className="text-gray-600">غنة</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.ikhfa }} />
+                    <span className="text-gray-600">إخفاء</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.idgham }} />
+                    <span className="text-gray-600">إدغام</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.iqlab }} />
+                    <span className="text-gray-600">إقلاب</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.qalqalah }} />
+                    <span className="text-gray-600">قلقلة</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TAJWEED_COLORS.madd }} />
+                    <span className="text-gray-600">مد</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* تحميل السور للاستماع بدون إنترنت */}
           <div>
             <label className="text-sm font-bold text-gray-700 mb-3 block flex items-center gap-2">
@@ -240,6 +294,7 @@ export default function ReadingSettings({ settings, onSettingsChange }) {
               setFontFamily('amiri');
               setLineHeight(2);
               setDarkMode(false);
+              setTajweedEnabled(true);
             }}
             className="w-full"
           >
