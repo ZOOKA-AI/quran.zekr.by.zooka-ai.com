@@ -84,7 +84,7 @@ export default function QuranRadio() {
     name: s.name,
     country: COUNTRY_FLAGS[s.country] || '🌍',
     url: s.stream_url,
-    category: s.category,
+    category: s.station_type || 'general',
     listeners: s.listeners_count
   }));
 
