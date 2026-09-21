@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Button } from "@/components/ui/button";
-import { Copy, Zap, CheckCircle2, AlertCircle, Loader2, ChevronRight, Clock, Volume2 } from 'lucide-react';
+import { Copy, Zap, CheckCircle2, AlertCircle, Loader2, ChevronRight, Clock, Volume2, BookOpen, FileText, Scale, HelpCircle } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ const FunctionDisplay = ({ toolCall }) => {
     const name = toolCall?.name || 'Function';
     const status = toolCall?.status || 'pending';
     const results = toolCall?.results;
-    
+
     const parsedResults = (() => {
         if (!results) return null;
         try {
@@ -19,27 +19,27 @@ const FunctionDisplay = ({ toolCall }) => {
             return results;
         }
     })();
-    
+
     const isError = results && (
         (typeof results === 'string' && /error|failed/i.test(results)) ||
         (parsedResults?.success === false)
     );
-    
+
     const statusConfig = {
         pending: { icon: Clock, color: 'text-slate-400', text: 'جاري المعالجة' },
         running: { icon: Loader2, color: 'text-slate-500', text: 'جاري التنفيذ...', spin: true },
         in_progress: { icon: Loader2, color: 'text-slate-500', text: 'جاري التنفيذ...', spin: true },
-        completed: isError ? 
-            { icon: AlertCircle, color: 'text-red-500', text: 'فشل' } : 
+        completed: isError ?
+            { icon: AlertCircle, color: 'text-red-500', text: 'فشل' } :
             { icon: CheckCircle2, color: 'text-green-600', text: 'تم بنجاح' },
         success: { icon: CheckCircle2, color: 'text-green-600', text: 'تم بنجاح' },
         failed: { icon: AlertCircle, color: 'text-red-500', text: 'فشل' },
         error: { icon: AlertCircle, color: 'text-red-500', text: 'فشل' }
     }[status] || { icon: Zap, color: 'text-slate-500', text: '' };
-    
+
     const Icon = statusConfig.icon;
     const formattedName = name.split('.').reverse().join(' ').toLowerCase();
-    
+
     return (
         <div className="mt-2 text-xs">
             <button
@@ -58,11 +58,11 @@ const FunctionDisplay = ({ toolCall }) => {
                     </span>
                 )}
                 {!statusConfig.spin && (toolCall.arguments_string || results) && (
-                    <ChevronRight className={cn("h-3 w-3 text-slate-400 transition-transform ml-auto", 
+                    <ChevronRight className={cn("h-3 w-3 text-slate-400 transition-transform ml-auto",
                         expanded && "rotate-90")} />
                 )}
             </button>
-            
+
             {expanded && !statusConfig.spin && (
                 <div className="mt-1.5 ml-3 pl-3 border-l-2 border-slate-200 space-y-2">
                     {toolCall.arguments_string && (
@@ -83,7 +83,7 @@ const FunctionDisplay = ({ toolCall }) => {
                         <div>
                             <div className="text-xs text-slate-500 mb-1">النتيجة:</div>
                             <pre className="bg-slate-50 rounded-md p-2 text-xs text-slate-600 whitespace-pre-wrap max-h-48 overflow-auto">
-                                {typeof parsedResults === 'object' ? 
+                                {typeof parsedResults === 'object' ?
                                     JSON.stringify(parsedResults, null, 2) : parsedResults}
                             </pre>
                         </div>
@@ -94,9 +94,104 @@ const FunctionDisplay = ({ toolCall }) => {
     );
 };
 
+// يفصل محتوى الإجابة إلى: المتن، المصادر، الملاحظة
+function parseSections(content) {
+    if (!content) return { body: '', sources: '', note: '' };
+    const sourcesMatch = content.match(/^##\s*المصادر\s*([\s\S]*?)(?=^##\s*⚠️|\Z)/m);
+    const noteMatch = content.match(/^##\s*⚠️\s*ملاحظة\s*([\s\S]*?)$/m);
+    let body = content;
+    if (sourcesMatch) {
+        body = body.split(/^##\s*المصادر/m)[0].trim();
+    }
+    if (noteMatch && body.includes('## ⚠️')) {
+        body = body.split('## ⚠️')[0].trim();
+    }
+    return {
+        body: body.trim(),
+        sources: sourcesMatch ? sourcesMatch[1].trim() : '',
+        note: noteMatch ? noteMatch[1].trim() : '',
+    };
+}
+
+const SourceBadge = ({ text }) => {
+    const lower = text.toLowerCase();
+    let icon = FileText;
+    let color = 'text-slate-600 bg-slate-50 border-slate-200';
+    if (lower.includes('قرآن') || lower.includes('سورة') || lower.includes('آية')) {
+        icon = BookOpen;
+        color = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    } else if (lower.includes('بخاري') || lower.includes('مسلم') || lower.includes('حديث') || lower.includes('سنن') || lower.includes('أبو داود') || lower.includes('ترمذي')) {
+        icon = BookOpen;
+        color = 'text-amber-700 bg-amber-50 border-amber-200';
+    } else if (lower.includes('فتوى') || lower.includes('إفتاء') || lower.includes('دار الإفتاء')) {
+        icon = Scale;
+        color = 'text-rose-700 bg-rose-50 border-rose-200';
+    } else if (lower.includes('تفسير') || lower.includes('ابن كثير') || lower.includes('طبري') || lower.includes('قرطبي') || lower.includes('سعدي') || lower.includes('ميسر')) {
+        icon = FileText;
+        color = 'text-blue-700 bg-blue-50 border-blue-200';
+    }
+    const Icon = icon;
+    return (
+        <div className={cn("flex items-start gap-2 px-3 py-2 rounded-lg border text-xs", color)}>
+            <Icon className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+            <span className="leading-relaxed">{text.replace(/^-\s*/, '')}</span>
+        </div>
+    );
+};
+
+const SourcesCard = ({ sources }) => {
+    const [showWhy, setShowWhy] = useState(false);
+    if (!sources) return null;
+    const lines = sources.split('\n').map(s => s.trim()).filter(Boolean);
+
+    return (
+        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/50 overflow-hidden">
+            <div className="px-4 py-2.5 bg-emerald-100/60 border-b border-emerald-200 flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-emerald-700" />
+                <span className="text-sm font-bold text-emerald-800">المصادر</span>
+                <span className="text-xs text-emerald-600 mr-auto">{lines.length} مصدر</span>
+            </div>
+            <div className="p-3 space-y-2">
+                {lines.map((line, i) => <SourceBadge key={i} text={line} />)}
+            </div>
+            <div className="px-3 pb-3">
+                <button
+                    onClick={() => setShowWhy(!showWhy)}
+                    className="flex items-center gap-2 text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
+                >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                    {showWhy ? 'إخفاء طريقة الوصول للإجابة' : 'كيف وصل Zekr إلى هذه الإجابة؟'}
+                </button>
+                {showWhy && (
+                    <div className="mt-2 p-3 bg-white/70 rounded-lg border border-emerald-200 text-xs text-slate-700 leading-relaxed">
+                        <p className="font-semibold text-emerald-800 mb-1.5">طريقة الوصول للإجابة:</p>
+                        <ol className="space-y-1 list-decimal mr-4">
+                            <li>تحديد نوع السؤال والمصادر المناسبة.</li>
+                            <li>استرجاع النصوص من قاعدة بيانات القرآن والتفاسير.</li>
+                            <li>التحقق من النص ونسبة الأقوال إلى أصحابها.</li>
+                            <li>تكوين الإجابة من المصادر مع إظهارها لك.</li>
+                        </ol>
+                        <p className="mt-2 text-slate-500">قاعدة Zekr AI: المصدر أولًا، والذكاء الاصطناعي ثانيًا.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const FatwaDisclaimer = ({ note }) => {
+    if (!note) return null;
+    return (
+        <div className="mt-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2.5 flex items-start gap-2">
+            <Scale className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-amber-800 leading-relaxed">{note}</p>
+        </div>
+    );
+};
+
 export default function MessageBubble({ message }) {
     const isUser = message.role === 'user';
-    
+
     const handleSpeak = () => {
         if ('speechSynthesis' in window && message.content) {
             const utterance = new SpeechSynthesisUtterance(message.content);
@@ -105,7 +200,9 @@ export default function MessageBubble({ message }) {
             speechSynthesis.speak(utterance);
         }
     };
-    
+
+    const { body, sources, note } = isUser ? { body: message.content, sources: '', note: '' } : parseSections(message.content);
+
     return (
         <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
             {!isUser && (
@@ -114,7 +211,7 @@ export default function MessageBubble({ message }) {
                 </div>
             )}
             <div className={cn("max-w-[85%]", isUser && "flex flex-col items-end")}>
-                {message.content && (
+                {body && (
                     <div className="relative group">
                         <div className={cn(
                             "rounded-2xl px-4 py-2.5",
@@ -132,9 +229,9 @@ export default function MessageBubble({ message }) {
                             </Button>
                         )}
                         {isUser ? (
-                            <p className="text-sm leading-relaxed">{message.content}</p>
+                            <p className="text-sm leading-relaxed">{body}</p>
                         ) : (
-                            <ReactMarkdown 
+                            <ReactMarkdown
                                 className="text-sm prose prose-sm prose-slate max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
                                 components={{
                                     code: ({ inline, className, children, ...props }) => {
@@ -181,13 +278,16 @@ export default function MessageBubble({ message }) {
                                     ),
                                 }}
                             >
-                                {message.content}
+                                {body}
                             </ReactMarkdown>
                         )}
                         </div>
                     </div>
                 )}
-                
+
+                {!isUser && sources && <SourcesCard sources={sources} />}
+                {!isUser && note && <FatwaDisclaimer note={note} />}
+
                 {message.tool_calls?.length > 0 && (
                     <div className="space-y-1 mt-2">
                         {message.tool_calls.map((toolCall, idx) => (

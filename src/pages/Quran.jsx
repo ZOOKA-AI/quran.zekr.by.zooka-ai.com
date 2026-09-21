@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 import PrayerTimesWidget from '../components/prayer/PrayerTimesWidget';
 import WeatherWidget from '../components/weather/WeatherWidget';
 import DailyContent from '../components/daily/DailyContent';
-import DedicationCard from '../components/quran/DedicationCard';
 import DailyVerseCard from '../components/quran/DailyVerseCard';
 import AppFeaturesBanner from '../components/quran/AppFeaturesBanner';
 import ExternalResourcesWidget from '../components/quran/ExternalResourcesWidget';
@@ -170,10 +169,6 @@ export default function QuranPage() {
 
             {/* تبويب الرئيسية */}
             <TabsContent value="home" className="space-y-8 mt-8">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <DedicationCard />
-              </motion.div>
-
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
                 <DailyVerseCard />
               </motion.div>

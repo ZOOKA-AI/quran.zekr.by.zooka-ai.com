@@ -167,9 +167,10 @@ export default function AssistantPage() {
           <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
             <Bot className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">المساعد القرآني الذكي</h1>
-          <p className="text-xl text-indigo-200 font-arabic">﴿ فَاسْأَلُوا أَهْلَ الذِّكْرِ إِن كُنتُمْ لَا تَعْلَمُونَ ﴾</p>
-          <p className="text-slate-300 mt-2">اسأل بصوتك أو اكتب سؤالك - والمساعد سيقرأ لك الإجابة 🎙️</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">Zekr AI</h1>
+          <p className="text-lg text-amber-200 font-bold mb-1">مساعد قرآني ومعرفي إسلامي موثّق</p>
+          <p className="text-base text-indigo-200 font-arabic">﴿ فَاسْأَلُوا أَهْلَ الذِّكْرِ إِن كُنتُمْ لَا تَعْلَمُونَ ﴾</p>
+          <p className="text-slate-300 mt-2 text-sm">المصدر أولًا — كل إجابة علمية تعرض مصادرها • للفتوى يُرجع لجهة إفتاء مختصة</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
