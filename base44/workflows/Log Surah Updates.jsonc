@@ -1,0 +1,38 @@
+{
+  "name": "Log Surah Updates",
+  "description": "\u062a\u0633\u062c\u064a\u0644 \u0648\u062a\u062a\u0628\u0639 \u062a\u062d\u062f\u064a\u062b\u0627\u062a \u0627\u0644\u0633\u0648\u0631",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update"
+      ],
+      "entity_name": "Surah"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "log_surah_updates",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "updatePerformanceMetrics",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "updatePerformanceMetrics"
+  }
+}

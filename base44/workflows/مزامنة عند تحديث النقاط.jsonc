@@ -1,0 +1,38 @@
+{
+  "name": "\u0645\u0632\u0627\u0645\u0646\u0629 \u0639\u0646\u062f \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0646\u0642\u0627\u0637",
+  "description": "\u0645\u0632\u0627\u0645\u0646\u0629 \u0641\u0648\u0631\u064a\u0629 \u0645\u0639 Salesforce \u0639\u0646\u062f \u062a\u062d\u062f\u064a\u062b \u0646\u0642\u0627\u0637 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update"
+      ],
+      "entity_name": "UserPoints"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "migrated_workflow",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncToSalesforce",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "syncToSalesforce"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Sync Audio Sources Every Hour",
+  "description": "\u0645\u0632\u0627\u0645\u0646\u0629 \u0645\u0635\u0627\u062f\u0631 \u0627\u0644\u0635\u0648\u062a \u0648\u0627\u0644\u0645\u0642\u0631\u0626\u064a\u0646 \u0643\u0644 \u0633\u0627\u0639\u0629",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "interval",
+      "cron_expression": null,
+      "one_time_date": null,
+      "timezone": "UTC",
+      "interval_value": 1,
+      "interval_unit": "hours",
+      "interval_anchor": "2026-02-02T04:29:36.521000",
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "sync_audio_sources_every_hour",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncAudioSources",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "syncAudioSources"
+  }
+}
